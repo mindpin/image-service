@@ -1,0 +1,14 @@
+%h1 已生效配置 
+
+- OutputSettings.options.each do |name, value|
+  - cn = OutputSettings.names_without_type[name]
+  .active-option{:"data-value" => value, :"data-option" => name}
+    %h4= cn
+
+    %span
+      - if value.is_a?(Array)
+        #{value.join("x")}
+      - else
+        #{value}
+
+    %button= "删除"

@@ -1,0 +1,18 @@
+.add-options
+  %h1 添加配置
+
+  - OutputSettings.names.each do |type, names|
+    - names.each do |name, cn|
+      .add-option{:"data-option" => "#{name}", class: type}
+        %h4= cn
+
+        - if :single == type.to_sym
+          %input{type: "number"}
+        - else
+          %input.1st{type: "number"}
+          %input.2nd{type: "number"}
+
+        %button{disabled: true}= "添加"
+
+.active-options
+  = haml :settings_partial
