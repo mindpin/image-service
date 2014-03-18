@@ -10,16 +10,12 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   storage :aliyun
 
-  def filename=(filename)
-    @_filename = filename
-  end
-
   def filename
-    @_filename
+    self.model.filename
   end
 
   def store_dir
-    "/images"
+    R::ALIYUN_BASE_DIR
   end
 
   def cache_dir

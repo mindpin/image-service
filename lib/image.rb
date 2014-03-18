@@ -14,7 +14,6 @@ class Image
 
   def self.from_params(hash)
     image = self.new(token: randstr, original: hash[:filename])
-    image.file.filename = image.filename
     image.file = hash[:tempfile]
     image.save
     image
