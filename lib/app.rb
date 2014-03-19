@@ -50,7 +50,7 @@ class ImageServiceApp < Sinatra::Base
   end
 
   get "/images" do
-    @images = Image.all
+    @images = Image.all.sort(created_at: -1)
     haml :images
   end
 
@@ -64,12 +64,12 @@ class ImageServiceApp < Sinatra::Base
   end
 
   put "/settings" do
-    OutputSettings.add(params[:option].to_a[0]).save
+    OutputSettings.add(params[:option].to_a[0]).reload!
     haml :settings_partial, layout: false
   end
 
   delete "/settings" do
-    OutputSettings.del(params[:option].to_a[0]).save
+    OutputSettings.del(params[:option].to_a[0]).reload!
     "deleted"
   end
 

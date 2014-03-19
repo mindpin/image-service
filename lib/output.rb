@@ -9,7 +9,7 @@ module Output
       manipulate! do |img|
         x = dimension.to_s == "height" ? "x" : ""
 
-        img.adaptive_resize "#{x}#{value}"
+        img.adaptive_resize "#{x}#{value[0]}"
         img
       end
     end
@@ -27,14 +27,7 @@ module Output
           x = height > width ? "" : "x"
         end
 
-        img.adaptive_resize "#{x}#{value}"
-        img
-      end
-    end
-
-    def fix_to(width, height)
-      manipulate! do |img|
-        img.resize "#{width}x#{height}!"
+        img.adaptive_resize "#{x}#{value[0]}"
         img
       end
     end
@@ -54,7 +47,7 @@ module Output
         when /^([a-z]*)_size$/
           process limit_size: [$1, value]
         when "fix"
-          process fix_to: value
+          process resize_to_limit: value
         when "fill"
           process resize_to_fill: value
         end
