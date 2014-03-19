@@ -47,7 +47,7 @@ task :deploy => :environment do
     queue! "bundle"
 
     to :launch do
-      queue! "bundle exec rake assetpack:build"      
+      queue! "RACK_ENV=production bundle exec rake assetpack:build"      
       queue %[
         source /etc/profile
         ./deploy/sh/unicorn.sh stop
@@ -65,7 +65,7 @@ task :update_code => :environment do
     queue! "bundle"
 
     to :launch do
-      queue! "bundle exec rake assetpack:build"      
+      queue! "RACK_ENV=production bundle exec rake assetpack:build"      
     end
 
   end
