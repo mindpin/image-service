@@ -6,11 +6,11 @@
     %h4= cn
 
     %span
-      - if value.is_a?(Array)
+      - if value.size == 2
         = value[0]
         %span.icon.ion-ios7-close-empty
         = value[1]
       - else
-        #{value}
+        = value[0]
 
     %button.icon.ion-ios7-close

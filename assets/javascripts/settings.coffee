@@ -6,13 +6,10 @@ jQuery ->
     $parent = jQuery(this).parent()
     name    = $parent.data("option")
 
-    value = $parent.find("input").map ->
-      ~~jQuery(this).val()
+    value = jQuery.makeArray($parent.find("input")).map (e)->
+      ~~jQuery(e).val()
 
-    value = if 1 == value.length
-      value[0]
-    else
-      [value[0], value[1]]
+    console.log value
 
     data = {option: {}}
     data.option[name] = value
