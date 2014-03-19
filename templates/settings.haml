@@ -1,0 +1,20 @@
+.settings
+  .add-options
+    %h1 添加配置
+  
+    - OutputSettings.names.each do |type, names|
+      - names.each do |name, cn|
+        .add-option.option{:"data-option" => "#{name}", class: type}
+          %h4= cn
+  
+          - if :single == type.to_sym
+            %input{type: "number"}
+          - else
+            %input.1st{type: "number"}
+            %span.icon.ion-ios7-close-empty
+            %input.2nd{type: "number"}
+  
+          %button.icon.ion-ios7-plus{disabled: true, style:"display:none"}
+  
+  .active-options
+    = haml :settings_partial

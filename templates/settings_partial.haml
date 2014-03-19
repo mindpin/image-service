@@ -1,0 +1,16 @@
+%h1 已生效配置 
+
+- OutputSettings.options.each do |name, value|
+  - cn = OutputSettings.names_without_type[name]
+  .active-option.option{:"data-value" => value, :"data-option" => name}
+    %h4= cn
+
+    %span
+      - if value.is_a?(Array)
+        = value[0]
+        %span.icon.ion-ios7-close-empty
+        = value[1]
+      - else
+        #{value}
+
+    %button.icon.ion-ios7-close

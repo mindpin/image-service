@@ -1,0 +1,10 @@
+.image-show
+  %h1
+    %i.icon.ion-navicon-round
+    所有图片
+
+  - @images.each do |image|
+    .image
+      %h4= image.original
+    
+      %a.url.icon.ion-link{href: "/images/#{image.token}"}

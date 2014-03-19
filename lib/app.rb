@@ -1,3 +1,4 @@
+require "./lib/randstr"
 require "bundler"
 Bundler.setup(:default)
 require "sinatra"
@@ -15,6 +16,8 @@ require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
 require File.expand_path("../../config/env",__FILE__)
+
+require "./lib/image"
 
 class ImageServiceApp < Sinatra::Base
   configure :development do
@@ -42,4 +45,36 @@ class ImageServiceApp < Sinatra::Base
     js_compression  :uglify
   }
 
+  get "/" do
+    haml :index
+  end
+
+  get "/images" do
+    @images = Image.all
+    haml :images
+  end
+
+  post "/images" do
+    image = Image.from_params(params[:file])
+    redirect to("/images/#{image.token}")
+  end
+
+  get "/settings" do
+    haml :settings
+  end
+
+  put "/settings" do
+    OutputSettings.add(params[:option].to_a[0]).save
+    haml :settings_partial, layout: false
+  end
+
+  delete "/settings" do
+    OutputSettings.del(params[:option].to_a[0]).save
+    "deleted"
+  end
+
+  get "/images/:id" do
+    @image = Image.find_by(token: params[:id])
+    haml :image
+  end
 end
