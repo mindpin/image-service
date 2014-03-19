@@ -26,6 +26,7 @@ jQuery ->
       jQuery(".active-options").html(res)
       $parent.find("input").val("")
       jQuery(this).attr("disabled", true)
+      jQuery(this).fadeOut()
 
   $add_options.find("input").on "change", ->
     $parent = jQuery(this).parent()
