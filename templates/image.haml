@@ -1,3 +1,23 @@
-%h1 hahaha
+.image-show
+  %h1
+    %i.icon.ion-image
+    = @image.original
 
-%img{src: @image.file.url}
+  .image
+    - @image.versions.each do |version|
+      - name  = version[:name]
+      - value = version[:value]
+      - url   = version[:url]
+      - cn    = OutputSettings.names_without_type[version[:name]]
+    
+      %h4= cn
+    
+      %span
+        - if value.size == 2
+          = value[0]
+          %span.icon.ion-ios7-close-empty
+          = value[1]
+        - else
+          #{value[0]}
+    
+      %a.url.icon.ion-link{href: url}

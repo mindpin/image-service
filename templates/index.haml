@@ -1,5 +1,12 @@
-%h1 上传图片
+.image-upload
+  .select-file
+    %span.icon.ion-image
+    %span.txt 点击选择图片
 
-%form{action: "/images", method:"post", enctype: "multipart/form-data"}
-  %input{type: "file", name: "file"}
-  %input{type: "submit", value: "上传"}
+  %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
+    %input{type: "file", name: "file"}
+    %button.icon.ion-upload{style: "display:none"}
+
+  %a.all{href: "/images"}
+    %i.icon.ion-grid
+    所有图片

@@ -1,0 +1,49 @@
+.image-upload {
+    display:relative;
+    width:640px;
+    height:40px;
+    border:4px solid #ccc;
+    margin:auto;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    
+    input[type=file] {
+        position:absolute;
+        top:-1000px;
+    }
+
+    .select-file {
+        font-size:18px;
+        color:#ccc;
+        padding:7px 0;
+        padding-left:16px;
+        display:inline-block;
+        height:100%;
+        width:560px;
+    }
+    
+    form {
+        position:absolute;
+        width:80px;
+        right:0;
+        display:inline-block;
+        height:100%;
+    }
+    
+    button {
+        font-size:32px;
+        background:#0431B4;
+        color:white;
+        width:100%;
+        height:100%;
+    }
+    
+    .all {
+        display:block;
+        font-family:sans-serif;
+        color:#ccc;
+    }
+}

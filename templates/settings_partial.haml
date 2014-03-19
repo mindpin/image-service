@@ -2,13 +2,15 @@
 
 - OutputSettings.options.each do |name, value|
   - cn = OutputSettings.names_without_type[name]
-  .active-option{:"data-value" => value, :"data-option" => name}
+  .active-option.option{:"data-value" => value, :"data-option" => name}
     %h4= cn
 
     %span
       - if value.is_a?(Array)
-        #{value.join("x")}
+        = value[0]
+        %span.icon.ion-ios7-close-empty
+        = value[1]
       - else
         #{value}
 
-    %button= "删除"
+    %button.icon.ion-ios7-close

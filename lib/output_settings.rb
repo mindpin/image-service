@@ -9,15 +9,15 @@ class OutputSettings
     def names
       {
         single: {
-          adaptive_width: "限定高度，宽度自适应",
-          adaptive_height: "限定宽度，高度自适应",
-          max_size: "限定最长边，短边自适应",
-          min_size: "限定最短边，长边自适应"
+          adaptive_width: "限定高度宽度自适应",
+          adaptive_height: "限定宽度高度自适应",
+          max_size: "限定最长边短边自适应",
+          min_size: "限定最短边长边自适应"
         },
 
         pair: {
           fix: "限定宽高",
-          fill: "放大较小图片，裁剪较大图片到某尺寸"
+          fill: "拉伸/裁切到尺寸"
         }
       }
     end

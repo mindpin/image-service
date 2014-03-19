@@ -1,0 +1,103 @@
+.settings {
+    padding:0;
+    margin:0;
+    height:100%;
+    position:relative;
+    font-size:16px;
+    //left:-400px;
+    
+    * {
+        vertical-align:middle;
+    }
+    
+    & > * {
+        padding:40px;
+        height:100%;
+        
+        h1 {
+            margin-bottom:16px; 
+        }
+        
+        .option {
+            padding:16px;
+            
+        }
+        
+        span, button {
+            font-size:18px;
+            background:none;
+        }
+        
+        button {
+            float:right;
+        }
+
+        h4 {
+            display:inline-block;
+        }
+        
+        input[type=number] {
+            width:40px;
+            background:none;
+            border-bottom:1px solid white;
+            vertical-align:baseline;
+        }
+    }
+
+    .add-options {
+        &, * {
+            color:white;
+        }
+
+        float:left;
+        background:#0431B4; 
+        width:360px;
+        
+        .option {
+            border-bottom:1px dashed white;
+
+            &:nth-child(2) {
+                border-top:1px solid white;
+            }
+
+            &:last-child {
+                border-bottom:1px solid white;
+            }
+        }
+        
+        button:hover {
+            color:#3FEB28;
+        }
+    }
+
+    .active-options {
+        &, * {
+            color:#666;
+        }
+
+        float:left;
+        background:white;
+        width:800px;
+
+        .option {
+            border-bottom:1px dashed #666;
+
+            &:nth-child(2) {
+                border-top:1px solid #666;
+            }
+
+            &:last-child {
+                border-bottom:1px solid #666;
+            }
+        }
+
+        button:hover {
+            color:red;
+        }
+    }
+    
+    &:after {
+        clear:both;
+        display:none;
+    }
+}

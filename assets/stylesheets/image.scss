@@ -1,0 +1,62 @@
+.image-show {
+    padding:0;
+    margin:0;
+    position:relative;
+    font-size:16px;
+    
+    * {
+        vertical-align:middle;
+    }
+
+    padding:40px;
+    
+    h1 {
+        margin-bottom:16px; 
+    }
+    
+    .image {
+        position:relative;
+        padding:16px;
+    }
+    
+    span, .url {
+        font-size:18px;
+        background:none;
+    }
+    
+    .url {
+        position:absolute;
+        font-size:32px;
+        top:10px;
+        right:8px;
+        vertical-align:middle;
+        color:#0431B4;
+    }
+
+    h4 {
+        display:inline-block;
+    }
+
+    &, * {
+        color:#666;
+    }
+
+    background:white;
+    width:800px;
+
+    .image {
+        border-bottom:1px dashed #666;
+
+        &:nth-child(2) {
+            border-top:1px solid #666;
+        }
+
+        &:last-child {
+            border-bottom:1px solid #666;
+        }
+    }
+
+    button:hover {
+        color:red;
+    }
+}

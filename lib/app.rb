@@ -49,6 +49,11 @@ class ImageServiceApp < Sinatra::Base
     haml :index
   end
 
+  get "/images" do
+    @images = Image.all
+    haml :images
+  end
+
   post "/images" do
     image = Image.from_params(params[:file])
     redirect to("/images/#{image.token}")

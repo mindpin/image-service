@@ -41,8 +41,10 @@ jQuery ->
 
     if !$parent.data("invalid")
       $button.attr("disabled", false)
+      $button.fadeIn()
     else
       $button.attr("disabled", true)
+      $button.fadeOut()
 
   jQuery(document).on "click", ".active-options button", ->
     $parent = jQuery(this).parent()
