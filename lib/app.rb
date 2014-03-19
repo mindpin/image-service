@@ -77,4 +77,9 @@ class ImageServiceApp < Sinatra::Base
     @image = Image.find_by(token: params[:id])
     haml :image
   end
+
+  get "/display" do
+    @url = params[:url]
+    haml :display
+  end
 end

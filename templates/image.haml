@@ -6,7 +6,9 @@
   .image
     %h4 原始图片
   
-    %a.url.icon.ion-link{href: @image.file.url}
+    %a.url.icon.ion-link{href: "/display?url=#{@image.file.url}"}
+
+    %input.copy{type: "text", value: @image.file.url, disabled: true}
 
   - @image.versions.each do |version|
     - name  = version[:name]
@@ -25,4 +27,6 @@
         - else
           #{value[0]}
     
-      %a.url.icon.ion-link{href: url}
+      %a.url.icon.ion-link{href: "/display?url=#{url}"}
+
+      %input.copy{type: "text", value: url, disabled: true}
