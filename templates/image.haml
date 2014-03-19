@@ -3,13 +3,13 @@
     %i.icon.ion-image
     = @image.original
 
-  .image
-    - @image.versions.each do |version|
-      - name  = version[:name]
-      - value = version[:value]
-      - url   = version[:url]
-      - cn    = OutputSettings.names_without_type[version[:name]]
-    
+  - @image.versions.each do |version|
+    - name  = version[:name]
+    - value = version[:value]
+    - url   = version[:url]
+    - cn    = OutputSettings.names_without_type[version[:name]]
+  
+    .image
       %h4= cn
     
       %span
