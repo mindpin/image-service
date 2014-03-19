@@ -3,6 +3,11 @@
     %i.icon.ion-image
     = @image.original
 
+  .image
+    %h4 原始图片
+  
+    %a.url.icon.ion-link{href: @image.file.url}
+
   - @image.versions.each do |version|
     - name  = version[:name]
     - value = version[:value]

@@ -12,5 +12,5 @@ CarrierWave.configure do |config|
   config.aliyun_access_key = ENV_YAML_HASH['ALIYUN_ACCESS_KEY']
   config.aliyun_bucket = ENV_YAML_HASH['ALIYUN_BUCKET']
   config.aliyun_internal = false
-  config.aliyun_area = "cn-qingdao" 
+  config.aliyun_area = ENV_YAML_HASH['ALIYUN_AREA']
 end
