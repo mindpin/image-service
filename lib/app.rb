@@ -63,13 +63,13 @@ class ImageServiceApp < Sinatra::Base
     haml :settings
   end
 
-  put "/settings" do
-    OutputSettings.add(params[:option].to_a[0]).reload!
+  post "/settings" do
+    OutputSetting.from(params[:option].to_a[0])
     haml :settings_partial, layout: false
   end
 
   delete "/settings" do
-    OutputSettings.del(params[:option].to_a[0]).reload!
+    OutputSetting.del(params[:option].to_a[0])
     "deleted"
   end
 
