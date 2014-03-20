@@ -1,10 +1,9 @@
 .image-upload {
-    display:relative;
     width:640px;
     height:40px;
     border:4px solid #ccc;
     margin:auto;
-    position:absolute;
+    position:fixed;
     top:0;
     bottom:0;
     left:0;
@@ -22,7 +21,7 @@
         padding-left:16px;
         display:inline-block;
         height:100%;
-        width:560px;
+        width:100%;
     }
     
     form {
@@ -33,17 +32,37 @@
         height:100%;
     }
     
-    button {
-        font-size:32px;
-        background:#0431B4;
-        color:white;
-        width:100%;
-        height:100%;
-    }
-    
     .all {
         display:block;
         font-family:sans-serif;
         color:#ccc;
+    }
+
+    &.moveup {
+        top:64px;
+        bottom:initial;
+    }
+    
+    .uploading-list {
+        display:none;
+        margin-top:12px;
+        border-top:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        font-size:16px;
+        color:#ccc;
+        
+        .uploading {
+            padding:16px;
+            
+            &.template {display:none;}
+            
+            a {display:none;}
+            
+            a, i {
+                color: #666;
+                font-size:20px;
+                float:right;
+            }
+        }
     }
 }
