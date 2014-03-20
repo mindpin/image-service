@@ -15,6 +15,7 @@ require 'carrierwave'
 require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
+require "sidekiq"
 require File.expand_path("../../config/env",__FILE__)
 
 require "./lib/image"
@@ -56,7 +57,7 @@ class ImageServiceApp < Sinatra::Base
 
   post "/images" do
     image = Image.from_params(params[:file])
-    redirect to("/images/#{image.token}")
+    "/images/#{image.token}"
   end
 
   get "/settings" do

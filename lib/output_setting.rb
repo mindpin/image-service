@@ -49,8 +49,7 @@ class OutputSetting
   end
 
   def self.del(param)
-    setting = self.from(param)
-    setting.destroy if setting.persisted?
+    self.from(param).destroy
   end
 
   def self.format_attrs(option)

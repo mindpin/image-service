@@ -11,6 +11,7 @@ gem 'sass'
 gem 'coffee-script'
 gem 'yui-compressor'
 gem 'uglifier'
+gem "sidekiq"
 
 gem "carrierwave", "0.8.0"
 gem 'carrierwave-mongoid'
