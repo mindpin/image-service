@@ -1,7 +1,7 @@
 %h1 已生效配置 
 
-- OutputSettings.options.each do |name, value|
-  - cn = OutputSettings.names_without_type[name]
+- OutputSetting.options.each do |name, value|
+  - cn = OutputSetting.names[name]
   .active-option.option{:"data-value" => value, :"data-option" => name}
     %h4= cn
 

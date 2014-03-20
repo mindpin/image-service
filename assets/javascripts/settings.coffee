@@ -15,7 +15,7 @@ jQuery ->
     data.option[name] = value
 
     deferred = jQuery.ajax
-      type: "PUT"
+      type: "POST"
       url:  "/settings"
       data: data
 

@@ -16,6 +16,7 @@ class Image
   alias :old_vers :versions
 
   def self.from_params(hash)
+    ImageUploader.apply_settings!
     image = self.new(token: randstr, original: hash[:filename])
     image.file = hash[:tempfile]
     image.versions = image.file.versions.keys

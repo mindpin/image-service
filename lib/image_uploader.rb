@@ -1,10 +1,9 @@
-require "./lib/output"
-require "./lib/output_settings"
+require "./lib/output_setting"
+require "./lib/output_setting_uploader_methods"
 
 class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
-  include Output
-  extend  OutputSettings::UploaderMethods
+  include OutputSetting::UploaderMethods
 
   apply_settings!
 
@@ -20,5 +19,9 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   def cache_dir
     "/tmp/4ye_image_service"
+  end
+
+  def version_names
+    versions.keys
   end
 end
