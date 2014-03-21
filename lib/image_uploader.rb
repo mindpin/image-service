@@ -3,7 +3,11 @@ require "./lib/output_setting_uploader_methods"
 
 class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+  include CarrierWave::Backgrounder::Delay
   include OutputSetting::UploaderMethods
+  include CarrierWave::MimeTypes
+
+  process :set_content_type
 
   apply_settings!
 
