@@ -1,17 +1,24 @@
 require "./lib/image_uploader"
+require "backgrounder/orm/activemodel"
 
 class Image
   include Mongoid::Document
   include Mongoid::Timestamps
+  extend CarrierWave::Backgrounder::ORM::ActiveModel
 
   field :file,     type: String
   field :original, type: String
   field :token,    type: String
   field :versions, type: Array
+  field :file_processing, type: Boolean
+  field :file_tmp, type: String
 
   validate :file, :original, :filename, presence: true
 
   mount_uploader :file, ImageUploader
+
+  process_in_background :file
+  store_in_background :file
 
   alias :old_vers :versions
 

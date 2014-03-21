@@ -3,30 +3,37 @@
     %i.icon.ion-image
     = @image.original
 
-  .image
-    %h4 原始图片
-  
-    %a.url.icon.ion-link{href: "/display?url=#{@image.file.url}"}
+  - if @image.file_processing || @image.file_tmp
 
-    %input.copy{type: "text", value: @image.file.url, disabled: true}
+    .image
+      %h4{style:"color:#ccc"}= "图片处理中, 请稍后刷新页面"
 
-  - @image.versions.each do |version|
-    - name  = version[:name]
-    - value = version[:value]
-    - url   = version[:url]
-    - cn    = OutputSetting.names[version[:name]]
+  - else
   
     .image
-      %h4= cn
+      %h4 原始图片
     
-      %span
-        - if value.size == 2
-          = value[0]
-          %span.icon.ion-ios7-close-empty
-          = value[1]
-        - else
-          = value[0]
-    
-      %a.url.icon.ion-link{href: "/display?url=#{url}"}
+      %a.url.icon.ion-link{href: "/display?url=#{@image.file.url}"}
+  
+      %input.copy{type: "text", value: @image.file.url, disabled: true}
 
-      %input.copy{type: "text", value: url, disabled: true}
+    - @image.versions.each do |version|
+      - name  = version[:name]
+      - value = version[:value]
+      - url   = version[:url]
+      - cn    = OutputSetting.names[version[:name]]
+    
+      .image
+        %h4= cn
+      
+        %span
+          - if value.size == 2
+            = value[0]
+            %span.icon.ion-ios7-close-empty
+            = value[1]
+          - else
+            = value[0]
+      
+        %a.url.icon.ion-link{href: "/display?url=#{url}"}
+  
+        %input.copy{type: "text", value: url, disabled: true}

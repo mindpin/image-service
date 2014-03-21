@@ -15,6 +15,7 @@ gem "sidekiq"
 
 gem "carrierwave", "0.8.0"
 gem 'carrierwave-mongoid'
+gem 'carrierwave_backgrounder'
 gem "mini_magick"
 
 gem 'rest-client'

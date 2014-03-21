@@ -14,3 +14,7 @@ CarrierWave.configure do |config|
   config.aliyun_internal = false
   config.aliyun_area = ENV_YAML_HASH['ALIYUN_AREA']
 end
+
+CarrierWave::Backgrounder.configure do |c|
+  c.backend :sidekiq, queue: :carrierwave
+end

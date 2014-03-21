@@ -1,3 +1,4 @@
 require "./lib/app"
+require "sidekiq/web"
 
-run ImageServiceApp.new
+run Rack::URLMap.new "/sidekiq" => Sidekiq::Web.new, "/" => ImageServiceApp.new
