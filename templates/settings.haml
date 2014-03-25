@@ -7,11 +7,11 @@
         %h4= cn
   
         - if [:limit, :fill].include? name.to_sym
-          %input.1st{type: "number"}
+          %input.1st{type: "number"} px
           %span.icon.ion-ios7-close-empty
-          %input.2nd{type: "number"}
+          %input.2nd{type: "number"} px
         - else
-          %input{type: "number"}
+          %input{type: "number"} px
   
         %button.icon.ion-ios7-plus{disabled: true, style:"display:none"}
   
