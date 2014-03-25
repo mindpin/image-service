@@ -1,4 +1,5 @@
 require "./lib/image_uploader"
+require "./lib/workers"
 require "backgrounder/orm/activemodel"
 
 class Image
@@ -17,8 +18,8 @@ class Image
 
   mount_uploader :file, ImageUploader
 
-  process_in_background :file
-  store_in_background :file
+  process_in_background :file, ProcessWorker
+  store_in_background   :file, StoreWorker
 
   alias :old_vers :versions
 
@@ -26,13 +27,13 @@ class Image
     ImageUploader.apply_settings!
     image = self.new(token: randstr, original: hash[:filename])
     image.file = hash[:tempfile]
-    image.versions = image.file.versions.keys
+    image.versions = image.file.version_names
     image.save
     image
   end
 
   def filename
-    "#{token}#{File.extname(original)}"
+    "#{token}#{File.extname(original).downcase}"
   end
 
   def versions
