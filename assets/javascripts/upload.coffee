@@ -7,7 +7,7 @@ jQuery ->
   class FileUploader
     constructor: (@file)->
       @data = new FormData
-      @data.append "file", @file
+      @data.append "file", @file, @file.name
 
     before: (fn)->
       @before = fn
@@ -21,13 +21,8 @@ jQuery ->
         url         : url
         data        : @data
 
-  jQuery(".select-file").on "click", ->
-    $fileinput.trigger("click")
-
-  jQuery(".upload input[type=file]").on "change", ->
-    file = $fileinput[0].files[0]
-    jQuery(".upload button").fadeIn()
-
+  upload = (file, name)->
+    file.name = name if name
     uploader = new FileUploader(file)
 
     uploader.before ->
@@ -47,4 +42,15 @@ jQuery ->
       file.elm.find("i").fadeOut()
       file.elm.find("a").attr("href", res).fadeIn()
     
+  jQuery(".select-file").on "click", ->
+    $fileinput.trigger("click")
 
+  jQuery(".upload input[type=file]").on "change", ->
+    file = $fileinput[0].files[0]
+    upload(file)
+
+  jQuery(document).on "paste", (event)->
+    items = (event.clipboardData || event.originalEvent.clipboardData).items
+    file = items[0].getAsFile() if items[0]
+
+    upload(file, "image#{(new Date).valueOf()}.png") if file
