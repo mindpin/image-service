@@ -8,7 +8,7 @@ class OutputSetting
     module InstanceMethods
       def adaptive(dimension, value)
         manipulate! do |img|
-          x = dimension.to_s == "height" ? "x" : ""
+          x = dimension.to_s == "height" ? "" : "x"
 
           img.adaptive_resize "#{x}#{value[0]}"
           img
