@@ -1,7 +1,7 @@
 .image-upload
   .select-file
     %i.icon.ion-image
-    %span.txt 点击选择图片
+    %span.txt 点击选择图片或者Ctrl + V粘贴图片
 
   %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
     %input{type: "file", name: "file"}
