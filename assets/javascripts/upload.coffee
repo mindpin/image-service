@@ -51,6 +51,8 @@ jQuery ->
 
   jQuery(document).on "paste", (event)->
     items = (event.clipboardData || event.originalEvent.clipboardData).items
-    file = items[0].getAsFile() if items[0]
 
-    upload(file, "image#{(new Date).valueOf()}.png") if file
+    for i in items
+      if i.type.match(/^image\/\w+$/) 
+        file = i.getAsFile()
+        upload(file, "image#{(new Date).valueOf()}.png") if file
