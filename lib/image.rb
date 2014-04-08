@@ -13,6 +13,7 @@ class Image
   field :versions, type: Array
   field :file_processing, type: Boolean
   field :file_tmp, type: String
+  field :mime,     type: String
 
   validate :file, :original, :filename, presence: true
 
@@ -27,6 +28,7 @@ class Image
     ImageUploader.apply_settings!
     image = self.new(token: randstr, original: hash[:filename])
     image.file = hash[:tempfile]
+    image.mime = hash[:type]
     image.versions = image.file.version_names
     image.save
     image
