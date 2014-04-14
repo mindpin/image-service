@@ -46,6 +46,12 @@ class ImageServiceApp < Sinatra::Base
     js_compression  :uglify
   }
 
+  before do
+    headers("Access-Control-Allow-Origin" => "#{request.env['HTTP_ORIGIN']}")
+    headers("Access-Control-Allow-Credentials" => "true")
+    headers("Access-Control-Allow-Methods" => "POST,GET,OPTIONS")
+  end
+  
   get "/" do
     haml :index
   end
@@ -55,9 +61,19 @@ class ImageServiceApp < Sinatra::Base
     haml :images
   end
 
+  get "/r/:token" do
+    image = Image.find_by(token: params[:token])
+    redirect to(image.file.url)
+  end
+
+  options "/images" do
+    200 
+  end
+
   post "/images" do
     image = Image.from_params(params[:file])
-    "/images/#{image.token}"
+    content_type :json
+    JSON.generate show: "/images/#{image.token}", orig: "http://#{request.host_with_port}/r/#{image.token}"
   end
 
   get "/settings" do
@@ -74,8 +90,8 @@ class ImageServiceApp < Sinatra::Base
     "deleted"
   end
 
-  get "/images/:id" do
-    @image = Image.find_by(token: params[:id])
+  get "/images/:token" do
+    @image = Image.find_by(token: params[:token])
     haml :image
   end
 

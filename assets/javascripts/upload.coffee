@@ -40,7 +40,7 @@ jQuery ->
 
     deferred.done (res)->
       file.elm.find("i").fadeOut()
-      file.elm.find("a").attr("href", res).fadeIn()
+      file.elm.find("a").attr("href", res.show).fadeIn()
     
   jQuery(".select-file").on "click", ->
     $fileinput.trigger("click")
