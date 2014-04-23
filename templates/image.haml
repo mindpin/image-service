@@ -15,7 +15,7 @@
     
       %a.url.icon.ion-link{href: "/display?url=#{@image.file.url}"}
   
-      %input.copy{type: "text", value: @image.file.url, disabled: true}
+      %input.copy{type: "text", value: @image.file.url, readonly: true}
 
     - @image.versions.each do |version|
       - name  = version[:name]
@@ -36,4 +36,4 @@
       
         %a.url.icon.ion-link{href: "/display?url=#{url}"}
   
-        %input.copy{type: "text", value: url, disabled: true}
+        %input.copy{type: "text", value: url, readonly: true}
