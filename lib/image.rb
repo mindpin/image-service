@@ -1,3 +1,4 @@
+# coding: utf-8
 require "./lib/image_uploader"
 require "./lib/workers"
 require "backgrounder/orm/activemodel"
@@ -39,18 +40,37 @@ class Image
   end
 
   def versions
-    old_vers.map do |version|
-      array = version.to_s.split("_")
-      name  = array.select {|i| i.match /[a-zA-Z]+/}.join("_").to_sym
-      value = array.select {|i| i.match /[0-9]+/}.map(&:to_i)
-      {name: name, value: value, url: url_template(version)}
-    end
+    [raw].concat(old_vers.map do |version|
+      Version.new(self, version)
+    end)
   end
 
-  private
+  def raw
+    Version.new(self, nil)
+  end
 
-  def url_template(version)
-    base = file.url.split("/")[0..-2].join("/")
-    File.join(base, "#{version}_#{filename}")
+  class Version
+    attr_reader :name, :value, :url
+
+    def initialize(image, version_def)
+      array  = version_def ? version_def.to_s.split("_") : []
+      name   = array.select {|i| i.match /[a-zA-Z]+/}.join("_").to_sym
+      @name  = name.blank? ? :raw : name
+      @image = image
+      @value = array.select {|i| i.match /[0-9]+/}.map(&:to_i)
+      @url   = image.file.url(version_def)
+    end
+
+    def cn
+      OutputSettings.names[name] || "原始图片"
+    end
+
+    def html
+      %Q|<img src="#{url}" />|
+    end
+
+    def markdown
+      %Q|![](#{url})|
+    end
   end
 end

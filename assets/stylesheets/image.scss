@@ -14,11 +14,6 @@
         margin-bottom:16px; 
     }
     
-    .image {
-        position:relative;
-        padding:16px;
-    }
-    
     span, .url {
         font-size:18px;
         background:none;
@@ -27,8 +22,8 @@
     .url {
         position:absolute;
         font-size:32px;
-        top:10px;
-        right:8px;
+        top:4px;
+        right:0;
         vertical-align:middle;
         color:#0431B4;
     }
@@ -45,6 +40,8 @@
     width:800px;
 
     .image {
+        padding-top:10px;
+        position:relative;
         border-bottom:1px dashed #666;
 
         &:nth-child(2) {
@@ -60,13 +57,27 @@
         color:red;
     }
     
+    label {
+        display:block;
+        margin-top:10px;
+        padding-left:10px;
+        background:#eee;
+        font-family:monospace;
+        border:1px solid #ccc;
+        height:32px;
+        color:#888;
+        line-height:30px;
+    }
+    
     input.copy {
-        position:absolute;
+        width:676px;
         height:100%;
-        width:720px;
+        padding:0px 10px;
+        border-left:1px solid #ccc;
+        float:right;
         font-size:16px;
+        color:#aaa;
         top:0;
         left:0;
-        display:none;
     }
 }
