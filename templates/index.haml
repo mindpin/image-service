@@ -4,7 +4,7 @@
     %span.txt 点击选择图片或者Ctrl + V粘贴图片
 
   %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
-    %input{type: "file", name: "file"}
+    %input{type: "file", name: "file", multiple: true}
 
   %a.all{href: "/images"}
     %i.icon.ion-grid
