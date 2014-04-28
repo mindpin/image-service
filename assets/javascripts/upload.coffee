@@ -45,9 +45,27 @@ jQuery ->
   jQuery(".select-file").on "click", ->
     $fileinput.trigger("click")
 
+  jQuery(document).on "dragover", (event)->
+    event.stopPropagation()
+    event.preventDefault()
+
+  jQuery(document).on "dragenter", (event)->
+    event.stopPropagation()
+    event.preventDefault()
+
+  jQuery(document).on "drop", (event)->
+    event.stopPropagation()
+    event.preventDefault()
+
+    files = event.originalEvent.dataTransfer.files
+
+    for file in files
+      upload(file)
+
   jQuery(".upload input[type=file]").on "change", ->
-    file = $fileinput[0].files[0]
-    upload(file)
+    files = $fileinput[0].files
+    for file in files
+      upload(file)
 
   jQuery(document).on "paste", (event)->
     items = (event.clipboardData || event.originalEvent.clipboardData).items
