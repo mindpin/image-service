@@ -13,7 +13,6 @@ class Image
   field :token,    type: String
   field :versions, type: Array
   field :file_processing, type: Boolean
-  field :file_tmp, type: String
   field :mime,     type: String
 
   validate :file, :original, :filename, presence: true
@@ -21,7 +20,6 @@ class Image
   mount_uploader :file, ImageUploader
 
   process_in_background :file, ProcessWorker
-  store_in_background   :file, StoreWorker
 
   alias :old_vers :versions
 

@@ -3,18 +3,15 @@
     %i.icon.ion-image
     = @image.original
 
-  - if @image.file_processing || @image.file_tmp
-
+  - @image.versions.each do |version|
+    - name  = version.name
+    - value = version.value
+    - cn    = OutputSetting.names[name] || "原始图片"
+  
     .image
-      %h4{style:"color:#ccc"}= "图片处理中, 请稍后刷新页面"
-
-  - else
-    - @image.versions.each do |version|
-      - name  = version.name
-      - value = version.value
-      - cn    = OutputSetting.names[name] || "原始图片"
-    
-      .image
+      - if @image.file_processing && name != :raw
+        %h4{style:"color:#ccc"}= "图片处理中, 请稍后刷新页面"
+      - else
         %h4= cn
       
         - if !value.blank?
@@ -27,7 +24,7 @@
               #{value[0]} px
       
         %a.url.icon.ion-link{href: "/display?url=#{version.url}"}
-  
+    
         .formats
           - %W(url html markdown).each do |meth|
             %label
