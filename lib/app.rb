@@ -15,7 +15,6 @@ require 'carrierwave'
 require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
-require "carrierwave_backgrounder"
 require File.expand_path("../../config/env",__FILE__)
 
 require "./lib/image"

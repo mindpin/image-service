@@ -9,24 +9,21 @@
     - cn    = OutputSetting.names[name] || "原始图片"
   
     .image
-      - if @image.file_processing && name != :raw
-        %h4{style:"color:#ccc"}= "图片处理中, 请稍后刷新页面"
-      - else
-        %h4= cn
+      %h4= cn
       
-        - if !value.blank?
-          %span
-            - if value.size == 2
-              #{value[0]} px
-              %span.icon.ion-ios7-close-empty
-              #{value[1]} px
-            - else
-              #{value[0]} px
+      - if !value.blank?
+        %span
+          - if value.size == 2
+            #{value[0]} px
+            %span.icon.ion-ios7-close-empty
+            #{value[1]} px
+          - else
+            #{value[0]} px
       
-        %a.url.icon.ion-link{href: "/display?url=#{version.url}"}
+      %a.url.icon.ion-link{href: "/display?url=#{version.url}"}
     
-        .formats
-          - %W(url html markdown).each do |meth|
-            %label
-              #{meth}
-              %input.copy{type: "text", value: version.send(meth), readonly: true}
+      .formats
+        - %W(url html markdown).each do |meth|
+          %label
+            #{meth}
+            %input.copy{type: "text", value: version.send(meth), readonly: true}

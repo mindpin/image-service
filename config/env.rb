@@ -1,10 +1,10 @@
-
 Mongoid.load!("./config/mongoid.yml")
 
 ENV_YAML_HASH = YAML.load_file(File.expand_path("../env.yml",__FILE__))
 
 class R
   ALIYUN_BASE_DIR = ENV_YAML_HASH['ALIYUN_BASE_DIR']
+  IMAGE_ENDPOINT = ENV_YAML_HASH['IMAGE_ENDPOINT']
 end
 
 CarrierWave.configure do |config|
@@ -13,8 +13,4 @@ CarrierWave.configure do |config|
   config.aliyun_bucket = ENV_YAML_HASH['ALIYUN_BUCKET']
   config.aliyun_internal = false
   config.aliyun_area = ENV_YAML_HASH['ALIYUN_AREA']
-end
-
-CarrierWave::Backgrounder.configure do |c|
-  c.backend :sidekiq, queue: :carrierwave
 end
