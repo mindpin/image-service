@@ -61,11 +61,15 @@ class Image
     File.join(base, [param, filename].compact.join("_"))
   end
 
-  def new_url(param)
+  def base
     File.join(R::IMAGE_ENDPOINT,
               R::ALIYUN_BASE_DIR,
               "images/#{token}",
-              "#{filename}@#{param}#{ext}")
+              "#{filename}")
+  end
+
+  def new_url(param)
+    param ? "#{base}@#{param}#{ext}" : base
   end
 
   class Version
@@ -78,7 +82,7 @@ class Image
       @image = image
       @value = array.select {|i| i.match /[0-9]+/}.map(&:to_i)
 
-      if image.old || @name == :raw
+      if image.old
         @url = image.old_url(version_def)
       else
         param = OutputSetting.translate(name, value)
