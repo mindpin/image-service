@@ -2,21 +2,25 @@ module MiniMagick
   class Image
     def histogram
       @histogram ||= proc {
-        regexp = /^.*\:\s*\([\d\s\,]*\)\s*(?<hex>\#\h*)\s*srgba\((?<rgba>.*)\)$/
+        regexp = /^.*\:\s*\([\d\s\,]*\)\s*(?<hex>\#\h*)\s*(?<rgba>.*)$/
 
         raw = run_command(:convert,
                           path,
                           "-format",
-                          "%c\n",
+                          "%c",
                           "-colors",
                           1,
                           "-depth",
                           8,
-                          "histogram:info:").match(regexp)
+                          "-colorspace",
+                          "RGB",
+                          "-alpha",
+                          "On",
+                          "histogram:info:").strip.match(regexp)
 
         {
-          :rgba => raw[:rgba].split(","),
-          :hex  => raw[:hex][0..-3]
+          :rgba => raw[:rgba],
+          :hex  => raw[:hex][0, 7]
         }
       }.call
     end
