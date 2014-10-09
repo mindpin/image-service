@@ -12,10 +12,13 @@ class Image
   field :versions, type: Array
   field :mime,     type: String
   field :old,      type: Boolean,  default: false
+  field :meta,     type: Hash
 
   validate :file, :original, :filename, presence: true
 
   mount_uploader :file, ImageUploader
+
+  after_create :set_meta!
 
   alias :old_vers :versions
 
@@ -70,6 +73,22 @@ class Image
 
   def new_url(param)
     param ? "#{base}@#{param}#{ext}" : base
+  end
+
+  def magick
+    @magick ||= MiniMagick::Image.open(self.raw.url)
+  end
+
+  def set_meta!
+    self.meta = {
+      color: magick.histogram,
+      height: magick[:heigh],
+      width: magick[:width],
+    }
+
+    self.save
+  rescue OpenURI::HTTPError
+    false
   end
 
   class Version

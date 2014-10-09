@@ -14,6 +14,7 @@ gem 'uglifier'
 
 gem "carrierwave", "0.8.0"
 gem 'carrierwave-mongoid'
+gem "mini_magick"
 
 gem 'rest-client'
 gem 'carrierwave-aliyun',

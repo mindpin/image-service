@@ -15,6 +15,8 @@ require 'carrierwave'
 require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
+require "mini_magick"
+require "./lib/ext"
 require File.expand_path("../../config/env",__FILE__)
 
 require "./lib/image"
@@ -92,6 +94,12 @@ class ImageServiceApp < Sinatra::Base
   get "/images/:token" do
     @image = Image.find_by(token: params[:token])
     haml :image
+  end
+
+  get "/images/:token.json" do
+    @image = Image.find_by(token: params[:token])
+    content_type :json
+    JSON.generate meta: @image.color
   end
 
   get "/display" do
