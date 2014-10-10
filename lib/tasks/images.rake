@@ -3,7 +3,7 @@ namespace :images do
   task :set_meta do
     begin
       puts "====: 开始设置"
-      criteria = Image.where(meta: nil)
+      criteria = Image.all
       total    = criteria.size
 
       criteria.each_with_index do |task, index|

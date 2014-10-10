@@ -52,6 +52,11 @@ class ImageServiceApp < Sinatra::Base
     headers("Access-Control-Allow-Credentials" => "true")
     headers("Access-Control-Allow-Methods" => "POST,GET,OPTIONS")
   end
+
+  def img_json(image)
+    content_type :json
+    JSON.generate({filename: image.filename, url: image.raw.url}.merge(image.meta || {}))
+  end
   
   get "/" do
     haml :index
@@ -73,8 +78,7 @@ class ImageServiceApp < Sinatra::Base
 
   post "/images" do
     image = Image.from_params(params[:file])
-    content_type :json
-    JSON.generate show: "/images/#{image.token}", orig: "http://#{request.host_with_port}/r/#{image.token}"
+    img_json(image)
   end
 
   get "/settings" do
@@ -98,8 +102,7 @@ class ImageServiceApp < Sinatra::Base
 
   get "/images/:token.json" do
     @image = Image.find_by(token: params[:token])
-    content_type :json
-    JSON.generate meta: @image.color
+    image_json(@image.color)
   end
 
   get "/display" do

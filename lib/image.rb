@@ -81,9 +81,10 @@ class Image
 
   def set_meta!
     self.meta = {
-      color: magick.histogram,
+      major_color: magick.histogram,
       height: magick[:heigh],
       width: magick[:width],
+      filesize: magick.tempfile.size,
     }
 
     self.save
