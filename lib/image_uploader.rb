@@ -14,7 +14,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   def store_dir
-    File.join(R::ALIYUN_BASE_DIR, "images/#{model.token}")
+    R::ALIYUN_BASE_DIR
   end
 
   def cache_dir

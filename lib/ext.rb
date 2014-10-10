@@ -24,5 +24,9 @@ module MiniMagick
         }
       }.call
     end
+
+    def tempfile
+      @tempfile
+    end
   end
 end

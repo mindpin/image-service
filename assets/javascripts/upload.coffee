@@ -40,7 +40,7 @@ jQuery ->
 
     deferred.done (res)->
       file.elm.find("i").fadeOut()
-      file.elm.find("a").attr("href", res.show).fadeIn()
+      file.elm.find("a").attr("href", "/images/#{res.filename.split('.')[0]}").fadeIn()
     
   jQuery(".select-file").on "click", ->
     $fileinput.trigger("click")
