@@ -1,0 +1,67 @@
+!!!
+%html{:lang => "zh"}
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}
+    %title img4ye service
+    %link{:href => "css/ui.css", :rel => "stylesheet"}
+  %body
+    .home
+      .file-list
+        .file
+          .img{:style => 'background-image:url(http://ww1.sinaimg.cn/bmiddle/548cebedjw1el5ddxve3pj21h20r4q81.jpg)'}
+          .ubox
+            %textarea.url{:readonly => true} http://ww1.sinaimg.cn/bmiddle/548cebedjw1el5ddxve3pj21h20r4q81.jpg
+          .op.copy
+            %i.fa.fa-clipboard
+          .op.close
+            %i.fa.fa-times
+          .loading-icon
+            %i.fa.fa-refresh.fa-spin
+        .file
+          .img{:style => 'background-image:url(http://ww1.sinaimg.cn/bmiddle/548cebedjw1ekrd4wf4qyj21hc0sbqk3.jpg)'}
+          .ubox
+            %textarea.url{:readonly => true} http://ww1.sinaimg.cn/bmiddle/548cebedjw1ekrd4wf4qyj21hc0sbqk3.jpg
+          .op.copy
+            %i.fa.fa-clipboard
+          .op.close
+            %i.fa.fa-times
+          .loading-icon
+            %i.fa.fa-refresh.fa-spin
+        .file
+          .img{:style => 'background-image:url(http://ww4.sinaimg.cn/cmw205/548cebedjw1ef54s937hmj219c0y0gw4.jpg)'}
+          .ubox
+            %textarea.url{:readonly => true} http://ww4.sinaimg.cn/cmw205/548cebedjw1ef54s937hmj219c0y0gw4.jpg
+          .op.copy
+            %i.fa.fa-clipboard
+          .op.close
+            %i.fa.fa-times
+          .loading-icon
+            %i.fa.fa-refresh.fa-spin
+        .file
+          .img{:style => 'background-image:url(http://ww2.sinaimg.cn/cmw205/548cebedtw1edkj6clcd6j21kw16onaq.jpg)'}
+          .ubox
+            %textarea.url{:readonly => true} http://ww2.sinaimg.cn/cmw205/548cebedtw1edkj6clcd6j21kw16onaq.jpg
+          .op.copy
+            %i.fa.fa-clipboard
+          .op.close
+            %i.fa.fa-times
+          .loading-icon
+            %i.fa.fa-refresh.fa-spin
+
+      .area
+        .logo>
+          %span> img
+          %span.siye> 4ye
+          
+        .ops
+          .op.from-album
+            .opbox
+              %i.fa.fa-image
+          .op.from-camera
+            .opbox
+              %i.fa.fa-camera
+
+    %script{:src => "js/lib/jquery-2.1.1.min.js", :type => "text/javascript"}
+    %script{:src => "js/lib/coffee-script.js", :type => "text/javascript"}
+    %script{:src => "js/ui.coffee", :type => "text/coffeescript"}

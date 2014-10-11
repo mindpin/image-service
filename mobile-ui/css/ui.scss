@@ -1,0 +1,195 @@
+$fa-font-path: "font-awesome-4.2.0/fonts";
+@import "font-awesome-4.2.0/scss/font-awesome.scss";
+
+@font-face {
+  font-family: 'Futura-Condensed';
+  src: url('fonts/Futura-Condensed.eot');
+  src: local('☺'), url('fonts/Futura-Condensed.woff') format('woff'), url('fonts/Futura-Condensed.ttf') format('truetype'), url('fonts/Futura-Condensed.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import "mixin";
+
+body {
+  font-family: "Segoe UI", "Helvetica Neue", "Helvetica", "Arial", "sans-serif", "微软雅黑";
+  color:#333;
+  line-height:1.5;
+  font-size:14px;
+  padding:0;
+  margin:0;
+
+  textarea {
+    font-family: "Menlo", "Monaco", "Consolas", "Courier New", "monospace", "微软雅黑";
+  }
+}
+
+$logo-height: 48px;
+$btn-width: 64px;
+
+$right-area-width: $btn-width + $btn-width * 3/4 * 2;
+
+@mixin default-transition {
+  @include transition(all .5s);
+}
+
+.home {
+  .file-list {
+    background-color: #FFF;
+
+    .file {
+      padding:10px;
+      overflow:hidden;
+      position:relative;
+      background-color: #f1f1f1;
+      margin:5px;
+      border-radius:3px;
+
+      .img {
+        width:80px;height:80px;
+        background-size:cover;
+        background-repeat:no-repeat;
+        background-position:center center;
+        box-sizing:border-box;
+        float:left;
+        box-shadow:3px 3px 0 rgba(black, 0.1);
+        // box-shadow:0 0 3px rgba(black, 0.1);
+      }
+
+      .ubox {
+        position:absolute;
+        height:80px;top:10px;left:100px;right:64px;
+
+        .url {
+          height:80px;width:100%;
+          padding:0 5px;margin:0;
+          line-height:20px;font-size:12px;
+          resize:none;
+          border:0 none;
+          box-sizing:border-box;
+          background-color:#f7f7f7;
+          word-wrap: break-word;
+          overflow:hidden;
+          border-radius:3px;
+          color:#555;
+        }
+      }
+
+      .op {
+        $h:35px;
+        position:absolute;
+        height:$h;right:10px;top:10px;
+        background-color:#ddd;
+        width:44px;
+        color:#999;
+        border-radius:3px;
+        i {
+          height:$h;line-height:$h;
+          width:44px;text-align:center;
+          font-size:18px;
+        }
+        &.close {
+          top:55px;
+        }
+      }
+
+
+      .loading-icon {
+        color:#666;
+        font-size:24px;
+        position:absolute;
+        top:50%;left:50%;
+        width:40px;height:40px;
+        margin-left:-20px;margin-top:-20px;
+        text-align:center;
+        opacity:0;
+        pointer-events: none;
+      }
+
+      .img, .ubox, .op {
+        @include default-transition;
+      }
+      .loading-icon {
+        @include default-transition;
+      }
+    }
+
+    .file.loading {
+      .img, .ubox, .op {
+        opacity:0;
+      }
+      .loading-icon {
+        opacity:1;
+      }
+    }
+  }
+
+  .area {
+    position:relative;
+    $h:96px;
+    .logo {
+      position:absolute;
+      top:0;left:0;
+      right:160px;
+      height:$h;
+
+      font-family: "Futura-Condensed";
+      font-weight:bold;
+      font-size:48px;
+
+      text-align:center;
+      line-height:$h;
+
+      color:#555;
+      span.siye {
+        color:#7DB500;
+      }
+    }
+
+    .ops {
+      position:absolute;
+      top:0;right:0;height:96px;
+
+      .op {
+        @include default-transition;
+
+        width:$btn-width;
+        height:$btn-width;
+        position: relative;
+        float:left;
+        margin-right:$btn-width/4;
+        margin-top:$btn-width/4;
+
+        &.from-album {
+        }
+
+        &.from-camera {
+        }
+
+        .opbox {
+          $c: #eee;
+          position:absolute;
+          top:0;left:0;right:0;bottom:0;
+          border-radius:100px;
+          background-color:$c;
+
+          i {
+            position:absolute;
+            width:$btn-width;height:$btn-width;line-height:$btn-width;
+            top:50%;left:50%;
+            margin-left:-$btn-width/2;margin-top:-$btn-width/2;
+            text-align:center;
+            font-size:$btn-width * 0.5;
+            color:rgba(black, 0.3);
+          }
+        }
+
+        .opbox:hover, .opbox:active {
+          $c: lighten(#FFCC3F, 25%);
+          background-color:$c;
+          border-color:$c;
+        }
+      }
+    }
+  }
+}
