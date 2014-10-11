@@ -52,15 +52,14 @@ namespace :images do
         rescue OpenURI::HTTPError
           not_found << task.id.to_s
           print "已完成(#{current}/#{total})#{newline}"
+        rescue Exception => ex
+          binding.pry
+          exit
         end
       end
 
       puts "====: 以下图片不存在: #{not_found.join(",")}" if not_found.any?
       puts "====: 设置完毕."
-    rescue Exception => ex
-      puts ex.class
-      puts ex.backtrace
-      exit
     end
   end
 end
