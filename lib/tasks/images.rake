@@ -34,7 +34,7 @@ namespace :images do
         current = index + 1
         newline = current == total ? "\n" : "\r"
 
-        old_path = File.join(R::IMAGE_ENDPOINT,
+        old_path = File.join("http://#{task.raw.url.split('/i')[0]}",
                              "image_service",
                              "images/#{task.token}",
                              task.filename)
