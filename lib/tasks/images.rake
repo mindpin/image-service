@@ -42,7 +42,6 @@ namespace :images do
                                "images/#{task.token}",
                                task.filename)
 
-          binding.pry
           task.file = open(old_path)
           task.save
 
