@@ -37,12 +37,13 @@ namespace :images do
         newline = current == total ? "\n" : "\r"
 
         begin
-          old_path = File.join("#{task.raw.url.split('/i')[0]}",
+          old_path = File.join("#{task.raw.url.split('/i/')[0]}",
                                "image_service",
                                "images/#{task.token}",
                                task.filename)
 
-          task.file = open("http://img.4ye.me/hehe")
+          binding.pry
+          task.file = open(old_path)
           task.save
 
           print "已完成(#{current}/#{total})#{newline}"
