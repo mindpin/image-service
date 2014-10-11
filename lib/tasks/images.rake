@@ -25,6 +25,9 @@ namespace :images do
 
   desc "拷贝所有图片到新的路径"
   task :migrate_path do
+    OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
+    OpenURI::Buffer.const_set 'StringMax', 0
+
     not_found = []
 
     begin
