@@ -49,16 +49,6 @@ class Image
     Version.new(self, nil)
   end
 
-  def save_old_urls
-    versions[1..-1].each do |version|
-      self.old_urls = [] if !self.old_urls
-      next if self.old_urls.include?(version.url)
-      self.old_urls << version.url
-    end
-
-    save
-  end
-
   def old_url(param)
     base = file.url.split(filename)[0]
     File.join(base, [param, filename].compact.join("_"))
@@ -67,7 +57,6 @@ class Image
   def base
     File.join(R::IMAGE_ENDPOINT,
               R::ALIYUN_BASE_DIR,
-              "images/#{token}",
               "#{filename}")
   end
 
