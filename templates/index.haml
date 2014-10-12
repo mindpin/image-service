@@ -1,5 +1,5 @@
 .page-index
-  .col-pad-4.col-pad-offset-4
+  .base-info.col-pad-4.col-pad-pull-4
     .logo>
       %span.a> img
       %span.b> 4ye
@@ -13,27 +13,37 @@
       %i.fa.fa-smile-o
 
     %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
-      %input{type: "file", name: "file", multiple: true}
+      %input{type: "file", name: "file", multiple: true, accept: ".jpg,.jpeg,.png,.gif"}
 
     .ops
       %a.op.btn-upload{:href => 'javascript:;', :draggable => false}
         %i.fa.fa-upload
 
       %a.op.btn-explore{:href => '/images', :target => '_blank'}
-        %i.fa.fa-list
+        %i.fa.fa-th-large
 
-
-.image-upload{:style => 'display:none;'}
-  .select-file
-    %i.icon.ion-image
-    %span.txt 点击选择图片或者Ctrl + V粘贴图片
-
-  %a.all{href: "/images"}
-    %i.icon.ion-grid
-    所有图片
-
-  .uploading-list
+  .uploading-list.col-pad-7.col-pad-pull-4
     .uploading.template
-      %span.filename
-      %a.icon.ion-link
-      %i.icon.ion-loading-c
+      :ruby
+        filename = 'CcZU32rQ.jpg'
+        url = 'http://img.teamkn.com/i/CcZU32rQ.jpg'
+        url1 = "#{url}@150w_150h_1c_1e"
+
+      .op.close
+        %i.fa.fa-times
+
+      %a.image{:href => url, :target => '_blank'}
+        .ibox
+          %img{:src => url1}
+        %i.fa.fa-circle-o-notch.fa-spin
+      .info
+        .filename filename
+        .field
+          %label url
+          %input.url.i{:type => :text, :readonly => true, :value => url}
+        .field
+          %label html
+          %input.url.h{:type => :text, :readonly => true, :value => "<img src='#{url}' />"}
+        .field
+          %label md
+          %input.url.m{:type => :text, :readonly => true, :value => "![](#{url})"}

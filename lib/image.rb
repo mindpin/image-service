@@ -34,11 +34,29 @@ class Image
   # base64 字符串形如：
   # data:image/png;base64, ....
   def self.from_base64(base64_str)
-    png_data = Base64.decode64 base64_str['data:image/png;base64,'.length .. -1]
-    tempfile = Tempfile.new 'tmp'
-    tempfile.write png_data
+    idx = base64_str.index(',') + 1 
+    png_data = Base64.decode64 base64_str[idx .. -1]
 
-    image = self.new(token: randstr, original: "image-#{(Time.now.to_f * 1000).to_i}.png")
+    tempfile = Tempfile.new 'tmp'
+    begin
+      tempfile.write png_data
+      image = self.new(token: randstr, original: "paste-#{(Time.now.to_f * 1000).to_i}.png")
+      image.mime = 'image/png'
+      image.file = tempfile
+      image.versions = OutputSetting.version_names
+      image.save
+    ensure
+      tempfile.close
+      tempfile.unlink
+    end
+
+    image
+  end
+
+  # 从传入的远程网址读取图片文件
+  def self.from_remote_url(remote_url)
+    tempfile = open remote_url
+    image = self.new(token: randstr, original: "remote-#{(Time.now.to_f * 1000).to_i}.png")
     image.mime = 'image/png'
     image.file = tempfile
     image.versions = OutputSetting.version_names

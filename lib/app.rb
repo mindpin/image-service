@@ -81,12 +81,16 @@ class ImageServiceApp < Sinatra::Base
   post "/images" do
     if params[:base64]
       image = Image.from_base64 params[:base64]
-    else
-      p params[:file]
-      # image = Image.from_params(params[:file])
+
+    elsif params[:remote_url]
+      image = Image.from_remote_url params[:remote_url]
+    
+    elsif params[:file]
+      image = Image.from_params(params[:file])
+    
     end
 
-    img_json(image)
+    img_json(image) if image
   end
 
   get "/settings" do

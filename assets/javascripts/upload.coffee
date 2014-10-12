@@ -24,13 +24,27 @@ jQuery.fn.draghover = (options)->
       evt.preventDefault()
 
 
+
+class ImageUrlFormatter
+  constructor: (@url)->
+    @html = "<img src='#{@url}' />"
+    @markdown = "![](#{@url})"
+
+  clip_url: (width, height)->
+    "#{@url}@#{width}w_#{height}h_1e_1c"
+
+
+
 class IndexPage
   constructor: (@$el)->
     @$file_input = @$el.find('form.upload input[type=file]')
-    
+    @$uploading_list = @$el.find('.uploading-list')
+
     @bind_events()
 
   bind_events: ->
+    that = @
+
     # 禁止拖拽页面元素
     jQuery(document).on 'dragstart', (evt)=>
       evt.stopPropagation()
@@ -65,6 +79,19 @@ class IndexPage
         @upload file
 
 
+    # 通过粘贴上传文件
+    ###
+      粘贴有六种情况：
+      1. [√] 在 chrome 下通过软件复制图像数据
+      2. [√] 在 chrome 下右键复制网页图片
+      3. [×] 在 chrome 下粘贴磁盘文件句柄 ......
+
+      4. [√] 在 firefox 下通过软件复制图像数据
+      5. [√] 在 firefox 下右键复制网页图片
+      6. [√] 在 firefox 下粘贴磁盘文件句柄
+    ###
+
+
     # 粘贴剪贴板内容 (chrome)
     # 在 firefox 下，需要在页面放置一个隐藏的 contenteditable = true 的 dom
     paste_dom = jQuery '<div contenteditable></div>'
@@ -76,75 +103,139 @@ class IndexPage
       .focus()
 
     jQuery(document).on 'paste', (evt)=>
-      paste_dom.focus()
-
-      setTimeout =>
-        if ($img = paste_dom.find('img')).length
-          @_deal_firefox_paste $img
-          return
-        
+      # chrome
       arr = (evt.clipboardData || evt.originalEvent.clipboardData)?.items
-      @_deal_chrome_paste arr if arr
+      if arr?.length
+        return @_deal_chrome_paste arr
+
+      # firefox
+      paste_dom.html('').focus()
+      setTimeout =>
+        paste_dom.find('img').each ->
+          $img = jQuery(this)
+          that._deal_firefox_paste $img
+
+
+    # 选中 input 内容
+    @$uploading_list.delegate 'input', 'click', ->
+      jQuery(this).select()
+
+
+    # 关闭 uploading
+    @$uploading_list.delegate '.op.close', 'click', ->
+      $uploading = jQuery(this).closest '.uploading'
+      $uploading.hide 400, -> 
+        $uploading.remove()
+        if that.$uploading_list.find('.uploading:not(.template)').length is 0
+          that.$el.removeClass 'uploading'
+
 
   _deal_firefox_paste: ($img)->
     console.log 'firefox paste'
+    src = $img.attr 'src'
+    if src.match /^data\:image\//
+      @upload_base64 src
+      return
+    if src.match /http\:\/\//
+      @upload_remote_url src
 
-    jQuery.ajax
-      type : "POST"
-      url         : '/images'
-      data        : 
-        'base64': $img.attr('src')
 
   _deal_chrome_paste: (arr)->
     console.log 'chrome paste'
     for i in arr
       if i.type.match(/^image\/\w+$/) 
         file = i.getAsFile()
-        @upload(file, "image-#{(new Date).valueOf()}.png") if file
+        @upload(file) if file
 
 
 
   # 上传指定文件
-  upload: (file, name)->
-    console.log file
-    file.name = name if name
-    uploader = new FileUploader(file)
+  upload: (file)->
+    file.name ?= "paste-#{(new Date).valueOf()}.png"
 
-    uploader.before ->
-      # $image_upload.addClass("moveup")
-      # $uploading = $uploading_template.clone()
-
-      # file.elm = $uploading
-
-      # $uploading.find(".filename").text(file.name)
-      # $uploading_list.fadeIn()
-      # $uploading_list.append($uploading)
-      # $uploading.fadeIn()
-
-    deferred = uploader.request("/images")
-
-    deferred.done (res)->
-      file.elm.find("i").fadeOut()
-      file.elm.find("a").attr("href", "/images/#{res.filename.split('.')[0]}").fadeIn()
-
-
-
-class FileUploader
-  constructor: (@file)->
-    @data = new FormData
-    @data.append "file", @file, @file.name
-
-  before: (fn)->
-    @before = fn
-
-  request: (url)->
-    @before()
+    @$el.addClass 'uploading'
+    $uploading = @_generate_uploading_el(file.name)
     jQuery.ajax
-      type : "POST"
+      type        : 'POST'
       contentType : false
       processData : false
-      url         : url
-      data        : @data
+      url         : '/images'
+      data        : @_make_file_data(file)
+      success: (res)=>
+        @_deal_res res, $uploading
+
+
+  # 上传 base64 信息
+  upload_base64: (base64_string)->
+    filename = "paste-#{(new Date).valueOf()}.png"
+
+    @$el.addClass 'uploading'
+    $uploading = @_generate_uploading_el(filename)
+    jQuery.ajax
+      type : 'POST'
+      url  : '/images'
+      data : 
+        'base64': base64_string
+      success: (res)=>
+        @_deal_res res, $uploading
+
+
+  # 传远程 url，服务器读取远程 url
+  upload_remote_url: (remote_url)->
+    filename = "remote-#{(new Date).valueOf()}.png"
+
+    @$el.addClass 'uploading'
+    $uploading = @_generate_uploading_el(filename)
+    jQuery.ajax
+      type : 'POST'
+      url  : '/images'
+      data : 
+        'remote_url': remote_url
+      success: (res)=>
+        @_deal_res res, $uploading
+
+
+  _make_file_data: (file)->
+    data = new FormData
+    data.append "file", file, file.name
+    return data
+
+
+  _generate_uploading_el: (filename)->
+    @$uploading_list.find('.template').clone()
+      .removeClass 'template'
+      .addClass 'running'
+      .find('.filename').text(filename).end()
+      .find('input.url').val('').end()
+      .find('a.image')
+        .attr('href', 'javascript:;')
+        .find('.ibox').html('').end()
+      .end()
+      .prependTo @$uploading_list
+      .hide()
+      .show 400
+      # .css
+      #   'opacity': 0
+      #   'left': 100
+      # .animate
+      #   'opacity': 1
+      #   'left': 0
+      # , 300
+
+  _deal_res: (res, $uploading)->
+    iuf = new ImageUrlFormatter res.url
+
+    $uploading
+      .removeClass 'running'
+      .find('input.url.i').val(iuf.url).end()
+      .find('input.url.h').val(iuf.html).end()
+      .find('input.url.m').val(iuf.markdown).end()
+      .find('a.image').attr 'href', iuf.url
+
+    jQuery '<img>'
+      .attr 'src', iuf.clip_url(150, 150)
+      .hide().fadeIn()
+      .appendTo $uploading.find('a.image .ibox')
 
 
 
