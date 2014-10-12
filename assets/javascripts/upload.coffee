@@ -23,7 +23,17 @@ jQuery.fn.draghover = (options)->
       evt.stopPropagation()
       evt.preventDefault()
 
-
+# 跨域情况下似乎不能用，先注掉
+# getImageBlob = (url)->
+#   r = new XMLHttpRequest()
+#   r.open "GET", url, false
+#   # 详细请查看: https://developer.mozilla.org/En/XMLHttpRequest/Using_XMLHttpRequest#Receiving_binary_data
+#   # XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com]
+#   r.overrideMimeType 'text/plainl; charset=x-user-defined'
+#   r.send null
+#   blob = binaryToBlob r.responseText
+#   blob.fileType = 'image/png'
+#   blob
 
 class ImageUrlFormatter
   constructor: (@url)->
@@ -134,9 +144,15 @@ class IndexPage
     console.log 'firefox paste'
     src = $img.attr 'src'
     if src.match /^data\:image\//
-      @upload_base64 src
+      blob = dataURLtoBlob src
+      blob.name = "paste-#{(new Date).valueOf()}.png"
+      @upload blob
       return
+
     if src.match /http\:\/\//
+      # blob = getImageBlob src
+      # blob.name = "remote-#{(new Date).valueOf()}.png"
+      # @upload blob
       @upload_remote_url src
 
 
@@ -166,6 +182,8 @@ class IndexPage
 
 
   # 上传 base64 信息
+  # 因为找到了 canvas-to-blob 这个库，因此用了更简单的方法来上传文件
+  # 此方法和服务端相应的处理方法都没有被用到，但保留
   upload_base64: (base64_string)->
     filename = "paste-#{(new Date).valueOf()}.png"
 
@@ -214,13 +232,6 @@ class IndexPage
       .prependTo @$uploading_list
       .hide()
       .show 400
-      # .css
-      #   'opacity': 0
-      #   'left': 100
-      # .animate
-      #   'opacity': 1
-      #   'left': 0
-      # , 300
 
   _deal_res: (res, $uploading)->
     iuf = new ImageUrlFormatter res.url
