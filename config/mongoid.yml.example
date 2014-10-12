@@ -1,0 +1,12 @@
+development:
+  sessions:
+    default:
+      database: img4ye
+      hosts:
+        - 0.0.0.0:27017
+test:
+  sessions:
+    default:
+      database: img4ye_test
+      hosts:
+        - 0.0.0.0:27017

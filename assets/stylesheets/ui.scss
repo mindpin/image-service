@@ -1,0 +1,118 @@
+$fa-font-path: "/lily/fonts";
+
+@import "assets/lily/css/lily.scss";
+
+@font-face {
+  font-family: 'Futura-Condensed';
+  src: url('/futura/Futura-Condensed.eot');
+  src: local('☺'), 
+    url('/futura/Futura-Condensed.woff') format('woff'), 
+    url('/futura/Futura-Condensed.ttf') format('truetype'), 
+    url('/futura/Futura-Condensed.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@mixin default-transition {
+  @include transition(all .3s);
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  background-color:#f7f7f7;
+  a {outline:0;}
+}
+
+.page-index {
+  .logo {
+    font-family: "Futura-Condensed";
+    font-size: 128px;
+    font-weight: bold;
+    span.a {color: #555;}
+    span.b {color: #7DB500;}
+
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+
+  .usage {
+    $c:rgba(white, 0.8);
+    background-color:$c;
+    padding:20px;
+    color: $black-50;
+    border-radius:$border-radius-default * 5;
+    font-size:16px;
+    margin-bottom:50px;
+    &:before {
+      content:"";
+      border:solid 20px transparent;
+      border-bottom:solid 20px $c;
+      position:absolute;
+      top:-40px;
+      left:60px;
+    }
+  }
+
+  form.upload {
+    display:none;
+  }
+
+  .ops {
+    $w:80px;
+    
+    position:relative;
+    left:50%;
+    margin-left: - $w * 2.5 / 2;
+
+    a.op {
+      @include unselectable;
+      outline:0 none !important;
+
+      display:block;
+      width:$w;height:$w;
+      background-color:#eee;
+      color:rgba(black, 0.3);
+      text-align:center;
+      font-size:$w * 0.5;
+      border-radius: $w * 2;
+      position:relative;
+
+      float:left;
+      margin-right:$w/2;
+
+      i {width:$w;height:$w;line-height:$w;}
+      @include default-transition;
+      &:hover {background-color: lighten($area-warning, 25%);}
+    }
+
+    a.op.btn-upload {
+      &:before {
+        $bw:3px;
+        $pw:8px;
+        content:"";
+        position:absolute;
+        border:dashed $bw #ddd;
+        width:$w;height:$w;
+        padding:$pw;
+        left:- $bw - $pw;
+        top:- $bw - $pw;
+        border-radius:100px;
+      }
+      &:hover:before {
+        border-color: darken(#FFCC3F, 25%);
+      }
+    }
+  }
+}
+
+body.drag-over {
+  background-color:$area-dawn;
+  .page-index .ops a.op.btn-upload {
+    background-color: lighten($area-warning, 25%);
+    &:before {border-color: darken(#FFCC3F, 25%);}
+  }
+}

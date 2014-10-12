@@ -1,9 +1,12 @@
 !!!
-%html
+%html{:lang => :zh}
   %head
-    %title ImageService
+    %meta{:'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf-8'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'}
+    %title img4ye Service
     = css :application
-    %link{rel: "stylesheet", href: "http://cdn.jsdelivr.net/ionicons/1.4.1/css/ionicons.min.css"}
   %body
-    = yield
+    .container
+      .row
+        = yield
     = js :application

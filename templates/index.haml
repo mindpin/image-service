@@ -1,10 +1,32 @@
-.image-upload
+.page-index
+  .col-pad-4.col-pad-offset-4
+    .logo>
+      %span.a> img
+      %span.b> 4ye
+
+    .usage
+      %span 上传本地图片
+      %br
+      %span 或者按下 Ctrl + V 粘贴剪贴板里的图片
+      %br
+      %span 或者拖拽图片文件到浏览器
+      %i.fa.fa-smile-o
+
+    %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
+      %input{type: "file", name: "file", multiple: true}
+
+    .ops
+      %a.op.btn-upload{:href => 'javascript:;', :draggable => false}
+        %i.fa.fa-upload
+
+      %a.op.btn-explore{:href => '/images', :target => '_blank'}
+        %i.fa.fa-list
+
+
+.image-upload{:style => 'display:none;'}
   .select-file
     %i.icon.ion-image
     %span.txt 点击选择图片或者Ctrl + V粘贴图片
-
-  %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
-    %input{type: "file", name: "file", multiple: true}
 
   %a.all{href: "/images"}
     %i.icon.ion-grid

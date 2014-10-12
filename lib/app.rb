@@ -33,6 +33,8 @@ class ImageServiceApp < Sinatra::Base
   assets {
     serve '/js', :from => 'assets/javascripts'
     serve '/css', :from => 'assets/stylesheets'
+    serve '/lily', :from => 'assets/lily' # 引用 lily 样式库
+    serve '/futura', :from => 'mobile-ui/css/fonts' # 引用 futura 字体
 
     js :application, "/js/application.js", [
       '/js/jquery-1.11.0.min.js',
@@ -40,7 +42,7 @@ class ImageServiceApp < Sinatra::Base
     ]
 
     css :application, "/css/application.css", [
-      '/css/**/*.css'
+      '/css/ui.css'
     ]
 
     css_compression :yui
@@ -77,7 +79,13 @@ class ImageServiceApp < Sinatra::Base
   end
 
   post "/images" do
-    image = Image.from_params(params[:file])
+    if params[:base64]
+      image = Image.from_base64 params[:base64]
+    else
+      p params[:file]
+      # image = Image.from_params(params[:file])
+    end
+
     img_json(image)
   end
 

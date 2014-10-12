@@ -31,6 +31,22 @@ class Image
     image
   end
 
+  # 从传入的 base64 字符串构建并保存图片对象
+  # base64 字符串形如：
+  # data:image/png;base64, ....
+  def self.from_base64(base64_str)
+    png_data = Base64.decode64 base64_str['data:image/png;base64,'.length .. -1]
+    tempfile = Tempfile.new 'tmp'
+    tempfile.write png_data
+
+    image = self.new(token: randstr, original: "image-#{(Time.now.to_f * 1000).to_i}.png")
+    image.mime = 'image/png'
+    image.file = tempfile
+    image.versions = OutputSetting.version_names
+    image.save
+    image
+  end
+
   def filename
     "#{token}#{ext}"
   end
