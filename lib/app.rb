@@ -112,7 +112,12 @@ class ImageServiceApp < Sinatra::Base
     haml :image
   end
 
-  get "/images/:token.json" do
+  post "/api/upload" do
+    image = Image.from_params(params[:file])
+    img_json(image) if image
+  end
+
+  get "/api/images/:token" do
     @image = Image.find_by(token: params[:token])
     image_json(@image.color)
   end
