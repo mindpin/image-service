@@ -17,7 +17,7 @@ class Image
 
   mount_uploader :file, ImageUploader
 
-  after_create :set_meta!
+  before_create :set_meta!
 
   alias :old_vers :versions
 
@@ -93,7 +93,8 @@ class Image
   end
 
   def magick
-    @magick ||= MiniMagick::Image.open(self.raw.url)
+    location = self.new_record? ? self.file.path : self.raw.url
+    @magick ||= MiniMagick::Image.open(location)
   end
 
   def set_meta!
@@ -104,7 +105,7 @@ class Image
       filesize: magick.tempfile.size,
     }
 
-    self.save
+    self.save if !self.new_record?
   rescue OpenURI::HTTPError
     false
   end
