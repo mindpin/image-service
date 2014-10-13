@@ -1,9 +1,14 @@
-.image-show
-  %h1
-    %i.icon.ion-navicon-round
-    所有图片
+.page-images
+  .images
+    - @images.each do |image|
+      :ruby
+        meta = image.meta
+        major_color = meta['major_color']['hex']
+        width = meta['width']
+        height = meta['height']
 
-  - @images.each do |image|
-    .image
-      %h4= image.original
-      %a.url.icon.ion-link{href: "/images/#{image.token}"} link
+        url_200w_200h = "#{image.base}@200w_200h_1e_1c"
+
+      .image{:data => {:'major-color' => major_color, :width => width, :height => height, :src => url_200w_200h, :base => image.base}}
+        .ibox
+          / %img{:src => url_200w_200h}
