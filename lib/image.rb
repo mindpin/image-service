@@ -113,10 +113,13 @@ class Image
     attr_reader :name, :value, :url, :image
 
     def initialize(image, version_def)
-      @name  = name.blank? ? :raw : name
+      array  = version_def ? version_def.to_s.split("_") : []
+      vname  = array.select {|i| i.match(/[a-zA-Z]+/)}.join("_").to_sym
+      @name  = vname.blank? ? :raw : vname
       @image = image
+      @value = array.select {|i| i.match(/[0-9]+/)}.map(&:to_i)
 
-      param = OutputSetting.translate(name, value)
+      param = version_def && OutputSetting.translate(name, value)
       @url = image.new_url(param)
     end
 

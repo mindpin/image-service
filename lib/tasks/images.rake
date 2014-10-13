@@ -53,7 +53,8 @@ namespace :images do
           not_found << task.id.to_s
           print "已完成(#{current}/#{total})#{newline}"
         rescue Exception => ex
-          binding.pry
+          puts ex.class
+          puts ex.backtrace
           exit
         end
       end
