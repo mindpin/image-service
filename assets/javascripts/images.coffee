@@ -1,0 +1,276 @@
+class Image
+  constructor: (@$el)->
+    @major_color = @$el.data 'major-color'
+    @width       = @$el.data 'width'
+    @height      = @$el.data 'height'
+    @base_url    = @$el.data 'base'
+
+    @padding = 0
+
+    @$ibox = @$el.find('.ibox')
+    @$ibox.css 'background-color', @major_color
+
+  pos: (left, top, width, height)->
+    @layout_left = left
+    @layout_top = top
+    @layout_width = width
+    @layout_height = height
+
+    @$el
+      .css
+        'left': left
+        'top': top
+        'width': width
+        'height': height
+
+  is_in_screen: ->
+    scroll_top = jQuery(document).scrollTop()
+
+    offset = @$el.offset()
+    offset_left = offset.left
+    offset_top  = offset.top - scroll_top
+
+    offset_right  = offset_left + @$el.width()
+    offset_bottom = offset_top + @$el.height()
+
+    screen_width = jQuery(window).width()
+    screen_height = jQuery(window).height()
+
+    return false if offset_right < 0
+    return false if offset_left > screen_width
+    return false if offset_bottom < 0
+    return false if offset_top > screen_height
+    return true
+
+  load: ->
+    return if @loaded
+    @loaded = true
+
+    w = Math.round @layout_width - @padding * 2
+    h = Math.round @layout_height - @padding * 2
+
+    img = jQuery "<img>"
+      .attr 'src', "#{@base_url}@#{w}w_#{h}h_1e_1c"
+      .attr 'draggable', false
+      .css 'opacity', 0
+      .on 'load', ->
+        img.animate
+          'opacity': 1
+        , 400
+      .appendTo @$ibox
+
+  set_padding: (padding)->
+    @padding = padding
+    @$el.css 'box-shadow', '1px 1px 3px rgba(0, 0, 0, 0.4)'
+      .find('.ibox')
+      .css
+        'top': padding
+        'left': padding
+        'right': padding
+        'bottom': padding
+
+# 水平网格布局
+class HorizontalGridLayout
+  constructor: (@host)->
+    @GRIDS = 6
+    @GRID_PADDING = 4
+
+    @bind_events()
+
+  go: ->
+    # 计算屏幕宽高
+    screen_height = jQuery(document).height()
+    screen_width  = jQuery(document).width()
+
+    # 计算 grid 边长
+    side_length = (screen_height - @GRID_PADDING * (@GRIDS + 1)) / @GRIDS
+
+    that = @
+    max_left = 0
+    max_top = 0
+
+    @host.each_image (idx, image)->
+      x = ~~(idx / that.GRIDS)
+      y = idx % that.GRIDS
+
+      left = that.GRID_PADDING + x * (side_length + that.GRID_PADDING)
+      top = that.GRID_PADDING + y * (side_length + that.GRID_PADDING)
+
+      image.x = x
+      image.y = y
+      max_left = 0
+      max_top = 0
+      image.pos left, top, side_length, side_length
+
+      max_left = Math.max max_left, image.layout_left
+      max_top = Math.max max_top, image.layout_top
+
+      image.load() if image.is_in_screen()
+
+    @host.$container
+      .css
+        'height': '100%'
+        'width': max_left + side_length
+
+  bind_events: ->
+    # 鼠标滚轮横向滚动
+    @host.$el.on 'mousewheel', (evt)=>
+      move = 100
+      left = parseInt @host.$container.css 'left'
+      left -= move if evt.deltaY < 0
+      left += move if evt.deltaY > 0
+      left = 0 if left > 0
+
+      @host.$container
+        .css
+          'left': left
+
+      @host.lazy_load_images()
+
+# 瀑布流
+class FlowLayout
+  constructor: (@host)->
+    @GRID_PADDING = 15
+    @bind_events()
+
+  go: ->
+    @_set_container_style()
+
+    container_width = @host.$container.width()
+
+    GRID_COUNT = ~~(container_width / 200)
+    side_length = (container_width - @GRID_PADDING * (GRID_COUNT - 1)) / GRID_COUNT
+
+
+    cols = ({height: @GRID_PADDING} for i in [0 ... GRID_COUNT])
+    padding = 4
+    @host.each_image (idx, image)=>
+      image.set_padding 4
+
+      heights = cols.map (col)-> col.height
+      minh = Math.min.apply null, heights
+      x = heights.indexOf minh
+
+      left = x * (side_length + @GRID_PADDING)
+      top = minh
+      height = side_length * image.height / image.width
+
+      cols[x].height += height + @GRID_PADDING
+
+      image.pos left, top, side_length, height
+      setTimeout ->
+        image.load() if image.is_in_screen()
+        console.log image.is_in_screen()
+
+  _set_container_style: ->
+    @host.$container.closest('.page-images')
+      .addClass 'col-pad-12'
+      .css 
+        'position': 'relative'
+        'background': 'none'
+
+  bind_events: ->
+    # 鼠标滚轮横向滚动
+    jQuery(document).on 'scroll', (evt)=>
+      @host.lazy_load_images()
+
+
+# 普通网格
+class GridLayout
+  constructor: (@host)->
+    @GRID_PADDING = 15
+    @bind_events()
+
+  go: ->
+    @_set_container_style()
+
+    container_width = @host.$container.width()
+
+    GRID_COUNT = ~~(container_width / 200)
+    side_length = (container_width - @GRID_PADDING * (GRID_COUNT - 1)) / GRID_COUNT
+
+
+    cols = ({height: @GRID_PADDING} for i in [0 ... GRID_COUNT])
+
+    @host.each_image (idx, image)=>
+      heights = cols.map (col)-> col.height
+      minh = Math.min.apply null, heights
+      x = heights.indexOf minh
+
+      left = x * (side_length + @GRID_PADDING)
+      top = minh
+      height = side_length
+
+      cols[x].height += height + @GRID_PADDING
+
+      image.pos left, top, side_length, height
+      setTimeout ->
+        image.load() if image.is_in_screen()
+        console.log image.is_in_screen()
+
+  _set_container_style: ->
+    # jQuery(document.body).css 'background-color', '#333333'
+
+    @host.$container.closest('.page-images')
+      .addClass 'col-pad-12'
+      .css 
+        'position': 'relative'
+        'background': 'none'
+
+  bind_events: ->
+    # 鼠标滚轮横向滚动
+    jQuery(document).on 'scroll', (evt)=>
+      @host.lazy_load_images()
+
+
+class ImageGrid
+  constructor: (@$el)->
+    # @_layout = new FlowLayout @
+    # @_layout = new HorizontalGridLayout @
+    @_layout = new GridLayout @
+
+    @$container = @$el.find('.icontainer')
+    
+    @images = []
+    that = @
+    @$container.find('.image').each ->
+      that.images.push new Image jQuery(this)
+
+    @bind_events()
+
+  each_image: (func)->
+    for idx in [0 ... @images.length]
+      func idx, @images[idx] 
+
+  # 对所有图片重新布局
+  layout: ->
+    @_layout.go()
+
+  bind_events: ->
+    that = this
+
+    # 图片点击
+    @$el.delegate '.image', 'click', ->
+      # $image = jQuery(this)
+      # that.show_detail $image
+
+
+  lazy_load_images: ->
+    @each_image (idx, image)->
+      image.load() if image.is_in_screen() 
+
+
+  # 显示单个图片详情
+  show_detail: ($image)->
+    @$container.addClass 'show-detail'
+
+    $image.addClass 'show-detail'
+
+
+jQuery ->
+  if jQuery('.page-images').length
+    grid = new ImageGrid jQuery('.page-images')
+    grid.layout()
+
+    jQuery(window).on 'resize', ->
+      grid.layout()
