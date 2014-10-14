@@ -37,8 +37,8 @@ class ImageServiceApp < Sinatra::Base
     serve '/futura', :from => 'mobile-ui/css/fonts' # 引用 futura 字体
 
     js :application, "/js/application.js", [
-      '/js/jquery-1.11.0.min.js',
-      '/js/**/*.js'
+      '/js/lib/*.js',
+      '/js/*.js'
     ]
 
     css :application, "/css/application.css", [
