@@ -249,3 +249,7 @@ jQuery ->
 
     jQuery(window).on 'resize', ->
       grid.layout()
+
+  if jQuery('.page-image-show').length
+    jQuery(document).delegate 'input.url', 'click', ->
+      jQuery(this).select()

@@ -243,7 +243,7 @@ body {
         font-size:15px;
         background-color:$black-40;
         color:white;
-        top:-$w/2;right:-$w/2;
+        top:$w/4;right:-$w/2;
         border-radius:100px;
         cursor:pointer;
         &:hover {
@@ -345,11 +345,25 @@ body.drag-over {
     padding:15px;
     border-radius:$border-radius-default;
     @include url-field;
+    margin-bottom:15px;
+    position:relative;
     .name {
       height:30px;line-height:30px;
       font-size: 16px;
       margin-bottom: 10px;
       font-weight: bold;
+    }
+
+    a.open {
+      position:absolute;
+      height:24px;width:24px;line-height:24px;
+      text-align:center;
+      border-radius:$border-radius-default;
+      background-color: #999;
+      &:hover {background-color: #666;}
+      color:white;
+      &:hover {text-decoration:none;}
+      right:15px;top:15px;
     }
   }
 }
