@@ -1,14 +1,15 @@
 .page-images
-  .images
+  %h3 总共 #{@images.count} 张图片
+  .icontainer
     - @images.each do |image|
       :ruby
+        id = image.id
         meta = image.meta
         major_color = meta['major_color']['hex']
         width = meta['width']
         height = meta['height']
 
-        url_200w_200h = "#{image.base}@200w_200h_1e_1c"
+        url_200w_200h = "#{image.base}@100w_100h_1e_1c"
 
-      .image{:data => {:'major-color' => major_color, :width => width, :height => height, :src => url_200w_200h, :base => image.base}}
+      %a.image{:href => "/images/#{image.token}", :target => '_blank', :data => {:id => id, :'major-color' => major_color, :width => width, :height => height, :base => image.base}}
         .ibox
-          / %img{:src => url_200w_200h}
