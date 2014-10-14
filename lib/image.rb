@@ -106,6 +106,15 @@ class Image
     }
 
     self.save if !self.new_record?
+  rescue MiniMagick::Error
+    self.meta = {
+      major_color: {hex: "#000000", rgba: "rgba(0,0,0,1)"},
+      height: 100,
+      width: 100,
+      filesize: 0
+    }
+
+    self.save if !self.new_record?
   rescue OpenURI::HTTPError
     false
   end
