@@ -41,7 +41,7 @@ class ImageUrlFormatter
     @markdown = "![](#{@url})"
 
   clip_url: (width, height)->
-    "#{@url}@#{width}w_#{height}h_1e_1c"
+    "#{@url}@#{width}w_#{height}h_1e_1c.png"
 
 
 

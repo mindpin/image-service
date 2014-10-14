@@ -40,10 +40,11 @@ class Image
       .attr 'src', @get_png_url(w, h)
       .attr 'draggable', false
       .css 'opacity', 0
-      .on 'load', ->
+      .on 'load', =>
         img.animate
           'opacity': 1
-        , 400
+        , 400, =>
+          @$ibox.css 'background', 'none'
       .appendTo @$ibox
 
   set_padding: (padding)->
