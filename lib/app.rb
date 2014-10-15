@@ -85,7 +85,8 @@ class ImageServiceApp < Sinatra::Base
   end
 
   get "/images" do
-    @images = Image.page(params[:page]).per(100)
+    @images = Image.order_by(created_at: -1)
+      .page(params[:page]).per(100)
     haml :images
   end
 
