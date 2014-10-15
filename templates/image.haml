@@ -5,7 +5,7 @@
       %span= @image.original
 
   .col-pad-5
-    .image.o
+    %a.image.o{:href => @image.base, :target => '_blank'}
       %img{:src => @image.base}
 
   .col-pad-7
@@ -25,6 +25,9 @@
               %span #{value[1]} px
             - else
               %span #{value[0]} px
+
+        %a.open{:href => url, :target => '_blank'}
+          %i.fa.fa-external-link
 
         .field
           %label url
