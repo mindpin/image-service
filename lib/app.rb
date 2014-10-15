@@ -18,6 +18,7 @@ require 'carrierwave-aliyun'
 require "mini_magick"
 require 'kaminari/sinatra'
 require "./lib/ext"
+require "logger"
 require File.expand_path("../../config/env",__FILE__)
 
 require "./lib/image"
@@ -27,15 +28,33 @@ class ImageServiceApp < Sinatra::Base
     register Sinatra::Reloader
   end
 
+  Logger.class_eval { alias :write :'<<' }
+  log_dir = File.join(File.dirname(File.expand_path("..", __FILE__)), "tmp", "logs")
+
+  FileUtils.mkdir_p(log_dir) if !File.exists?(log_dir)
+
+  access_log        = File.join(log_dir, "access.log")
+  access_logger     = Logger.new(access_log)
+  error_logger      = File.new(File.join(log_dir, "error.log"), "a+")
+  error_logger.sync = true
+ 
+  configure do
+    use Rack::CommonLogger, access_logger
+  end
+ 
+  before {
+    env["rack.errors"] =  error_logger
+  }
+
   set :views, ["templates"]
   set :root, File.expand_path("../../", __FILE__)
   register Sinatra::AssetPack
 
   assets {
-    serve '/js', :from => 'assets/javascripts'
-    serve '/css', :from => 'assets/stylesheets'
-    serve '/lily', :from => 'assets/lily' # 引用 lily 样式库
-    serve '/futura', :from => 'mobile-ui/css/fonts' # 引用 futura 字体
+    serve "/js", :from => "assets/javascripts"
+    serve "/css", :from => "assets/stylesheets"
+    serve "/lily", :from => "assets/lily" # 引用 lily 样式库
+    serve "/futura", :from => "mobile-ui/css/fonts" # 引用 futura 字体
 
     js :application, "/js/application.js", [
       '/js/lib/*.js',
@@ -43,7 +62,7 @@ class ImageServiceApp < Sinatra::Base
     ]
 
     css :application, "/css/application.css", [
-      '/css/ui.css'
+      "/css/ui.css"
     ]
 
     css_compression :yui
@@ -51,7 +70,7 @@ class ImageServiceApp < Sinatra::Base
   }
 
   before do
-    headers("Access-Control-Allow-Origin" => "#{request.env['HTTP_ORIGIN']}")
+    headers("Access-Control-Allow-Origin" => "#{request.env["HTTP_ORIGIN"]}")
     headers("Access-Control-Allow-Credentials" => "true")
     headers("Access-Control-Allow-Methods" => "POST,GET,OPTIONS")
   end
