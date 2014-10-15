@@ -1,6 +1,11 @@
 .page-images
   %h3 总共 #{@images.count} 张图片
   .icontainer
+    .loading-icon
+      %i.fa.fa-refresh.fa-spin
+    .end-text
+      the end
+
     - @images.each do |image|
       :ruby
         id = image.id

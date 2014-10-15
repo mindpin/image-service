@@ -25,6 +25,9 @@ gem 'mina',
     :git => 'git://github.com/fushang318/mina.git',
     :tag => 'v0.2.0fix'
 
+gem "kaminari", "~> 0.15.1",
+    :require => 'kaminari/sinatra'
+
 group :test do
   gem "rspec"
   gem "database_cleaner", "~> 1.2.0"

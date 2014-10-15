@@ -16,6 +16,7 @@ require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
 require "mini_magick"
+require 'kaminari/sinatra'
 require "./lib/ext"
 require File.expand_path("../../config/env",__FILE__)
 
@@ -65,7 +66,7 @@ class ImageServiceApp < Sinatra::Base
   end
 
   get "/images" do
-    @images = Image.all.sort(created_at: -1)
+    @images = Image.page(params[:page]).per(100)
     haml :images
   end
 

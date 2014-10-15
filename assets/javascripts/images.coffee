@@ -193,7 +193,7 @@ class GridLayout
           image.load() if image.is_in_screen()
 
       max_height = jQuery.array_max cols.map (col)-> col.height
-      @host.$container.css 'height', max_height
+      @host.$container.css 'height', max_height + 80
 
   _set_container_style: ->
     @host.$container.closest('.page-images')
@@ -205,6 +205,38 @@ class GridLayout
   bind_events: ->
     jQuery(document).on 'scroll', (evt)=>
       @host.lazy_load_images()
+
+      # 计算图片区域底部是否进入屏幕
+      off_bottom = @host.$container.offset_of_window().bottom
+      if off_bottom > -100
+        @load_next_page()
+
+  load_next_page: ->
+    return if @host.$container.hasClass 'end'
+    return if @host.$container.hasClass 'loading'
+    @host.$container.addClass 'loading'
+    page = @host.$container.data('page') || 1
+    jQuery.ajax
+      url: '/images'
+      type: 'GET'
+      data:
+        page: page + 1
+      success: (res)=>
+        that = @
+        $images = jQuery(res).find('.icontainer .image')
+
+        if $images.length
+          $images.each ->
+            $image = jQuery(this)
+            that.host.$container.append $image
+            that.host.add_image $image
+          @host.layout()
+          @host.$container.removeClass 'loading'
+          @host.$container.data 'page', page + 1
+
+        else
+          @host.$container.removeClass 'loading'
+          @host.$container.addClass 'end'
 
 
 class ImageGrid
@@ -218,9 +250,12 @@ class ImageGrid
     @images = []
     that = @
     @$container.find('.image').each ->
-      that.images.push new Image jQuery(this)
+      that.add_image jQuery(this)
 
     @bind_events()
+
+  add_image: ($image)->
+    @images.push new Image $image
 
   each_image: (func)->
     for idx in [0 ... @images.length]

@@ -297,6 +297,8 @@ body.drag-over {
   left:0;right:0;top:0;bottom:0;
   background-color:$black-80;
 
+  h3 {text-align:center;}
+
   .icontainer {
     position:relative;
     left:0;top:0;
@@ -327,6 +329,34 @@ body.drag-over {
       .image.show-detail {
         opacity:1;
       }
+    }
+
+    .loading-icon {
+      opacity:0;pointer-events:none;
+      @include default-transition;
+      position:absolute;
+      height:30px;
+      left:0;right:0;bottom:30px;
+      font-size:30px;line-height:30px;
+      text-align:center;
+    }
+    &.loading .loading-icon {
+      opacity:1;
+    }
+
+    .end-text {
+      opacity:0;pointer-events:none;
+      @include default-transition;
+      font-family: "Futura-Condensed";
+      font-size:24px;font-weight:bold;
+      position:absolute;
+      height:30px;
+      left:0;right:0;bottom:30px;
+      font-size:30px;line-height:30px;
+      text-align:center;
+    }
+    &.end .end-text {
+      opacity: 1;
     }
   }
 }
