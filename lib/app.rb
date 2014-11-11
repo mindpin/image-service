@@ -77,7 +77,11 @@ class ImageServiceApp < Sinatra::Base
 
   def img_json(image)
     content_type :json
-    JSON.generate({filename: image.filename, url: image.raw.url}.merge(image.meta || {}))
+    JSON.generate({
+      filename: image.filename, 
+      url: image.raw.url,
+      token: image.token
+    }.merge(image.meta || {}))
   end
   
   get "/" do
@@ -139,8 +143,7 @@ class ImageServiceApp < Sinatra::Base
   end
 
   get "/api/images/:token" do
-    @image = Image.find_by(token: params[:token])
-    image_json(@image.color)
+    img_json Image.find_by(token: params[:token])
   end
 
   get "/display" do

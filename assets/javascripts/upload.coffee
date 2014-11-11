@@ -241,7 +241,7 @@ class IndexPage
       .find('input.url.i').val(iuf.url).end()
       .find('input.url.h').val(iuf.html).end()
       .find('input.url.m').val(iuf.markdown).end()
-      .find('a.image').attr 'href', iuf.url
+      .find('a.image').attr 'href', "/images/#{res.token}"
 
     jQuery '<img>'
       .attr 'src', iuf.clip_url(150, 150)
