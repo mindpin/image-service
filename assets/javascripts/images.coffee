@@ -217,7 +217,7 @@ class GridLayout
     @host.$container.addClass 'loading'
     page = @host.$container.data('page') || 1
     jQuery.ajax
-      url: '/images'
+      url: @host.list_url
       type: 'GET'
       data:
         page: page + 1
@@ -240,9 +240,10 @@ class GridLayout
 
 
 class ImageGrid
-  constructor: (@$el)->
+  constructor: (@$el, list_url)->
     # @_layout = new FlowLayout @
     # @_layout = new HorizontalGridLayout @
+    @list_url = list_url
     @_layout = new GridLayout @
 
     @$container = @$el.find('.icontainer')
@@ -279,7 +280,8 @@ class ImageGrid
 
 jQuery ->
   if jQuery('.page-images').length
-    grid = new ImageGrid jQuery('.page-images')
+    list_url = '/zmkm/images'
+    grid = new ImageGrid jQuery('.page-images'), list_url
     grid.layout()
 
     jQuery(window).on 'resize', ->

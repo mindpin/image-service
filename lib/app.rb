@@ -84,11 +84,11 @@ class ImageServiceApp < Sinatra::Base
     }.merge(image.meta || {}))
   end
   
-  get "/" do
-    haml :index
+  get "/zmkm" do
+    haml :zmkm
   end
 
-  get "/images" do
+  get "/zmkm/images" do
     @images = Image.order_by(created_at: -1)
       .page(params[:page]).per(100)
     haml :images
@@ -99,11 +99,11 @@ class ImageServiceApp < Sinatra::Base
     redirect to(image.file.url)
   end
 
-  options "/images" do
+  options "/zmkm/images" do
     200 
   end
 
-  post "/images" do
+  post "/zmkm/images" do
     if params[:base64]
       image = Image.from_base64 params[:base64]
 
@@ -137,7 +137,7 @@ class ImageServiceApp < Sinatra::Base
     haml :image
   end
 
-  post "/api/upload" do
+  post "/api/zmkm/upload" do
     image = Image.from_params(params[:file])
     img_json(image) if image
   end
