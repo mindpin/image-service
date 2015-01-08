@@ -114,7 +114,13 @@ class ImageServiceApp < Sinatra::Base
 
 
   get "/" do
-    p current_user
+    redirect '/login' unless current_user
+    haml :index
+  end
+
+  get "/logout" do
+    user_sign_out!
+    redirect '/'
   end
   
 
