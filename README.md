@@ -7,6 +7,11 @@ cp config/mongoid.yml.example config/mongoid.yml
 cp config/env.yml.example config/env.yml
 # 配置 env.yml 内容
 
+
+cp env.example .env
+# 配置 oauth 登录支持
+
+
 bundle
 bundle exec rackup
 ```

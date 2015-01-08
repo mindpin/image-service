@@ -19,11 +19,31 @@ require "mini_magick"
 require 'kaminari/sinatra'
 require "./lib/ext"
 require "logger"
+
+require "sinatra/cookies"
+
+require 'omniauth'
+require 'omniauth-weibo-oauth2'
+require 'omniauth-qq'
+require 'omniauth-github'
+require 'dotenv'
+Dotenv.load
+
 require File.expand_path("../../config/env",__FILE__)
 
 require "./lib/image"
 
+
+require './lib/user'
+require './lib/user_token'
+
+
+enable :sessions
+
+
 class ImageServiceApp < Sinatra::Base
+  helpers Sinatra::Cookies
+
   configure :development do
     register Sinatra::Reloader
   end
@@ -40,6 +60,14 @@ class ImageServiceApp < Sinatra::Base
  
   configure do
     use Rack::CommonLogger, access_logger
+
+    use Rack::Session::Cookie
+    use OmniAuth::Builder do
+      provider :weibo, ENV['WEIBO_KEY'], ENV['WEIBO_SECRET']
+      provider :qq_connect, ENV['QQ_CONNECT_KEY'], ENV['QQ_CONNECT_SECRET']
+      provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+    end
+
   end
  
   before {
@@ -85,6 +113,7 @@ class ImageServiceApp < Sinatra::Base
   end
   
   get "/" do
+    p current_user
     haml :index
   end
 
@@ -150,4 +179,83 @@ class ImageServiceApp < Sinatra::Base
     @url = params[:url]
     haml :display
   end
+
+  get "/login" do
+    
+    haml :login
+  end
+
+  get "/auth/github/callback" do
+    build_oauth
+    
+    redirect "/"
+  end
+
+
+  get "/auth/weibo/callback" do
+    build_oauth
+    
+    redirect "/"
+  end
+
+
+  get "/auth/qq/callback" do
+    build_oauth
+    
+    redirect "/"
+  end
+
+  def build_oauth
+    auth_hash = request.env['omniauth.auth']
+    uid = auth_hash["uid"]
+    provider   = auth_hash["provider"]
+    token      = auth_hash["credentials"]["token"]
+    expires_at = auth_hash["credentials"]["expires_at"]
+    expires    = auth_hash["credentials"]["expires"]
+    
+    user_token = UserToken.where(
+      :uid      => uid,
+      :provider => provider
+    ).first
+
+    if user_token.blank?
+      user = User.create!(:name => auth_hash[:info][:nickname])
+      user_token = user.user_tokens.create(
+        :uid        => uid,
+        :provider   => provider,
+        :token      => token,
+        :expires_at => expires_at,
+        :expires    => expires
+      )
+    else
+      user_token.update_attributes(
+        :token      => token,
+        :expires_at => expires_at,
+        :expires    => expires
+      )
+    end
+    self.current_user = user_token.user
+  end
+
+
+  def current_user=(user)
+    user_id = user.id.to_s
+    cookies[:user_id] = user_id
+
+  end
+
+  def current_user
+    user_id = cookies[:user_id]
+
+    User.where(:id => user_id).last
+  end
+
+  def user_signed_in?
+    !!current_user
+  end
+
+  def user_sign_out!
+    cookies.delete :user_id
+  end
+
 end
