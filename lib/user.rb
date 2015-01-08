@@ -4,4 +4,5 @@ class User
 
   field :name, type: String
   has_many :user_tokens
+  has_many :images
 end

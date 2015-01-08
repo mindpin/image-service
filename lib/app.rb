@@ -31,11 +31,9 @@ Dotenv.load
 
 require File.expand_path("../../config/env",__FILE__)
 
-require "./lib/image"
-
-
 require './lib/user'
 require './lib/user_token'
+require "./lib/image"
 
 
 enable :sessions
@@ -129,9 +127,9 @@ class ImageServiceApp < Sinatra::Base
   end
 
   get "/zmkm/images" do
-    @images = Image.order_by(created_at: -1)
+    @images = Image.anonymous.order_by(created_at: -1)
       .page(params[:page]).per(100)
-    haml :images
+    haml :zmkm_images
   end
 
   get "/r/:token" do
@@ -161,6 +159,38 @@ class ImageServiceApp < Sinatra::Base
   get "/settings" do
     haml :settings
   end
+
+  ##
+  # 私人图片
+  options "/images" do
+    200 
+  end
+
+  post "/images" do
+    return status 401 if !user_signed_in?
+
+    if params[:base64]
+      image = Image.from_base64 params[:base64], current_user
+
+    elsif params[:remote_url]
+      image = Image.from_remote_url params[:remote_url], current_user
+    
+    elsif params[:file]
+      image = Image.from_params params[:file], current_user
+    
+    end
+
+    img_json(image) if image
+  end
+
+  get "/images" do
+    return status 401 if !user_signed_in?
+
+    @images = current_user.images.order_by(created_at: -1)
+      .page(params[:page]).per(100)
+    haml :images
+  end
+  ##
 
   post "/settings" do
     OutputSetting.from(params[:option].to_a[0])

@@ -46,8 +46,8 @@ class ImageUrlFormatter
 
 
 class IndexPage
-  constructor: (@$el, upload_url)->
-    @upload_url = upload_url
+  constructor: (@$el)->
+    @upload_url = @$el.data("upload-url")
     @$file_input = @$el.find('form.upload input[type=file]')
     @$uploading_list = @$el.find('.uploading-list')
 
@@ -252,5 +252,4 @@ class IndexPage
 
 
 jQuery ->
-  upload_url = "/zmkm/images"
-  new IndexPage jQuery('.page-index'), upload_url if jQuery('.page-index').length
+  new IndexPage jQuery('.page-index') if jQuery('.page-index').length

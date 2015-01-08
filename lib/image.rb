@@ -13,6 +13,8 @@ class Image
   field :mime,     type: String
   field :meta,     type: Hash
 
+  belongs_to :user
+  scope :anonymous, where(:user_id => nil)
   validate :file, :original, :filename, presence: true
 
   mount_uploader :file, ImageUploader
@@ -21,11 +23,14 @@ class Image
 
   alias :old_vers :versions
 
-  def self.from_params(hash)
+  def self.from_params(hash, user = nil)
     image = self.new(token: randstr, original: hash[:filename])
     image.mime = hash[:type]
     image.file = hash[:tempfile]
     image.versions = OutputSetting.version_names
+    if !user.blank?
+      image.user = user
+    end
     image.save
     image
   end
@@ -33,7 +38,7 @@ class Image
   # 从传入的 base64 字符串构建并保存图片对象
   # base64 字符串形如：
   # data:image/png;base64, ....
-  def self.from_base64(base64_str)
+  def self.from_base64(base64_str, user = nil)
     idx = base64_str.index(',') + 1 
     png_data = Base64.decode64 base64_str[idx .. -1]
 
@@ -44,6 +49,9 @@ class Image
       image.mime = 'image/png'
       image.file = tempfile
       image.versions = OutputSetting.version_names
+      if !user.blank?
+        image.user = user
+      end
       image.save
     ensure
       tempfile.close
@@ -54,12 +62,15 @@ class Image
   end
 
   # 从传入的远程网址读取图片文件
-  def self.from_remote_url(remote_url)
+  def self.from_remote_url(remote_url, user = nil)
     tempfile = open remote_url
     image = self.new(token: randstr, original: "remote-#{(Time.now.to_f * 1000).to_i}.png")
     image.mime = 'image/png'
     image.file = tempfile
     image.versions = OutputSetting.version_names
+    if !user.blank?
+      image.user = user
+    end
     image.save
     image
   end
