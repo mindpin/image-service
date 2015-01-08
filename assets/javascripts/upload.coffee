@@ -46,7 +46,8 @@ class ImageUrlFormatter
 
 
 class IndexPage
-  constructor: (@$el)->
+  constructor: (@$el, upload_url)->
+    @upload_url = upload_url
     @$file_input = @$el.find('form.upload input[type=file]')
     @$uploading_list = @$el.find('.uploading-list')
 
@@ -175,7 +176,7 @@ class IndexPage
       type        : 'POST'
       contentType : false
       processData : false
-      url         : '/images'
+      url         : @upload_url
       data        : @_make_file_data(file)
       success: (res)=>
         @_deal_res res, $uploading
@@ -191,7 +192,7 @@ class IndexPage
     $uploading = @_generate_uploading_el(filename)
     jQuery.ajax
       type : 'POST'
-      url  : '/images'
+      url  : @upload_url
       data : 
         'base64': base64_string
       success: (res)=>
@@ -206,7 +207,7 @@ class IndexPage
     $uploading = @_generate_uploading_el(filename)
     jQuery.ajax
       type : 'POST'
-      url  : '/images'
+      url  : @upload_url
       data : 
         'remote_url': remote_url
       success: (res)=>
@@ -251,4 +252,5 @@ class IndexPage
 
 
 jQuery ->
-  new IndexPage jQuery('.page-index') if jQuery('.page-index').length
+  upload_url = "/zmkm/images"
+  new IndexPage jQuery('.page-index'), upload_url if jQuery('.page-index').length

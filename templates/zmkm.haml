@@ -15,14 +15,14 @@
       %span 或者拖拽图片文件到浏览器
       %i.fa.fa-smile-o
 
-    %form.upload{action: "/images", method:"post", enctype: "multipart/form-data"}
+    %form.upload{method:"post", enctype: "multipart/form-data"}
       %input{type: "file", name: "file", multiple: true, accept: ".jpg,.jpeg,.png,.gif"}
 
     .ops
       %a.op.btn-upload{:href => 'javascript:;', :draggable => false}
         %i.fa.fa-upload
 
-      %a.op.btn-explore{:href => '/images', :target => '_blank'}
+      %a.op.btn-explore{:href => '/zmkm/images', :target => '_blank'}
         %i.fa.fa-th-large
 
   .uploading-list.col-pad-7.col-pad-pull-4
