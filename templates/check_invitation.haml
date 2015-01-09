@@ -1,3 +1,8 @@
+- if flash[:error]
+  %p
+    = flash[:error]
+
+
 
 %form{:action => "/register_user", :method => "post", :name => "check-form"}
   %input{:name => "code", :type => "text", :value => ""}/

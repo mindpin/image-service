@@ -39,3 +39,5 @@ gem "omniauth-weibo-oauth2"
 gem "omniauth-qq"
 gem "omniauth-github"
 gem 'dotenv'
+
+gem 'sinatra-flash'

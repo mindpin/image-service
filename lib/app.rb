@@ -35,13 +35,15 @@ require './lib/user'
 require './lib/user_token'
 require "./lib/image"
 require './lib/invitation'
-
+require 'sinatra/flash'
 
 enable :sessions
 
 
 class ImageServiceApp < Sinatra::Base
   helpers Sinatra::Cookies
+  register Sinatra::Flash
+
 
   configure :development do
     register Sinatra::Reloader
@@ -132,6 +134,9 @@ class ImageServiceApp < Sinatra::Base
 
       current_user.update_attributes(:is_activated => true)
       current_user.save
+    else
+      flash[:error] = "邀请码不正确或者已经被使用"
+      redirect '/check_invitation'
     end
 
     redirect '/'
