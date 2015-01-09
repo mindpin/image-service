@@ -5,6 +5,7 @@ require "./lib/image_uploader"
 class Image
   include Mongoid::Document
   include Mongoid::Timestamps
+  include TagMethods
 
   field :file,     type: String
   field :original, type: String

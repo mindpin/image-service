@@ -31,6 +31,7 @@ Dotenv.load
 
 require File.expand_path("../../config/env",__FILE__)
 
+require "./lib/tag_methods"
 require './lib/user'
 require './lib/user_token'
 require "./lib/image"
@@ -205,6 +206,17 @@ class ImageServiceApp < Sinatra::Base
   get "/images/:token" do
     @image = Image.find_by(token: params[:token])
     haml :image
+  end
+
+  post "/images/:token/add_tags" do
+    @image = Image.find_by(token: params[:token])
+    if current_user != @image.user
+      return status 401
+    end
+
+    tags = @image.add_tags(params[:tags])
+    content_type :json
+    JSON.generate(tags)
   end
 
   post "/api/zmkm/upload" do
