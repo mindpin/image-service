@@ -8,11 +8,10 @@ namespace :invitations do
     count = ENV['count'].to_i
 
     count.times do |i|
-      Invitation.create(:code => randstr)
-    end
+      code = randstr
+      Invitation.create(:code => code)
 
-    Invitation.all.each do |t|
-      p t.code
+      p code
     end
     
      
