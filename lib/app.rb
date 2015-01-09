@@ -34,6 +34,7 @@ require File.expand_path("../../config/env",__FILE__)
 require './lib/user'
 require './lib/user_token'
 require "./lib/image"
+require './lib/invitation'
 
 
 enable :sessions
@@ -113,7 +114,27 @@ class ImageServiceApp < Sinatra::Base
 
   get "/" do
     redirect '/login' unless current_user
+
+    redirect '/check_invitation' unless current_user.is_activated
+
     haml :index
+  end
+
+  get "/check_invitation" do
+    haml :check_invitation
+  end
+
+  post "/register_user" do
+    if Invitation.where(code: params[:code], is_used: false).exists?
+      invitation = Invitation.where(code: params[:code], is_used: false).first
+      invitation.is_used = true
+      invitation.save
+
+      current_user.update_attributes(:is_activated => true)
+      current_user.save
+    end
+
+    redirect '/'
   end
 
   get "/logout" do
