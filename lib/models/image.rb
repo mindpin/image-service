@@ -1,7 +1,4 @@
 # coding: utf-8
-require "./lib/output_setting"
-require "./lib/image_uploader"
-
 class Image
   include Mongoid::Document
   include Mongoid::Timestamps
