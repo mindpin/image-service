@@ -15,6 +15,10 @@ cp env.example .env
 # 配置 oauth 登录支持
 
 
+rake invitations:create count=5
+# 生成邀请码
+
+
 bundle
 bundle exec rackup
 ```
