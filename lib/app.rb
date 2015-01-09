@@ -24,8 +24,6 @@ require 'omniauth'
 require 'omniauth-weibo-oauth2'
 require 'omniauth-qq'
 require 'omniauth-github'
-require 'dotenv'
-Dotenv.load
 
 require File.expand_path("../../config/env",__FILE__)
 
@@ -57,9 +55,9 @@ class ImageServiceApp < Sinatra::Base
 
     use Rack::Session::Cookie
     use OmniAuth::Builder do
-      provider :weibo, ENV['WEIBO_KEY'], ENV['WEIBO_SECRET']
-      provider :qq_connect, ENV['QQ_CONNECT_KEY'], ENV['QQ_CONNECT_SECRET']
-      provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+      provider :weibo, R::WEIBO_KEY, R::WEIBO_SECRET
+      provider :qq_connect, R::QQ_CONNECT_KEY, R::QQ_CONNECT_SECRET
+      provider :github, R::GITHUB_KEY, R::GITHUB_SECRET
     end
 
   end

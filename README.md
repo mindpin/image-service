@@ -11,10 +11,6 @@ cp config/env.yml.example config/env.yml
 # 配置 env.yml 内容
 
 
-cp env.example .env
-# 配置 oauth 登录支持
-
-
 rake invitations:create count=5
 # 生成邀请码
 

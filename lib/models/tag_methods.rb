@@ -1,16 +1,16 @@
 module TagMethods
   extend ActiveSupport::Concern 
 
-  WRITE_TAGS_URL   = File.join ENV['TAGS_SERVICE'], "write_tags"
-  READ_TAGS_URL    = File.join ENV['TAGS_SERVICE'], "read_tags"
-  FIND_BY_TAGS_URL = File.join ENV['TAGS_SERVICE'], "find_by_tags"
+  WRITE_TAGS_URL   = File.join R::TAGS_SERVICE, "write_tags"
+  READ_TAGS_URL    = File.join R::TAGS_SERVICE, "read_tags"
+  FIND_BY_TAGS_URL = File.join R::TAGS_SERVICE, "find_by_tags"
 
   def add_tags(tags)
     return [] if tags.blank?
     raise 'url_info 还没有保存' if self.id.blank?
     param = {
       token: _user_token, 
-      scope: ENV['TAG_SCOPE'],
+      scope: R::TAG_SCOPE,
       key: self.id.to_s,
       tags: tags
     }
@@ -38,7 +38,7 @@ module TagMethods
   end
 
   def _read_tags_url(token)
-    "#{READ_TAGS_URL}?token=#{token}&scope=#{ENV['TAG_SCOPE']}&key=#{self.id}"
+    "#{READ_TAGS_URL}?token=#{token}&scope=#{R::TAG_SCOPE]}&key=#{self.id}"
   end
 
   module ClassMethods
@@ -54,7 +54,7 @@ module TagMethods
     end
 
     def _find_by_tags_url(token, tags)
-      "#{FIND_BY_TAGS_URL}?token=#{token}&scope=#{ENV['TAG_SCOPE']}&tags=#{CGI.escape tags}"
+      "#{FIND_BY_TAGS_URL}?token=#{token}&scope=#{R::TAG_SCOPE}&tags=#{CGI.escape tags}"
     end
   end
 end
