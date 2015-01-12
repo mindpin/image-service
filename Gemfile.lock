@@ -51,7 +51,6 @@ GEM
     coffee-script-source (1.8.0)
     database_cleaner (1.2.0)
     diff-lcs (1.2.5)
-    dotenv (1.0.2)
     erubis (2.7.0)
     execjs (2.2.2)
     faraday (0.9.1)
@@ -191,7 +190,6 @@ DEPENDENCIES
   carrierwave-mongoid
   coffee-script
   database_cleaner (~> 1.2.0)
-  dotenv
   haml
   kaminari (~> 0.15.1)
   mina!

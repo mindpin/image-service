@@ -38,7 +38,7 @@ module TagMethods
   end
 
   def _read_tags_url(token)
-    "#{READ_TAGS_URL}?token=#{token}&scope=#{R::TAG_SCOPE]}&key=#{self.id}"
+    "#{READ_TAGS_URL}?token=#{token}&scope=#{R::TAG_SCOPE}&key=#{self.id}"
   end
 
   module ClassMethods
