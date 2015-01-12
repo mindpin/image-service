@@ -8,4 +8,13 @@ class User
 
   has_many :user_tokens
   has_many :images
+  has_one :space_state
+
+
+  def used_space_size
+    return 0 unless self.space_state
+
+    self.space_state.space_size.to_human_format
+  end
+
 end
