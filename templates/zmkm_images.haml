@@ -1,0 +1,20 @@
+.page-images{:data=>{"list-url"=>"/zmkm/images"}}
+  %h3 总共 #{@images.count} 张图片
+  .icontainer
+    .loading-icon
+      %i.fa.fa-refresh.fa-spin
+    .end-text
+      the end
+
+    - @images.each do |image|
+      :ruby
+        id = image.id
+        meta = image.meta
+        major_color = meta['major_color']['hex']
+        width = meta['width']
+        height = meta['height']
+
+        url_200w_200h = "#{image.base}@100w_100h_1e_1c"
+
+      %a.image{:href => "/images/#{image.token}", :target => '_blank', :data => {:id => id, :'major-color' => major_color, :width => width, :height => height, :base => image.base}}
+        .ibox

@@ -1,32 +1,40 @@
-.image-show
-  %h1
-    %i.icon.ion-image
-    = @image.original
+.page-image-show
+  .col-pad-12
+    %h3
+      %i.fa.fa-image
+      %span= @image.original
 
-  - @image.versions.each do |version|
-    - name  = version.name
-    - value = version.value
-    - cn    = OutputSetting.names[name] || "原始图片"
-  
-    .image
-      - if @image.file_processing && name != :raw
-        %h4{style:"color:#ccc"}= "图片处理中, 请稍后刷新页面"
-      - else
-        %h4= cn
-      
-        - if !value.blank?
-          %span
+  .col-pad-5
+    %a.image.o{:href => @image.base, :target => '_blank'}
+      %img{:src => @image.base}
+
+  .col-pad-7
+    - @image.versions.each do |version|
+      - name  = version.name
+      - value = version.value
+      - cn    = OutputSetting.names[name] || "原始图片"
+      - url   = version.url
+
+      .version
+        .name
+          %span= cn
+          - if !value.blank?
             - if value.size == 2
-              #{value[0]} px
-              %span.icon.ion-ios7-close-empty
-              #{value[1]} px
+              %span #{value[0]} px
+              %span ×
+              %span #{value[1]} px
             - else
-              #{value[0]} px
-      
-        %a.url.icon.ion-link{href: "/display?url=#{version.url}"}
-    
-        .formats
-          - %W(url html markdown).each do |meth|
-            %label
-              #{meth}
-              %input.copy{type: "text", value: version.send(meth), readonly: true}
+              %span #{value[0]} px
+
+        %a.open{:href => url, :target => '_blank'}
+          %i.fa.fa-external-link
+
+        .field
+          %label url
+          %input.url.i{:type => :text, :readonly => true, :value => url}
+        .field
+          %label html
+          %input.url.h{:type => :text, :readonly => true, :value => "<img src='#{url}' />"}
+        .field
+          %label md
+          %input.url.m{:type => :text, :readonly => true, :value => "![](#{url})"}

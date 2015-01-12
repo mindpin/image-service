@@ -1,0 +1,52 @@
+.page-index{:data => {"upload-url"=>"/zmkm/images"}}
+  .base-info.col-pad-4.col-pad-pull-4
+    .logo>
+      %span.a> img
+      %span.b> 4ye
+
+    %p
+
+
+    .usage
+      %span 上传本地图片
+      %br
+      %span 或者按下 Ctrl + V 粘贴剪贴板里的图片
+      %br
+      %span 或者拖拽图片文件到浏览器
+      %i.fa.fa-smile-o
+
+    %form.upload{method:"post", enctype: "multipart/form-data"}
+      %input{type: "file", name: "file", multiple: true, accept: ".jpg,.jpeg,.png,.gif"}
+
+    .ops
+      %a.op.btn-upload{:href => 'javascript:;', :draggable => false}
+        %i.fa.fa-upload
+
+      %a.op.btn-explore{:href => '/zmkm/images', :target => '_blank'}
+        %i.fa.fa-th-large
+
+  .uploading-list.col-pad-7.col-pad-pull-4
+    .uploading.template
+      :ruby
+        filename = 'CcZU32rQ.jpg'
+        url = 'http://img.teamkn.com/i/CcZU32rQ.jpg'
+        url1 = "#{url}@150w_150h_1c_1e"
+
+      .op.close
+        %i.fa.fa-times
+
+      %a.image{:href => url, :target => '_blank'}
+        .ibox
+          %img{:src => url1}
+        %i.fa.fa-circle-o-notch.fa-spin
+      .info
+        .filename filename
+        .field
+          %label url
+          %input.url.i{:type => :text, :readonly => true, :value => url}
+        .field
+          %label html
+          %input.url.h{:type => :text, :readonly => true, :value => "<img src='#{url}' />"}
+        .field
+          %label md
+          %input.url.m{:type => :text, :readonly => true, :value => "![](#{url})"}

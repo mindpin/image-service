@@ -1,4 +1,3 @@
-require "./lib/randstr"
 require "bundler"
 Bundler.setup(:default)
 require "sinatra"
@@ -15,31 +14,75 @@ require 'carrierwave'
 require 'mongoid'
 require 'carrierwave/mongoid'
 require 'carrierwave-aliyun'
-require "carrierwave_backgrounder"
+require "mini_magick"
+require 'kaminari/sinatra'
+require "logger"
+
+require "sinatra/cookies"
+
+require 'omniauth'
+require 'omniauth-weibo-oauth2'
+require 'omniauth-qq'
+require 'omniauth-github'
+
 require File.expand_path("../../config/env",__FILE__)
 
-require "./lib/image"
+require 'sinatra/flash'
+
+enable :sessions
+
+require "./lib/randstr"
+require "./lib/ext"
 
 class ImageServiceApp < Sinatra::Base
+  helpers Sinatra::Cookies
+  register Sinatra::Flash
+
   configure :development do
     register Sinatra::Reloader
   end
+
+  Logger.class_eval { alias :write :'<<' }
+  log_dir = File.join(File.dirname(File.expand_path("..", __FILE__)), "tmp", "logs")
+  FileUtils.mkdir_p(log_dir) if !File.exists?(log_dir)
+  access_log        = File.join(log_dir, "access.log")
+  access_logger     = Logger.new(access_log)
+  error_logger      = File.new(File.join(log_dir, "error.log"), "a+")
+  error_logger.sync = true
+ 
+  configure do
+    use Rack::CommonLogger, access_logger
+
+    use Rack::Session::Cookie
+    use OmniAuth::Builder do
+      provider :weibo, R::WEIBO_KEY, R::WEIBO_SECRET
+      provider :qq_connect, R::QQ_CONNECT_KEY, R::QQ_CONNECT_SECRET
+      provider :github, R::GITHUB_KEY, R::GITHUB_SECRET
+    end
+
+  end
+ 
+  before {
+    env["rack.errors"] =  error_logger
+  }
 
   set :views, ["templates"]
   set :root, File.expand_path("../../", __FILE__)
   register Sinatra::AssetPack
 
   assets {
-    serve '/js', :from => 'assets/javascripts'
-    serve '/css', :from => 'assets/stylesheets'
+    serve "/js", :from => "assets/javascripts"
+    serve "/css", :from => "assets/stylesheets"
+    serve "/lily", :from => "assets/lily" # 引用 lily 样式库
+    serve "/futura", :from => "mobile-ui/css/fonts" # 引用 futura 字体
 
     js :application, "/js/application.js", [
-      '/js/jquery-1.11.0.min.js',
-      '/js/**/*.js'
+      '/js/lib/*.js',
+      '/js/*.js'
     ]
 
     css :application, "/css/application.css", [
-      '/css/**/*.css'
+      "/css/ui.css"
     ]
 
     css_compression :yui
@@ -47,56 +90,19 @@ class ImageServiceApp < Sinatra::Base
   }
 
   before do
-    headers("Access-Control-Allow-Origin" => "#{request.env['HTTP_ORIGIN']}")
+    headers("Access-Control-Allow-Origin" => "#{request.env["HTTP_ORIGIN"]}")
     headers("Access-Control-Allow-Credentials" => "true")
     headers("Access-Control-Allow-Methods" => "POST,GET,OPTIONS")
   end
-  
+
   get "/" do
+    redirect '/login' unless current_user
+    redirect '/check_invitation' unless current_user.is_activated
     haml :index
   end
 
-  get "/images" do
-    @images = Image.all.sort(created_at: -1)
-    haml :images
-  end
-
-  get "/r/:token" do
-    image = Image.find_by(token: params[:token])
-    redirect to(image.file.url)
-  end
-
-  options "/images" do
-    200 
-  end
-
-  post "/images" do
-    image = Image.from_params(params[:file])
-    content_type :json
-    JSON.generate show: "/images/#{image.token}", orig: "http://#{request.host_with_port}/r/#{image.token}"
-  end
-
-  get "/settings" do
-    haml :settings
-  end
-
-  post "/settings" do
-    OutputSetting.from(params[:option].to_a[0])
-    haml :settings_partial, layout: false
-  end
-
-  delete "/settings" do
-    OutputSetting.del(params[:option].to_a[0])
-    "deleted"
-  end
-
-  get "/images/:token" do
-    @image = Image.find_by(token: params[:token])
-    haml :image
-  end
-
-  get "/display" do
-    @url = params[:url]
-    haml :display
-  end
 end
+
+require_relative 'models/init'
+require_relative 'helpers/init'
+require_relative 'routes/init'

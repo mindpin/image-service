@@ -1,0 +1,15 @@
+@mixin prefixer($name, $params...) {
+  -webkit-#{$name}: $params;
+  -moz-#{$name}: $params;
+  -ms-#{$name}: $params;
+  -o-#{$name}: $params;
+  #{$name}: $params;
+}
+
+@mixin transition($params...) {
+  @include prefixer(transition, $params);
+}
+
+@mixin transform($params) {
+  @include prefixer(transform, $params);
+}

@@ -11,3 +11,7 @@ public/css/*
 config/mongoid.yml
 config/env.yml
 config/output_settings.yml
+tmp/*
+
+
+.env
