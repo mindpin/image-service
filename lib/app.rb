@@ -34,6 +34,7 @@ enable :sessions
 require "./lib/randstr"
 require "./lib/ext"
 
+
 class ImageServiceApp < Sinatra::Base
   helpers Sinatra::Cookies
   register Sinatra::Flash
