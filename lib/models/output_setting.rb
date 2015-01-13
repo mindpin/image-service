@@ -62,13 +62,13 @@ class OutputSetting
     self.all.map(&:option)
   end
 
-  def self.from(param)
+  def self.from_param(param)
     option = format_attrs param
     self.find_or_create_by(name: option[0], value: option[1])
   end
 
-  def self.del(param)
-    self.from(param).destroy
+  def self.del_by_param(param)
+    self.from_param(param).destroy
   end
 
   def self.format_attrs(option)

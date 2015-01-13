@@ -1,0 +1,19 @@
+.settings
+  .add-options
+    %h1 添加配置
+  
+    - OutputSetting.names.each do |name, cn|
+      .add-option.option{:"data-option" => "#{name}", :"data-add-setting-url" => "/settings"}
+        %h4= cn
+  
+        - if [:limit, :fill].include? name.to_sym
+          %input.1st{type: "number"} px
+          %span.icon.ion-ios7-close-empty
+          %input.2nd{type: "number"} px
+        - else
+          %input{type: "number"} px
+  
+        %button.icon.ion-ios7-plus{disabled: true, style:"display:none"}
+  
+  .active-options
+    = haml :settings_partial
