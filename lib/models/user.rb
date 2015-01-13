@@ -15,7 +15,11 @@ class User
   def used_space_size
     return 0 unless self.space_state
 
-    self.space_state.space_size.to_human_format
+    self.space_state.space_size
+  end
+
+  def used_space_size_str
+    self.used_space_size.to_human_format_filesize
   end
 
 end

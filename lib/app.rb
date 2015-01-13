@@ -99,6 +99,10 @@ class ImageServiceApp < Sinatra::Base
   get "/" do
     redirect '/login' unless current_user
     redirect '/check_invitation' unless current_user.is_activated
+
+    p current_user.used_space_size
+    p 'human size ========='
+    p current_user.used_space_size_str
     haml :index
   end
 

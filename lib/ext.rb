@@ -38,7 +38,7 @@ end
 # todo: 猴子补丁，暂时放在这里
 
 class Integer
-  def to_human_format
+  def to_human_format_filesize
     {
       'B'  => 1024,
       'KB' => 1024 * 1024,
