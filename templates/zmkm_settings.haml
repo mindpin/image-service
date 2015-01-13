@@ -3,7 +3,7 @@
     %h1 添加配置
   
     - OutputSetting.names.each do |name, cn|
-      .add-option.option{:"data-option" => "#{name}"}
+      .add-option.option{:"data-option" => "#{name}", :"data-add-setting-url" => "/zmkm/settings"}
         %h4= cn
   
         - if [:limit, :fill].include? name.to_sym
@@ -16,4 +16,4 @@
         %button.icon.ion-ios7-plus{disabled: true, style:"display:none"}
   
   .active-options
-    = haml :settings_partial
+    = haml :zmkm_settings_partial

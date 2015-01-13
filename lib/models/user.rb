@@ -8,4 +8,5 @@ class User
 
   has_many :user_tokens
   has_many :images
+  has_many :output_settings
 end

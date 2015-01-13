@@ -25,9 +25,11 @@ class Image
     image = self.new(token: randstr, original: hash[:filename])
     image.mime = hash[:type]
     image.file = hash[:tempfile]
-    image.versions = OutputSetting.version_names
     if !user.blank?
       image.user = user
+      image.versions = user.output_settings.version_names
+    else
+      image.versions = OutputSetting.anonymous.version_names
     end
     image.save
     image
@@ -46,9 +48,11 @@ class Image
       image = self.new(token: randstr, original: "paste-#{(Time.now.to_f * 1000).to_i}.png")
       image.mime = 'image/png'
       image.file = tempfile
-      image.versions = OutputSetting.version_names
       if !user.blank?
         image.user = user
+        image.versions = user.output_settings.version_names
+      else
+        image.versions = OutputSetting.anonymous.version_names
       end
       image.save
     ensure
@@ -65,9 +69,11 @@ class Image
     image = self.new(token: randstr, original: "remote-#{(Time.now.to_f * 1000).to_i}.png")
     image.mime = 'image/png'
     image.file = tempfile
-    image.versions = OutputSetting.version_names
     if !user.blank?
       image.user = user
+      image.versions = user.output_settings.version_names
+    else
+      image.versions = OutputSetting.anonymous.version_names
     end
     image.save
     image

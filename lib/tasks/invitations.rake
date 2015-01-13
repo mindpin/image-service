@@ -8,7 +8,7 @@ namespace :invitations do
     count = ENV['count'].to_i
 
     count.times do |i|
-      code = randstr
+      code = randstr(16)
       Invitation.create(:code => code)
 
       p code

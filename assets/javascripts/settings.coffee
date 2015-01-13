@@ -5,6 +5,7 @@ jQuery ->
   $add_options.find("button").on "click", ->
     $parent = jQuery(this).parent()
     name    = $parent.data("option")
+    add_setting_url = $parent.data("add-setting-url")
 
     value = jQuery.makeArray($parent.find("input")).map (e)->
       ~~jQuery(e).val()
@@ -16,7 +17,7 @@ jQuery ->
 
     deferred = jQuery.ajax
       type: "POST"
-      url:  "/settings"
+      url:  add_setting_url
       data: data
 
     deferred.done (res)=>
@@ -47,13 +48,14 @@ jQuery ->
   jQuery(document).on "click", ".active-options button", ->
     $parent = jQuery(this).parent()
     name    = $parent.data("option")
+    delete_setting_url = $parent.data("delete-setting-url")
 
     data = {option: {}}
     data.option[name] = $parent.data("value")
 
     deferred = jQuery.ajax
       type: "DELETE"
-      url:  "/settings"
+      url:  delete_setting_url
       data: data
 
     deferred.done (res)=>
