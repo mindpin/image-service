@@ -3,7 +3,7 @@
     %h1 添加配置
   
     - OutputSetting.names.each do |name, cn|
-      .add-option.option{:"data-option" => "#{name}"}
+      .add-option.option{:"data-option" => "#{name}", :"data-add-setting-url" => "/settings"}
         %h4= cn
   
         - if [:limit, :fill].include? name.to_sym

@@ -1,8 +1,8 @@
 %h1 已生效配置 
 
-- OutputSetting.options.each do |name, value|
+- current_user.output_settings.all_options.each do |name, value|
   - cn = OutputSetting.names[name]
-  .active-option.option{:"data-value" => value, :"data-option" => name}
+  .active-option.option{:"data-value" => value, :"data-option" => name, :"data-delete-setting-url" => "/zmkm/settings"}
     %h4= cn
 
     %span

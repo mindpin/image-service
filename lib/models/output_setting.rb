@@ -14,6 +14,9 @@ class OutputSetting
   validates :value, uniqueness: {scope: :name}
   validates :name,  inclusion: {in: NAMES.map(&:to_s)}
 
+  belongs_to :user
+  scope :anonymous, where(:user_id => nil)
+
   def self.names
     Hash[NAMES.zip [
       "限定高度, 宽度自适应", "限定宽度, 高度自适应",
@@ -55,17 +58,17 @@ class OutputSetting
     self.all.map(&:version_name)
   end
 
-  def self.options
+  def self.all_options
     self.all.map(&:option)
   end
 
-  def self.from(param)
+  def self.from_param(param)
     option = format_attrs param
     self.find_or_create_by(name: option[0], value: option[1])
   end
 
-  def self.del(param)
-    self.from(param).destroy
+  def self.del_by_param(param)
+    self.from_param(param).destroy
   end
 
   def self.format_attrs(option)
