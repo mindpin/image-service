@@ -220,6 +220,7 @@ class IndexPage
     return data
 
 
+  # 在文件上传列表中创建一个代表“文件正在上传”的 DOM
   _generate_uploading_el: (filename)->
     @$uploading_list.find('.template').clone()
       .removeClass 'template'
@@ -230,7 +231,7 @@ class IndexPage
         .attr('href', 'javascript:;')
         .find('.ibox').html('').end()
       .end()
-      .prependTo @$uploading_list
+      .prependTo @$uploading_list.show()
       .hide()
       .show 400
 

@@ -1,9 +1,19 @@
-- if flash[:error]
-  %p
-    = flash[:error]
+.page-index.user
+  .base-info.col-pad-4.col-pad-pull-4
+    .logo{:style => "margin-top:0;"}>
+      %span.a> img
+      %span.b> 4ye
 
+.page-invite.col-pad-4.col-pad-pull-4
+  - if flash[:error]
+    .error= flash[:error]
+  - else
+    .code 请填写你获得的激活码，激活后才能使用
 
-
-%form{:action => "/register_user", :method => "post", :name => "check-form"}
-  %input{:name => "code", :type => "text", :value => ""}/
-  %input{:name => "submit", :type => "submit", :value => "激活"}/
+  %form{:action => "/register_user", :method => "post", :name => "check-form"}
+    .fields
+      %input.form-control{:name => :code, :type => :text, :value => '', :placeholder => '在这里输入激活码'}
+    .submits
+      %button.btn.btn-rounded.btn-flat-success.btn-large
+        %i.fa.fa-bicycle
+        %span 好了，激活吧

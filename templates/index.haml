@@ -1,15 +1,16 @@
-%p
-  %span=current_user.name
-  %a{:href => '/logout'} 退出
+.page-user-info.col-pad-4.col-pad-pull-4
+  .user
+    %span= current_user.name
+    %span 已登录
+  %a.signout{:href => '/logout'}
+    %i.fa.fa-power-off
+    %span 登出
 
-.page-index{:data => {"upload-url"=>"/images"}}
+.page-index.user{:data => {"upload-url" => "/images"}}
   .base-info.col-pad-4.col-pad-pull-4
-    .logo>
+    .logo{:style => "margin-top:0;"}>
       %span.a> img
       %span.b> 4ye
-
-    %p
-
 
     .usage
       %span 上传本地图片
@@ -29,7 +30,7 @@
       %a.op.btn-explore{:href => '/images', :target => '_blank'}
         %i.fa.fa-th-large
 
-  .uploading-list.col-pad-7.col-pad-pull-4
+  .uploading-list.col-pad-7.col-pad-pull-4{:style => 'display:none;'}
     .uploading.template
       :ruby
         filename = 'CcZU32rQ.jpg'

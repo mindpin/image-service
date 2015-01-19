@@ -1,5 +1,10 @@
 .page-images{:data=>{"list-url"=>"/images"}}
-  %h3 总共 #{@images.count} 张图片
+  %h3
+    %span= current_user.name
+    %span 的账号下总共有
+    %span.count #{@images.count}
+    %span 张图片
+
   .icontainer
     .loading-icon
       %i.fa.fa-refresh.fa-spin
