@@ -131,6 +131,10 @@ class Image
     false
   end
 
+  def raw
+    Version.new(self, nil)
+  end
+
   def versions
     if self.user.blank?
       settings = OutputSetting.anonymous
