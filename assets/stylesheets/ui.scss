@@ -69,9 +69,57 @@ body {
   a {outline:0;}
 }
 
+.page-user-info {
+  font-size: 16px;
+  height:40px;line-height:40px;
+  margin-top: 10px;
+
+  .user {
+    // background-color:$area-dawn;
+    // border-radius:100px;
+    // padding:0 20px;
+    float:left;
+  }
+  .signout {
+    background-color:#ddd;
+    border-radius:100px;
+    padding:0 20px;
+    float:right;
+    margin-left: 20px;
+    color:#333;
+    &:hover {
+      text-decoration: none;
+      background-color: #ccc;
+    }
+  }
+}
+
+.page-index.login {
+  .third {
+    margin-top: 50px;
+    .btn {
+      margin-bottom: 10px;
+      text-shadow: 0 0 2px rgba(black, 0.5);
+      font-weight: bold;
+    }
+  }
+
+  .third .auth-weibo {
+    display:block;
+    background: url(http://img.teamkn.com/i/rqxWe5bG.png);
+    width:239px;height:48px;
+    margin:0 auto;
+    i {display:none;}
+    span {display:none;}
+  }
+}
+
 .page-index {
+  clear:both;
+
   .base-info {
     @include default-transition;
+    @include clearfix;
 
     .logo {
       @include default-transition;
@@ -87,6 +135,11 @@ body {
       text-align: center;
       margin-top: 50px;
       margin-bottom: 20px;
+
+      @include -below(phone) {
+        font-size: 96px;
+        height:135px;line-height:135px;
+      }
     }
 
     .usage {
@@ -111,11 +164,13 @@ body {
     form.upload {display:none;}
 
     .ops {
+      @include clearfix;
       $w:80px;
       
       position:relative;
       left:50%;
       margin-left: - $w * 2.5 / 2;
+      float: left;
 
       a.op {
         @include unselectable;
@@ -134,9 +189,14 @@ body {
         float:left;
         margin-right:$w/2;
 
-        i {width:$w;height:$w;line-height:$w;}
+        i {
+          width:$w;height:$w;line-height:$w;
+        }
         @include default-transition;
-        &:hover {background-color: lighten($area-warning, 25%);}
+        &:hover {
+          background-color: lighten($area-warning, 25%);
+          i {color: darken(#FFCC3F, 25%);}
+        }
       }
 
       a.op.btn-upload {
@@ -151,7 +211,7 @@ body {
           padding:$pw;
           left:- $bw - $pw;
           top:- $bw - $pw;
-          border-radius:100px;
+          border-radius: 100px;
         }
         &:hover:before {
           border-color: darken(#FFCC3F, 25%);
@@ -163,10 +223,14 @@ body {
   .uploading-list {
     @include default-transition;
 
-    margin-top: 90px + 50px + 20px;
-    min-height: 300px;
+    margin-top: 90px + 20px;
+    // min-height: 300px;
+    // margin-bottom:100px;
     opacity:0;
-    margin-bottom:100px;
+
+    @include -below(phone) {
+      margin-top: 50px;
+    }
 
     .uploading {
       &.template {
@@ -248,6 +312,10 @@ body {
         cursor:pointer;
         &:hover {
           background-color:$black-60
+        }
+        i {
+          display: block;
+          width:24px;height:24px;line-height:24px;
         }
       }
 
@@ -394,6 +462,43 @@ body.drag-over {
       color:white;
       &:hover {text-decoration:none;}
       right:15px;top:15px;
+    }
+  }
+}
+
+.page-invite {
+  clear: both;
+  margin-top: 10px;
+
+  .error, .code {
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: $area-dawn;
+    border-radius: 4px;
+    padding: 20px;
+    color: darken($area-warning, 35%);
+    text-align: center;
+  }
+
+  .error {
+    background-color: $area-hot;
+    // color: $area-hot;
+    color: white;
+  }
+
+  form {
+    input[type=text] {
+      height:38px;line-height:38px;
+      border-radius:4px;
+      margin-bottom: 10px;
+    }
+
+    .submits {
+      text-align: center;
+      button {
+        width: 100%;
+        i {margin-right: 10px; margin-left: -10px;}
+      }
     }
   }
 }

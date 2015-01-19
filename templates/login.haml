@@ -1,13 +1,18 @@
-.page-index
+.page-index.login
   .base-info.col-pad-4.col-pad-pull-4
     .logo>
       %span.a> img
       %span.b> 4ye
 
-
-    %p
-      %a{:href => '/auth/weibo', :target => '_blank'} 微博登陆
-
-      %a{:href => '/auth/qq_connect', :target => '_blank'} QQ登陆
-
-      %a{:href => '/auth/github', :target => '_blank'} github登陆
+    .third
+      %a.auth-weibo{:href => '/auth/weibo'}
+        %i.fa.fa-weibo 
+        %span 新浪微博登录
+      
+      / %a.qq.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/qq_connect'}
+      /   %i.fa.fa-qq 
+      /   %span QQ 登录
+      
+      / %a.github.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/github'}
+      /   %i.fa.fa-github 
+      /   %span Github 登陆
