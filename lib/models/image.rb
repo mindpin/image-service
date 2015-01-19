@@ -8,7 +8,6 @@ class Image
   field :file,     type: String
   field :original, type: String
   field :token,    type: String
-  field :versions, type: Array
   field :mime,     type: String
   field :meta,     type: Hash
 
@@ -20,9 +19,6 @@ class Image
 
   before_create :set_meta!
   after_create :update_user_space
-
-  alias :old_vers :versions
-
 
   def update_user_space
     return unless self.user
@@ -47,9 +43,6 @@ class Image
     image.file = hash[:tempfile]
     if !user.blank?
       image.user = user
-      image.versions = user.output_settings.version_names
-    else
-      image.versions = OutputSetting.anonymous.version_names
     end
     image.save
     image
@@ -70,9 +63,6 @@ class Image
       image.file = tempfile
       if !user.blank?
         image.user = user
-        image.versions = user.output_settings.version_names
-      else
-        image.versions = OutputSetting.anonymous.version_names
       end
       image.save
     ensure
@@ -91,9 +81,6 @@ class Image
     image.file = tempfile
     if !user.blank?
       image.user = user
-      image.versions = user.output_settings.version_names
-    else
-      image.versions = OutputSetting.anonymous.version_names
     end
     image.save
     image
@@ -107,23 +94,13 @@ class Image
     File.extname(original).downcase
   end
 
-  def versions
-    [raw].concat(old_vers.map do |version|
-      Version.new(self, version)
-    end)
-  end
-
-  def raw
-    Version.new(self, nil)
-  end
-
   def base
     File.join(R::IMAGE_ENDPOINT,
               R::ALIYUN_BASE_DIR,
               "#{filename}")
   end
 
-  def new_url(param)
+  def new_url(param = nil)
     param ? "#{base}@#{param}#{ext}" : base
   end
 
@@ -154,30 +131,29 @@ class Image
     false
   end
 
+  def versions
+    if self.user.blank?
+      settings = OutputSetting.anonymous
+    else
+      settings = self.user.output_settings
+    end
+    result = settings.map{|setting| Version.new(self, setting)}
+    result.unshift(Version.new(self, nil))
+  end
+
   class Version
-    attr_reader :name, :value, :url, :image
-
-    def initialize(image, version_def)
-      array  = version_def ? version_def.to_s.split("_") : []
-      vname  = array.select {|i| i.match(/[a-zA-Z]+/)}.join("_").to_sym
-      @name  = vname.blank? ? :raw : vname
-      @image = image
-      @value = array.select {|i| i.match(/[0-9]+/)}.map(&:to_i)
-
-      param = version_def && OutputSetting.translate(name, value)
-      @url = image.new_url(param)
-    end
-
-    def cn
-      OutputSettings.names[name] || "原始图片"
-    end
-
-    def html
-      %Q|<img src="#{url}" />|
-    end
-
-    def markdown
-      %Q|![](#{url})|
+    attr_reader :name, :value, :url
+    def initialize(image,setting)
+      @setting = setting
+      if setting.blank?
+        @name  = "原始图片"
+        @value = nil
+        @url = image.new_url
+      else
+        @name  = setting.name
+        @value = setting.value
+        @url = image.new_url(@value)
+      end
     end
   end
 end
