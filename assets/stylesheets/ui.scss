@@ -13,6 +13,17 @@ $fa-font-path: "/lily/fonts";
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Dreamspeak';
+  src: url('/dreamspeak/Dreamspeak.ttf.eot');
+  src: local('☺'), 
+    url('/dreamspeak/Dreamspeak.ttf.woff') format('woff'), 
+    // url('/dreamspeak/Dreamspeak-Bold.ttf') format('truetype'), 
+    url('/dreamspeak/Dreamspeak.ttf.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @mixin default-transition {
   @include transition(all .3s);
 }
@@ -59,6 +70,7 @@ $fa-font-path: "/lily/fonts";
   }
 }
 
+// ------------------------------
 
 html {
   overflow-y: scroll;
@@ -67,6 +79,82 @@ html {
 body {
   background-color:#f7f7f7;
   a {outline:0;}
+}
+
+// ------------------------------
+
+@mixin siyelogo {
+  @include default-transition;
+  span.a {color: darken(#7DB500, 20%);}
+  span.b {color: #7DB500;}
+  // background-color: lighten(#B8E063, 20%);
+
+  $fz: 96px;
+  // font-family: "Dreamspeak";
+  font-family: "Futura-Condensed";
+  font-size: $fz;
+  height: $fz; line-height: $fz;
+  font-weight: bold;
+  text-align: center;
+
+  border-radius: $border-radius-default;
+  padding: $grid-gap / 2 0 $grid-gap;
+
+  @include -above(pad) {
+    $fz: 128px;
+    font-size: $fz;
+    height: $fz; line-height: $fz;
+  }
+}
+
+.page-login {
+  .logo {
+    @include siyelogo;
+    margin-top: $grid-gap / 2;
+    @include -above(pad) {
+      margin-top: $grid-gap / 2 + 50px;
+      margin-bottom: 50px;
+    }
+  }
+  .intro {
+    margin-top: $grid-gap;
+    font-size: 18px;
+    color: #555;
+    text-align: center;
+    line-height: 30px;
+  }
+  .third {
+    margin-top: $grid-gap;
+    .auth-weibo {
+      background-color: lighten(#EE3703, 10%);
+      display: block;
+      color: white;
+      text-align: center;
+      border-radius: $border-radius-default;
+      font-size: 18px;
+      height:60px;line-height:60px;
+
+      &:hover {
+        text-decoration: none;
+        background-color: #EE3703;
+      }
+    }
+  }
+
+  .power {
+    margin-top: $grid-gap;
+    font-size: 16px;
+    text-align: center;
+    a {color: #555;}
+  }
+
+  .intro, .third, .power {
+    box-sizing:border-box;
+    // @include -above(pad) {
+    //   width: 60%;
+    //   margin-left: 20%;
+    // }
+  }
 }
 
 .page-user-info {
@@ -91,26 +179,6 @@ body {
       text-decoration: none;
       background-color: #ccc;
     }
-  }
-}
-
-.page-index.login {
-  .third {
-    margin-top: 50px;
-    .btn {
-      margin-bottom: 10px;
-      text-shadow: 0 0 2px rgba(black, 0.5);
-      font-weight: bold;
-    }
-  }
-
-  .third .auth-weibo {
-    display:block;
-    background: url(http://img.teamkn.com/i/rqxWe5bG.png);
-    width:239px;height:48px;
-    margin:0 auto;
-    i {display:none;}
-    span {display:none;}
   }
 }
 

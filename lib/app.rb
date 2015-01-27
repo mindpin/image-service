@@ -74,8 +74,12 @@ class ImageServiceApp < Sinatra::Base
   assets {
     serve "/js", :from => "assets/javascripts"
     serve "/css", :from => "assets/stylesheets"
-    serve "/lily", :from => "assets/lily" # 引用 lily 样式库
-    serve "/futura", :from => "mobile-ui/css/fonts" # 引用 futura 字体
+    # 引用 lily 样式库
+    serve "/lily", :from => "assets/lily" 
+    # 引用 futura 字体
+    serve "/futura", :from => "mobile-ui/css/futura" 
+    # 引用 dreamspeak 字体
+    serve "/dreamspeak", :from => "mobile-ui/css/dreamspeak"
 
     js :application, "/js/application.js", [
       '/js/lib/*.js',
