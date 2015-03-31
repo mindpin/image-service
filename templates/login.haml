@@ -1,25 +1,26 @@
-.page-login.col-desk-4.col-desk-pull-4.col-pad-6.col-pad-pull-3
-  .logo>
-    %span.a> img
-    %span.b> 4ye
+.page-login
+  .col-desk-4.col-desk-pull-4.col-pad-6.col-pad-pull-3
+    .logo>
+      %span.a> img
+      %span.b> 4ye
 
-  .intro
-    .p 简单易用的图片保存服务
-    .p 支持手机，PC 访问
+    .intro
+      .p 简单易用的图片保存服务
+      .p 支持手机，PC 访问
 
-  .third
-    %a.auth-weibo{:href => '/auth/weibo'}
-      %i.fa.fa-weibo
-      %span 通过新浪微博登录
+    .third
+      %a.auth-weibo{:href => '/auth/weibo'}
+        %i.fa.fa-weibo
+        %span 通过新浪微博登录
+        
+      / %a.qq.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/qq_connect'}
+      /   %i.fa.fa-qq 
+      /   %span QQ 登录
       
-    / %a.qq.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/qq_connect'}
-    /   %i.fa.fa-qq 
-    /   %span QQ 登录
-    
-    / %a.github.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/github'}
-    /   %i.fa.fa-github 
-    /   %span Github 登陆
+      / %a.github.btn.btn-rounded.btn-flat-info.btn-large.btn-block{:href => '/auth/github'}
+      /   %i.fa.fa-github 
+      /   %span Github 登陆
 
-  .power
-    %a{:href => 'http://www.mindpin.com/', :target => '_blank'} 
-      %span MINDPIN TEAM, 2015
+    .power
+      %a{:href => 'http://www.mindpin.com/', :target => '_blank'} 
+        %span MINDPIN TEAM, 2015

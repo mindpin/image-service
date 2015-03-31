@@ -19,6 +19,7 @@ require 'kaminari/sinatra'
 require "logger"
 
 require "sinatra/cookies"
+require 'sinatra/partial'
 
 require 'omniauth'
 require 'omniauth-weibo-oauth2'
@@ -36,6 +37,8 @@ require "./lib/ext"
 
 
 class ImageServiceApp < Sinatra::Base
+  register Sinatra::Partial
+  
   helpers Sinatra::Cookies
   register Sinatra::Flash
 

@@ -83,38 +83,53 @@ body {
 
 // ------------------------------
 
+$phone-logo-size: 90px;
+$desk-logo-size: 120px;
+
 @mixin siyelogo {
   @include default-transition;
   span.a {color: darken(#7DB500, 20%);}
   span.b {color: #7DB500;}
-  // background-color: lighten(#B8E063, 20%);
-
-  $fz: 96px;
+  // background-color: lighten(#B8E063, 25%);
+  // border-radius: $border-radius-default;
   // font-family: "Dreamspeak";
   font-family: "Futura-Condensed";
-  font-size: $fz;
-  height: $fz; line-height: $fz;
   font-weight: bold;
   text-align: center;
 
-  border-radius: $border-radius-default;
-  padding: $grid-gap / 2 0 $grid-gap;
+  $fz: $phone-logo-size;
+  $lh: $fz * 5 / 3;
+  $pb: $fz / 4;
+  font-size: $fz;
+  height: $lh; line-height: $lh;
+  padding-bottom: $pb;
 
   @include -above(pad) {
-    $fz: 128px;
+    $fz: $desk-logo-size;
+    $lh: $fz * 5 / 3;
+    $pb: $fz / 4;
     font-size: $fz;
-    height: $fz; line-height: $fz;
+    height: $lh; line-height: $lh;
+    padding-bottom: $pb;
+  }
+}
+
+@mixin siyelogo-uploading {
+  @include siyelogo;
+  @include -above(pad) {
+    $fz: 90px;
+    $lh: $fz * 5 / 3;
+    $pb: $fz / 4;
+    font-size: $fz;
+    height: $lh; line-height: $lh;
+    padding-bottom: $pb;
+    text-align: left;
   }
 }
 
 .page-login {
   .logo {
     @include siyelogo;
-    margin-top: $grid-gap / 2;
-    @include -above(pad) {
-      margin-top: $grid-gap / 2 + 50px;
-      margin-bottom: 50px;
-    }
   }
   .intro {
     margin-top: $grid-gap;
@@ -140,45 +155,14 @@ body {
       }
     }
   }
-
   .power {
     margin-top: $grid-gap;
     font-size: 16px;
     text-align: center;
     a {color: #555;}
   }
-
   .intro, .third, .power {
     box-sizing:border-box;
-    // @include -above(pad) {
-    //   width: 60%;
-    //   margin-left: 20%;
-    // }
-  }
-}
-
-.page-user-info {
-  font-size: 16px;
-  height:40px;line-height:40px;
-  margin-top: 10px;
-
-  .user {
-    // background-color:$area-dawn;
-    // border-radius:100px;
-    // padding:0 20px;
-    float:left;
-  }
-  .signout {
-    background-color:#ddd;
-    border-radius:100px;
-    padding:0 20px;
-    float:right;
-    margin-left: 20px;
-    color:#333;
-    &:hover {
-      text-decoration: none;
-      background-color: #ccc;
-    }
   }
 }
 
@@ -190,34 +174,16 @@ body {
     @include clearfix;
 
     .logo {
-      @include default-transition;
-      padding:0 20px;
-      font-family: "Futura-Condensed";
-      font-size: 128px;
-      font-weight: bold;
-      span.a {color: #555;}
-      span.b {color: #7DB500;}
-      height:180px;line-height:180px;
-      position:relative;
-
-      text-align: center;
-      margin-top: 50px;
-      margin-bottom: 20px;
-
-      @include -below(phone) {
-        font-size: 96px;
-        height:135px;line-height:135px;
-      }
+      @include siyelogo;
     }
 
     .usage {
+      font-size: 16px;
+      color: #555;
       $c:rgba(white, 0.8);
       background-color:$c;
-      padding:20px;
-      color: $black-50;
+      padding:15px 20px;
       border-radius:$border-radius-default * 5;
-      font-size:16px;
-      margin-bottom:50px;
       position:relative;
       &:before {
         content:"";
@@ -226,6 +192,22 @@ body {
         position:absolute;
         top:-40px;
         left:60px;
+      }
+
+      .t {font-weight:bold;margin-bottom:5px;}
+
+      &.pc {display:none;}
+      &.phone {display:block;}
+      @include -above(pad) {
+        &.pc {display:block;}
+        &.phone {display:none;}
+      }
+
+      $fz: $phone-logo-size;
+      margin-bottom: $fz * 5 / 9;
+      @include -above(pad) {
+        $fz: $desk-logo-size;
+        margin-bottom: $fz * 5 / 9;
       }
     }
 
@@ -240,30 +222,32 @@ body {
       margin-left: - $w * 2.5 / 2;
       float: left;
 
+      $c1: lighten($area-warning, 25%);
+      $c2: darken($area-warning, 30%);
+
       a.op {
         @include unselectable;
         @include default-transition;
         outline:0 none !important;
-
         display:block;
-        width:$w;height:$w;
-        background-color:#eee;
-        color:rgba(black, 0.3);
         text-align:center;
-        font-size:$w * 0.5;
-        border-radius: $w * 2;
+        float:left;
+
+        background-color: $c1;
         position:relative;
 
-        float:left;
+        width:$w;height:$w;
+        font-size:$w * 0.5;
+        border-radius: $w * 2;
         margin-right:$w/2;
-
         i {
           width:$w;height:$w;line-height:$w;
+          color:$c2;
         }
         @include default-transition;
         &:hover {
-          background-color: lighten($area-warning, 25%);
-          i {color: darken(#FFCC3F, 25%);}
+          background-color: $c2;
+          i {color:white;}
         }
       }
 
@@ -280,10 +264,12 @@ body {
           left:- $bw - $pw;
           top:- $bw - $pw;
           border-radius: 100px;
+          border-color: $c2;
         }
-        &:hover:before {
-          border-color: darken(#FFCC3F, 25%);
-        }
+      }
+
+      a.op.btn-explore {
+        i {position:relative;top:2px;}
       }
     }
   }
@@ -399,21 +385,9 @@ body {
   }
 
   &.uploading {
-    .logo {
-      font-size: 128px * 2/4;
-      height:180px * 2/4;
-      line-height:180px * 2/4;
-      text-align:left;
-      top:-20px;
-    }
-
-    .base-info {
-      left:0;
-    }
-    .uploading-list {
-      opacity:1;
-      left:0;
-    }
+    .logo { @include siyelogo-uploading; }
+    .base-info { left:0; }
+    .uploading-list { opacity:1; left:0; }
   }
 }
 
@@ -425,6 +399,31 @@ body.drag-over {
   }
 }
 
+
+.page-user-info {
+  font-size: 16px;
+  height:40px;line-height:40px;
+  margin-top: 10px;
+
+  .user {
+    // background-color:$area-dawn;
+    // border-radius:100px;
+    // padding:0 20px;
+    float:left;
+  }
+  .signout {
+    background-color:#ddd;
+    border-radius:100px;
+    padding:0 20px;
+    float:right;
+    margin-left: 20px;
+    color:#333;
+    &:hover {
+      text-decoration: none;
+      background-color: #ccc;
+    }
+  }
+}
 
 
 // images

@@ -1,0 +1,9 @@
+%form.upload{:method => :post, :enctype => "multipart/form-data"}
+  %input{:type => :file, :name => :file, :multiple => true, :accept => ".jpg,.jpeg,.png,.gif"}
+
+.ops
+  %a.op.btn-upload{:href => 'javascript:;', :draggable => false}
+    %i.fa.fa-upload
+
+  %a.op.btn-explore{:href => list_url, :target => '_blank'}
+    %i.fa.fa-th-large

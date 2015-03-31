@@ -17,7 +17,7 @@ GIT
       rest-client (>= 1.6.7)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     actionpack (3.2.19)
       activemodel (= 3.2.19)
@@ -163,6 +163,8 @@ GEM
       tilt (~> 1.3)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
+    sinatra-partial (0.4.0)
+      sinatra
     slop (3.6.0)
     sprockets (2.2.2)
       hike (~> 1.2)
@@ -206,6 +208,7 @@ DEPENDENCIES
   sinatra-assetpack
   sinatra-contrib
   sinatra-flash
+  sinatra-partial
   uglifier
   unicorn
   yui-compressor

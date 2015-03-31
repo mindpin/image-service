@@ -1,4 +1,5 @@
-source "http://ruby.taobao.org"
+# source 'https://ruby.taobao.org/'
+source 'https://rubygems.org/'
 
 gem "mongoid", "~> 3.1.6"
 gem "sinatra"
@@ -39,3 +40,4 @@ gem "omniauth-weibo-oauth2"
 gem "omniauth-qq"
 gem "omniauth-github"
 gem 'sinatra-flash'
+gem 'sinatra-partial'
