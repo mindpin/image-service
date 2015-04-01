@@ -3,6 +3,10 @@ class ImageServiceApp < Sinatra::Base
     200 
   end
 
+  post '/images/flow-upload' do
+    part_upload current_user
+  end
+
   post "/images" do
     return status 401 if !user_signed_in?
 

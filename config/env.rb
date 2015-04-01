@@ -22,3 +22,8 @@ CarrierWave.configure do |config|
   config.aliyun_internal = false
   config.aliyun_area = ENV_YAML_HASH['ALIYUN_AREA']
 end
+
+# 先放在 tmp 目录下，以后需要修改，否则比较占用硬盘
+FilePartUpload.config do
+  path '/tmp/4ye_image_service/:id/file/:name'
+end

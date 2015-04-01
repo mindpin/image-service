@@ -41,3 +41,7 @@ gem "omniauth-qq"
 gem "omniauth-github"
 gem 'sinatra-flash'
 gem 'sinatra-partial'
+
+gem 'file-part-upload', 
+  :git => 'git://github.com/mindpin/file-part-upload.git',
+  :tag => '1.0.6'

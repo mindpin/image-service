@@ -16,6 +16,15 @@ GIT
       carrierwave (>= 0.5.7)
       rest-client (>= 1.6.7)
 
+GIT
+  remote: git://github.com/mindpin/file-part-upload.git
+  revision: d25de9dd35fdf45b49ef26e26a62d6eeab213a12
+  tag: 1.0.6
+  specs:
+    file-part-upload (0.0.1)
+      mime-types
+      mini_magick
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -192,6 +201,7 @@ DEPENDENCIES
   carrierwave-mongoid
   coffee-script
   database_cleaner (~> 1.2.0)
+  file-part-upload!
   haml
   kaminari (~> 0.15.1)
   mina!

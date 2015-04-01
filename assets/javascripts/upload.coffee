@@ -51,7 +51,51 @@ class IndexPage
     @$file_input = @$el.find('form.upload input[type=file]')
     @$uploading_list = @$el.find('.uploading-list')
 
+    # 初始化上传进度组件
+    # flow.js
+    # https://github.com/flowjs/flow.js
+    @init_flow_js()
+
     @bind_events()
+
+  init_flow_js: ->
+    @flow = new Flow {
+      target: "#{@upload_url}/flow-upload"
+      chunkSize: 32768 # 1024 * 32 32K
+      testChunks: false # 不断点续传
+      simultaneousUploads: 1 # 最多同时上传一个，保证顺序
+      generateUniqueIdentifier: (file)->
+        "#{file.size}|#{file.name}"
+    }
+
+    @flow.on 'fileAdded', (file, evt)=>
+      @$el.addClass 'uploading'
+      file.$uploading = @_generate_uploading_el file.name
+
+      # canvas preview
+      reader = new FileReader()
+      reader.readAsDataURL file.file
+      reader.onload = (e)->
+        file.$uploading.find('a.image .ibox').css
+          'background-image': "url(#{e.target.result})"
+
+
+      setTimeout =>
+        @flow.upload()
+      , 1
+
+    @flow.on 'fileProgress', (file)->
+      if file.$uploading
+        percent = "#{(file.progress() * 100).toFixed()}"
+        # console.debug percent
+        file.$uploading.find('.percent .p').text percent
+        file.$uploading.find('.percent .bar').css 'width', "#{100 - percent}%"
+
+    @flow.on 'fileSuccess', (file, message)=>
+      res = JSON.parse message
+      @_deal_res res, file.$uploading
+
+    window.flow = @flow
 
   bind_events: ->
     that = @
@@ -68,7 +112,7 @@ class IndexPage
         @upload file
 
 
-    # 上传图标
+    # 点击上传图标
     @$el.delegate 'a.btn-upload', 'click', =>
       @$file_input.trigger 'click'
 
@@ -167,19 +211,20 @@ class IndexPage
 
 
   # 上传指定文件
+  # 目前所有上传方式最后都走的这里
   upload: (file)->
+    console.debug '开始上传'
     file.name ?= "paste-#{(new Date).valueOf()}.png"
+    @flow.addFile file
 
-    @$el.addClass 'uploading'
-    $uploading = @_generate_uploading_el(file.name)
-    jQuery.ajax
-      type        : 'POST'
-      contentType : false
-      processData : false
-      url         : @upload_url
-      data        : @_make_file_data(file)
-      success: (res)=>
-        @_deal_res res, $uploading
+    # jQuery.ajax
+    #   type        : 'POST'
+    #   contentType : false
+    #   processData : false
+    #   url         : @upload_url
+    #   data        : @_make_file_data(file)
+    #   success: (res)=>
+    #     @_deal_res res, $uploading
 
 
   # 上传 base64 信息
@@ -231,7 +276,7 @@ class IndexPage
         .attr('href', 'javascript:;')
         .find('.ibox').html('').end()
       .end()
-      .prependTo @$uploading_list.show()
+      .appendTo @$uploading_list.show()
       .hide()
       .show 400
 
@@ -253,4 +298,5 @@ class IndexPage
 
 
 jQuery ->
-  new IndexPage jQuery('.page-index') if jQuery('.page-index').length
+  if jQuery('.page-index').length
+    new IndexPage jQuery('.page-index')

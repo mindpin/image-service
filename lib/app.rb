@@ -21,6 +21,8 @@ require "logger"
 require "sinatra/cookies"
 require 'sinatra/partial'
 
+require 'file-part-upload'
+
 require 'omniauth'
 require 'omniauth-weibo-oauth2'
 require 'omniauth-qq'

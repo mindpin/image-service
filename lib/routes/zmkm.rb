@@ -13,6 +13,10 @@ class ImageServiceApp < Sinatra::Base
     haml :zmkm_images
   end
   
+  post '/zmkm/images/flow-upload' do
+    part_upload
+  end
+
   post "/zmkm/images" do
     if params[:base64]
       image = Image.from_base64 params[:base64]
