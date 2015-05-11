@@ -13,6 +13,7 @@ config/env.yml
 config/output_settings.yml
 tmp/*
 log/*
+config/application.yml
 
 
 .env
