@@ -1,0 +1,24 @@
+# 填写 oss ALIYUN_ACCESS_ID
+ALIYUN_ACCESS_ID : b9Fmaqp6qETRGSTh 
+
+# 填写 oss ALIYUN_ACCESS_ID
+ALIYUN_ACCESS_KEY : pdCcOfgBWYEzBU3kbHU7nYM2bsAsrY 
+
+# BUCKET name
+ALIYUN_BUCKET : iostore
+
+# BUCKET 下的某个子目录名，可以随意写
+ALIYUN_BASE_DIR : dev 
+
+# zzz-dev 代表 BUCKET name 和上面的 ALIYUN_BUCKET 需要一致
+# oss-cn-qingdao 代表 BUCKET 属于 cn-qingdao
+IMAGE_ENDPOINT : http://iostore.oss-cn-hangzhou.aliyuncs.com
+
+# 上面的 ALIYUN_BUCKET 所属的地域
+ALIYUN_AREA : cn-hangzhou 
+
+
+WEIBO_KEY: 3516455898
+WEIBO_SECRET: d1cc70a0bb648c54fe00324fc37c6056
+TAGS_SERVICE: http://key-value.4ye.me
+TAG_SCOPE: image_service_dev
