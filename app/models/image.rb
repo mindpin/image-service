@@ -94,18 +94,14 @@ class Image
     File.extname(original).downcase
   end
 
-  def base
+  def url
     File.join(ENV['IMAGE_ENDPOINT'],
               ENV['ALIYUN_BASE_DIR'],
               "#{filename}")
   end
 
-  def new_url(param = nil)
-    param ? "#{base}@#{param}#{ext}" : base
-  end
-
   def magick
-    location = self.new_record? ? self.file.path : self.raw.url
+    location = self.new_record? ? self.file.path : self.url
     @magick ||= MiniMagick::Image.open(location)
   end
 
@@ -131,32 +127,57 @@ class Image
     false
   end
 
-  def raw
-    Version.new(self, nil)
-  end
-
   def versions
     if self.user.blank?
-      settings = OutputSetting.anonymous
+      image_sizes = ImageSize.anonymous
     else
-      settings = self.user.output_settings
+      image_sizes = self.user.image_sizes
     end
-    result = settings.map{|setting| Version.new(self, setting)}
+    result = image_sizes.map{|image_size| Version.new(self, image_size)}
     result.unshift(Version.new(self, nil))
   end
 
   class Version
-    attr_reader :name, :value, :url
-    def initialize(image,setting)
-      @setting = setting
-      if setting.blank?
-        @name  = "原始图片"
-        @value = nil
-        @url = image.new_url
-      else
-        @name  = setting.name
-        @value = setting.value
-        @url = image.new_url(@value)
+    attr_reader :name, :url
+    def initialize(image, image_size)
+      @image = image
+      @image_size = image_size
+      @name = _init_name
+      @url  = _init_url
+    end
+    
+    def _init_name
+      return "原始图片" if @image_size.blank?
+      @image_size.name
+    end
+
+    def _init_url
+      return @image.url if @image_size.blank?
+      return _get_oss_url if @image.is_oss?
+      _get_qiniu_url
+    end
+
+    # 获取 aliyun oss 自定义尺寸图片url
+    def _get_oss_url
+      case @image_size.style
+      when 'width_height'
+        "#{@image.url}@#{@image_size.width}w_#{@image_size.height}h_1e_1c#{@image.ext}"
+      when 'width'
+        "#{@image.url}@#{@image_size.width}w#{@image.ext}"
+      when 'height'
+        "#{@image.url}@#{@image_size.height}h#{@image.ext}"
+      end
+    end
+
+    # 获取 qiniu 云存储 自定义尺寸图片url
+    def _get_qiniu_url
+      case @image_size.style
+      when 'width_height'
+        "#{@image.url}?imageView2/1/w/#{@image_size.width}/h/#{@image_size.height}"
+      when 'width'
+        "#{@image.url}?imageView2/2/w/#{@image_size.width}"
+      when 'height'
+        "#{@image.url}?imageView2/2/h/#{@image_size.height}"
       end
     end
   end

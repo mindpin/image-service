@@ -20,6 +20,8 @@ RSpec.describe Image, type: :model do
     )
     
     expect(image.original).to eq("paste-1431337971644.png")
-    expect(image.base).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png")
+    expect(image.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png")
+
+    image.versions
   end
 end
