@@ -17,7 +17,7 @@ class Image
 
   # mount_uploader :file, ImageUploader
 
-  before_create :set_meta!
+  # before_create :set_meta!
   after_create :update_user_space
 
   def update_user_space
@@ -95,8 +95,8 @@ class Image
   end
 
   def base
-    File.join(R::IMAGE_ENDPOINT,
-              R::ALIYUN_BASE_DIR,
+    File.join(ENV['IMAGE_ENDPOINT'],
+              ENV['ALIYUN_BASE_DIR'],
               "#{filename}")
   end
 
