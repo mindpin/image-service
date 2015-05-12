@@ -51,11 +51,5 @@ gem 'devise'
 gem "omniauth-weibo-oauth2"
 gem "haml"
 
-
-
-
-
-
-
-
-
+# enum
+gem 'enumerize'
