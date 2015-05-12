@@ -56,3 +56,5 @@ group :test do
   gem 'rspec-rails', '~> 3.0'
   gem "database_cleaner", "~> 1.4.0"
 end
+
+gem 'qiniu', '~> 6.4.1'

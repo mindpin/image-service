@@ -25,3 +25,6 @@ QQ_CONNECT_KEY: xxx
 QQ_CONNECT_SECRET: xxx
 TAGS_SERVICE: http://key-value.4ye.me
 TAG_SCOPE: image_service_dev
+
+QINIU_APP_ACCESS_KEY: XXX
+QINIU_APP_SECRET_KEY: XXX
