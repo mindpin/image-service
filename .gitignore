@@ -15,7 +15,7 @@ tmp/*
 log/*
 config/application.yml
 
-
+*.log
 .env
 
 

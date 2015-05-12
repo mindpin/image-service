@@ -45,17 +45,14 @@ end
 gem "mongoid", "4.0.0"
 gem 'figaro', '>= 1.0.0'
 
-
-
 gem 'devise'
 gem "omniauth-weibo-oauth2"
 gem "haml"
 
+# enum
+gem 'enumerize'
 
-
-
-
-
-
-
-
+group :test do
+  gem 'rspec-rails', '~> 3.0'
+  gem "database_cleaner", "~> 1.4.0"
+end
