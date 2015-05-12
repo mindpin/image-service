@@ -15,6 +15,20 @@ class ImageSize
 
   belongs_to :user
 
+  scope :anonymous, -> { where(user_id: nil)}
+
+  def name
+    case style
+    when 'width_height'
+      "宽度 #{width}px，高度 #{height}px"
+    when 'width'
+      "宽度 #{width}px，高度按比例缩放"
+    when 'height'
+      "高度 #{height}px，宽度按比例缩放"
+    end
+  end
+
+  protected
   validate :validate_style_and_size
   def validate_style_and_size
     case style

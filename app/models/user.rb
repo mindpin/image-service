@@ -50,6 +50,7 @@ class User
   end
   ######################### issues/3626 ###########################
   has_many :user_tokens
+  has_many :image_sizes
   field :name, type: String
 
   def password_required?
