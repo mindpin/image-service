@@ -72,6 +72,10 @@ class Image
   #   SpaceState.create(:user => self.user, :space_size => new_size)
   # end
 
+  def filesize
+    self.meta["filesize"]
+  end
+
   def filename
     "#{token}#{ext}"
   end
