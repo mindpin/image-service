@@ -3,8 +3,6 @@ class Image
   include Mongoid::Document
   include Mongoid::Timestamps
 
-
-  field :file,     type: String
   field :original, type: String
   field :token,    type: String
   field :mime,     type: String
@@ -13,78 +11,66 @@ class Image
 
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
-  validates :file, :original, :filename, presence: true
+  validates :original, :token, :mime, :meta, presence: true
 
-  # mount_uploader :file, ImageUploader
+  # { "bucket"=>"fushang318", 
+  #   "key"=>"/i/yscPYbwk.jpeg", 
+  #   "fsize"=>"3514", 
+  #   "endUser"=>"5551b62b646562104b000000", 
+  #   "imageAve"=>"{\"RGB\":\"0xee4f60\"}", 
+  #   "origin_file_name"=>"icon200x200.jpeg",
+  #   "imageInfo"=>"{\"format\":\"png\",\"width\":200,\"height\":200,\"colorModel\":\"nrgba\"}"
+  # }
+  def self.from_qiniu_callback_body(callback_body)
+    token = callback_body[:key].match(/\/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
 
-  # before_create :set_meta!
-  after_create :update_user_space
+    rgb   = JSON.parse(callback_body[:imageAve])["RGB"]
+    rgba  = "rgba(#{rgb[2..3].hex},#{rgb[4..5].hex},#{rgb[6..7].hex},0)"
+    hex   = "##{rgb[2..7]}"
 
-  def update_user_space
-    return unless self.user
-    new_size = self.magick.tempfile.size 
+    image_info = JSON.parse(callback_body[:imageInfo])
+    width      = image_info["width"]
+    height     = image_info["height"]
+    fsize      = callback_body[:fsize]
 
-    space_state = self.user.space_state
-    if space_state
-      current_size = space_state.space_size
-      space_state.update_attributes(:space_size => current_size + new_size)
-      space_state.save
-      return
-    end
+    origin_file_name = callback_body[:origin_file_name]
+
+    mime_type = callback_body[:mimeType]
+
+    user_id   = callback_body[:endUser] || nil
+
+    Image.create!(
+      user_id:  user_id,
+      original: origin_file_name, 
+      token: token, 
+      mime: mime_type, 
+      meta: {
+        "major_color" => {
+          "rgba" => rgba, 
+          "hex"  => hex
+        }, 
+        "height"   => height, 
+        "width"    => width, 
+        "filesize" => fsize
+      }
+    )
+  end
+  # after_create :update_user_space
+
+  # def update_user_space
+  #   return unless self.user
+  #   new_size = self.magick.tempfile.size 
+
+  #   space_state = self.user.space_state
+  #   if space_state
+  #     current_size = space_state.space_size
+  #     space_state.update_attributes(:space_size => current_size + new_size)
+  #     space_state.save
+  #     return
+  #   end
     
-    SpaceState.create(:user => self.user, :space_size => new_size)
-    
-    
-  end
-
-  def self.from_params(hash, user = nil)
-    image = self.new(token: randstr, original: hash[:filename])
-    image.mime = hash[:type]
-    image.file = hash[:tempfile]
-    if !user.blank?
-      image.user = user
-    end
-    image.save
-    image
-  end
-
-  # 从传入的 base64 字符串构建并保存图片对象
-  # base64 字符串形如：
-  # data:image/png;base64, ....
-  def self.from_base64(base64_str, user = nil)
-    idx = base64_str.index(',') + 1 
-    png_data = Base64.decode64 base64_str[idx .. -1]
-
-    tempfile = Tempfile.new 'tmp'
-    begin
-      tempfile.write png_data
-      image = self.new(token: randstr, original: "paste-#{(Time.now.to_f * 1000).to_i}.png")
-      image.mime = 'image/png'
-      image.file = tempfile
-      if !user.blank?
-        image.user = user
-      end
-      image.save
-    ensure
-      tempfile.close
-      tempfile.unlink
-    end
-
-    image
-  end
-
-  # 从传入的远程网址读取图片文件
-  def self.from_remote_url(remote_url, user = nil)
-    tempfile = open remote_url
-    image = self.new(token: randstr, original: "remote-#{(Time.now.to_f * 1000).to_i}.png")
-    image.mime = 'image/png'
-    image.file = tempfile
-    if !user.blank?
-      image.user = user
-    end
-    image.save
-    image
-  end
+  #   SpaceState.create(:user => self.user, :space_size => new_size)
+  # end
 
   def filename
     "#{token}#{ext}"
@@ -95,36 +81,16 @@ class Image
   end
 
   def url
-    File.join(ENV['IMAGE_ENDPOINT'],
-              ENV['ALIYUN_BASE_DIR'],
-              "#{filename}")
-  end
-
-  def magick
-    location = self.new_record? ? self.file.path : self.url
-    @magick ||= MiniMagick::Image.open(location)
-  end
-
-  def set_meta!
-    self.meta = {
-      major_color: magick.histogram,
-      height: magick[:height],
-      width: magick[:width],
-      filesize: magick.tempfile.size,
-    }
-
-    self.save if !self.new_record?
-  rescue MiniMagick::Error
-    self.meta = {
-      major_color: {hex: "#000000", rgba: "rgba(0,0,0,1)"},
-      height: 100,
-      width: 100,
-      filesize: 0
-    }
-
-    self.save if !self.new_record?
-  rescue OpenURI::HTTPError
-    false
+    if self.is_oss?
+      File.join(ENV['IMAGE_ENDPOINT'],
+                ENV['ALIYUN_BASE_DIR'],
+                "#{filename}")
+    else
+      File.join(ENV['QINIU_DOMAIN'],
+                "@",
+                ENV['QINIU_BASE_PATH'],
+                "#{filename}")
+    end
   end
 
   def versions

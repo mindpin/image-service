@@ -1,6 +1,7 @@
 -if user_signed_in?
   = current_user.name
   = link_to "登出", "/sign_out",:method => :delete
+  %a.images{href: '/images'} 上传文件
 -else
   .weibo
     = link_to "微博登陆", "/auth/weibo"

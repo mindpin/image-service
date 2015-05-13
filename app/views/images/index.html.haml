@@ -1,0 +1,6 @@
+.page-images
+  .action
+    %a.upload{id: 'upload_btn', href: 'javascript:;', data: {domain: ENV['QINIU_DOMAIN'], basepath: ENV['QINIU_BASE_PATH']}} 上传文件
+    .filename{style: 'display:none;'}
+    .progress{style: 'display:none;'} 请稍等...
+    .success{style:  'display:none;'} 上传成功

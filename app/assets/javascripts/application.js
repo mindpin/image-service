@@ -13,4 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require randstr
+//= require plupload.full.min
+//= require qiniu.min
 //= require_tree .
