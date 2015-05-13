@@ -33,14 +33,14 @@ class ImageSize
   def validate_style_and_size
     case style
     when 'width_height'
-      return errors.add(:width, :format_error) if width.nil?
-      return errors.add(:height, :format_error) if height.nil?
+      errors.add(:width, :format_error) if width.nil?
+      errors.add(:height, :format_error) if height.nil?
     when 'width'
-      return errors.add(:width, :format_error) if width.nil?
-      return errors.add(:height, :format_error) if !height.nil?
+      errors.add(:width, :format_error) if width.nil?
+      errors.add(:height, :format_error) if !height.nil?
     when 'height'
-      return errors.add(:width, :format_error) if !width.nil?
-      return errors.add(:height, :format_error) if height.nil?
+      errors.add(:width, :format_error) if !width.nil?
+      errors.add(:height, :format_error) if height.nil?
     end
   end
 end
