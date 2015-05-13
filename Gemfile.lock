@@ -44,6 +44,13 @@ GEM
     builder (3.2.2)
     byebug (4.0.4)
       columnize (= 0.9.0)
+    carrierwave (0.8.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+    carrierwave-mongoid (0.7.1)
+      carrierwave (>= 0.8.0, < 0.11.0)
+      mongoid (>= 3.0, < 5.0)
+      mongoid-grid_fs (>= 1.3, < 3.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -92,6 +99,7 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
+    mini_magick (4.2.4)
     mini_portile (0.6.2)
     minitest (5.5.1)
     mongoid (4.0.0)
@@ -99,6 +107,9 @@ GEM
       moped (~> 2.0.0)
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
+    mongoid-grid_fs (2.1.0)
+      mime-types (>= 1.0, < 3.0)
+      mongoid (>= 3.0, < 5.0)
     moped (2.0.4)
       bson (~> 2.2)
       connection_pool (~> 2.0)
@@ -228,6 +239,8 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  carrierwave (= 0.8.0)
+  carrierwave-mongoid
   coffee-rails (~> 4.1.0)
   database_cleaner (~> 1.4.0)
   devise
@@ -236,6 +249,7 @@ DEPENDENCIES
   haml
   jbuilder (~> 2.0)
   jquery-rails
+  mini_magick
   mongoid (= 4.0.0)
   omniauth-weibo-oauth2
   qiniu (~> 6.4.1)

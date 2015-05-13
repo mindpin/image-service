@@ -58,3 +58,8 @@ group :test do
 end
 
 gem 'qiniu', '~> 6.4.1'
+# image
+gem "carrierwave", "0.8.0"
+gem 'carrierwave-mongoid'
+gem "mini_magick"
+
