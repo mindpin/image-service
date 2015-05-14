@@ -40,6 +40,12 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  # test
+
+  gem 'factory_girl_rails'
+  gem 'rspec-rails', '~> 3.2.1'
+  gem 'shoulda'
+  gem 'shoulda-matchers', require: false
 end
 
 gem "mongoid", "4.0.0"
@@ -53,7 +59,6 @@ gem "haml"
 gem 'enumerize'
 
 group :test do
-  gem 'rspec-rails', '~> 3.0'
   gem "database_cleaner", "~> 1.4.0"
 end
 
@@ -62,4 +67,16 @@ gem 'qiniu', '~> 6.4.1'
 gem "carrierwave", "0.8.0"
 gem 'carrierwave-mongoid'
 gem "mini_magick"
+
+group :development do
+  gem 'guard-bundler'
+  gem 'guard-rails'
+  gem 'guard-rspec', require: false
+  gem 'quiet_assets'
+  gem 'rails_layout'
+  gem 'rb-fchange', :require=>false
+  gem 'rb-fsevent', :require=>false
+  gem 'rb-inotify', :require=>false
+end
+
 
