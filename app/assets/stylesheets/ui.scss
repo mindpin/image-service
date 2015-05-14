@@ -1,0 +1,18 @@
+// 引用 ---------------------
+
+$futura-font-path: "fonts/futura";
+$fa-font-path: "fonts"; // 自行修改字体路径
+@import "css/lily.scss";
+
+
+//---------------
+.page-images{
+  .files{
+    .file{
+      img{
+        width: 200px;
+        height: 200px;
+      }
+    }
+  }  
+}
