@@ -7,6 +7,11 @@ $fa-font-path: "fonts"; // 自行修改字体路径
 
 //---------------
 .page-images{
+  .drag-area{
+    background-color: #fa9915;
+    height: 200px;
+    width: 200px;
+  }
   .files{
     .file{
       img{

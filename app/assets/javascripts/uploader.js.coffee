@@ -1,6 +1,5 @@
 class Uploader
-  constructor: (@$browse_button, @$files)->
-    @$browse_button_id = @$browse_button.attr("id")
+  constructor: (@$browse_button, @$drag_area_ele, @$files)->
     data = @$browse_button.data()
     @domain = data['domain']
     @basepath = data['basepath']
@@ -11,13 +10,15 @@ class Uploader
     that = this
     Qiniu.uploader
       runtimes: 'html5,flash,html4'
-      browse_button: 'upload_btn',
+      browse_button: that.$browse_button.get(0),
       uptoken_url: '/images/uptoken',
       domain: @domain,
-      max_file_size: '100mb',           
-      max_retries: 1,                   
-      chunk_size: '4mb',                
-      auto_start: true,               
+      max_file_size: '100mb',
+      max_retries: 1,
+      dragdrop: true,
+      drop_element: that.$drag_area_ele.get(0),
+      chunk_size: '4mb',
+      auto_start: true,
       x_vars:
         origin_file_name: (up, file)->
           file.name
@@ -29,7 +30,6 @@ class Uploader
           that.file_progresses[file.id] = new FileProgress(that.$files, file)
           that.file_progresses[file.id].start_upload()
         UploadProgress: (up, file)-> 
-          console.log file
           chunk_size = plupload.parseSize(this.getOption('chunk_size'));
           that.file_progresses[file.id].refresh_progress()
           # progress.text "当前进度 #{file.percent}%，速度 #{up.total.bytesPerSec}，#{chunk_size}"
@@ -87,4 +87,5 @@ jQuery(document).on 'ready page:load', ->
   if jQuery('.page-images .action a.upload').length > 0
     ele = jQuery('.page-images .action a.upload')
     files = jQuery('.page-images .files')
-    new Uploader(ele, files)
+    drag_area = jQuery('.page-images .drag-area')
+    new Uploader(ele, drag_area, files)
