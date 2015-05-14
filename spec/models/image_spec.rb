@@ -21,12 +21,13 @@ RSpec.describe Image, type: :model do
     }
 
     it{
+
       expect(@image.original).to eq("paste-1431337971644.png")
-      expect(@image.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png")
+      expect(@image.url).to eq(File.join(ENV['IMAGE_ENDPOINT'], ENV['ALIYUN_BASE_DIR'], 'FlsElzV4.png'))
 
       origin_version = @image.versions.first
       expect(origin_version.name).to eq("原始图片")
-      expect(origin_version.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png")
+      expect(origin_version.url).to eq(File.join(ENV['IMAGE_ENDPOINT'], ENV['ALIYUN_BASE_DIR'], 'FlsElzV4.png'))
     }
 
     context 'versions' do
@@ -34,21 +35,21 @@ RSpec.describe Image, type: :model do
         ImageSize.create(style: :width_height, width: 500, height: 500)
         version = @image.versions.last
         expect(version.name).to eq("宽度 500px，高度 500px")
-        expect(version.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png@500w_500h_1e_1c.png")   
+        expect(version.url).to eq(File.join(ENV['IMAGE_ENDPOINT'], ENV['ALIYUN_BASE_DIR'], 'FlsElzV4.png@500w_500h_1e_1c.png'))   
       }
 
       it {
         ImageSize.create(style: :width, width: 500)
         version = @image.versions.last
         expect(version.name).to eq("宽度 500px，高度按比例缩放")
-        expect(version.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png@500w.png")   
+        expect(version.url).to eq(File.join(ENV['IMAGE_ENDPOINT'], ENV['ALIYUN_BASE_DIR'], 'FlsElzV4.png@500w.png'))   
       }
 
       it{
         ImageSize.create(style: :height, height: 500)
         version = @image.versions.last
         expect(version.name).to eq("高度 500px，宽度按比例缩放")
-        expect(version.url).to eq("http://zzz-dev.oss-cn-qingdao.aliyuncs.com/aaa/FlsElzV4.png@500h.png")   
+        expect(version.url).to eq(File.join(ENV['IMAGE_ENDPOINT'], ENV['ALIYUN_BASE_DIR'], 'FlsElzV4.png@500h.png'))   
       }
     end
 
@@ -71,11 +72,10 @@ RSpec.describe Image, type: :model do
 
     it{
       expect(@image.original).to eq("1-120GQF34TY.jpg")
-      expect(@image.url).to eq("http://7xie1v.com1.z0.glb.clouddn.com/@/i/IuR0fINf.jpg")
-
+      expect(@image.url).to eq(File.join(ENV['QINIU_DOMAIN'], '@', ENV['QINIU_BASE_PATH'], 'IuR0fINf.jpg'))
       origin_version = @image.versions.first
       expect(origin_version.name).to eq("原始图片")
-      expect(origin_version.url).to eq("http://7xie1v.com1.z0.glb.clouddn.com/@/i/IuR0fINf.jpg")
+      expect(origin_version.url).to eq(File.join(ENV['QINIU_DOMAIN'], '@', ENV['QINIU_BASE_PATH'], 'IuR0fINf.jpg'))
     }
 
     context 'versions' do
@@ -83,21 +83,21 @@ RSpec.describe Image, type: :model do
         ImageSize.create(style: :width_height, width: 500, height: 500)
         version = @image.versions.last
         expect(version.name).to eq("宽度 500px，高度 500px")
-        expect(version.url).to eq("http://7xie1v.com1.z0.glb.clouddn.com/@/i/IuR0fINf.jpg?imageView2/1/w/500/h/500")   
+        expect(version.url).to eq(File.join(ENV['QINIU_DOMAIN'], '@', ENV['QINIU_BASE_PATH'], 'IuR0fINf.jpg?imageView2/1/w/500/h/500'))   
       }
 
       it {
         ImageSize.create(style: :width, width: 500)
         version = @image.versions.last
         expect(version.name).to eq("宽度 500px，高度按比例缩放")
-        expect(version.url).to eq("http://7xie1v.com1.z0.glb.clouddn.com/@/i/IuR0fINf.jpg?imageView2/2/w/500")   
+        expect(version.url).to eq(File.join(ENV['QINIU_DOMAIN'], '@', ENV['QINIU_BASE_PATH'], 'IuR0fINf.jpg?imageView2/2/w/500'))   
       }
 
       it{
         ImageSize.create(style: :height, height: 500)
         version = @image.versions.last
         expect(version.name).to eq("高度 500px，宽度按比例缩放")
-        expect(version.url).to eq("http://7xie1v.com1.z0.glb.clouddn.com/@/i/IuR0fINf.jpg?imageView2/2/h/500")   
+        expect(version.url).to eq(File.join(ENV['QINIU_DOMAIN'], '@', ENV['QINIU_BASE_PATH'], 'IuR0fINf.jpg?imageView2/2/h/500'))   
       }
     end
   end

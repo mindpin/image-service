@@ -1,12 +1,6 @@
 # 填写 oss ALIYUN_ACCESS_ID
 ALIYUN_ACCESS_ID : xxx 
 
-# 填写 oss ALIYUN_ACCESS_ID
-ALIYUN_ACCESS_KEY : yyy 
-
-# BUCKET name
-ALIYUN_BUCKET : zzz-dev 
-
 # BUCKET 下的某个子目录名，可以随意写
 ALIYUN_BASE_DIR : aaa 
 
@@ -14,21 +8,22 @@ ALIYUN_BASE_DIR : aaa
 # oss-cn-qingdao 代表 BUCKET 属于 cn-qingdao
 IMAGE_ENDPOINT : http://zzz-dev.oss-cn-qingdao.aliyuncs.com
 
-# 上面的 ALIYUN_BUCKET 所属的地域
-ALIYUN_AREA : cn-qingdao 
-
-GITHUB_KEY: xxx
-GITHUB_SECRET: xxx
+# http://open.weibo.com/ 申请应用后，把 key secret 填写在这里
 WEIBO_KEY: xxx
 WEIBO_SECRET: xxx
-QQ_CONNECT_KEY: xxx
-QQ_CONNECT_SECRET: xxx
-TAGS_SERVICE: http://key-value.4ye.me
-TAG_SCOPE: image_service_dev
 
+# http://www.qiniu.com/ 注册登陆后，访问 "账号设置" -> "秘钥"，把 key secret 填写在这里
 QINIU_APP_ACCESS_KEY: XXX
 QINIU_APP_SECRET_KEY: XXX
+
+# http://www.qiniu.com/ 注册登陆后，创建一个空间，然后空间名填写在这里
 QINIU_BUCKET: XXX
+
+# http://www.qiniu.com/ 注册登陆后，创建一个空间，选择空间 -> '空间设置' -> '域名设置'，把域名填写在这里，需要注意的是需要以 http:// 开头，比如 http://7xie1v.com1.z0.glb.clouddn.com
 QINIU_DOMAIN: XXX
+
+# 文件会上传到 bucket 下的 /<QINIU_BASE_PATH>/<文件名> ，这个位置
 QINIU_BASE_PATH: i
+
+# 这个设置的值是该工程访问地址的域名
 QINIU_CALLBACK_HOST: http://101.16.191.65:3000
