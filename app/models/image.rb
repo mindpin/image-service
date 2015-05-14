@@ -2,6 +2,7 @@
 class Image
   include Mongoid::Document
   include Mongoid::Timestamps
+  include SpaceStateCallback
 
   field :original, type: String
   field :token,    type: String
@@ -55,22 +56,6 @@ class Image
       }
     )
   end
-  # after_create :update_user_space
-
-  # def update_user_space
-  #   return unless self.user
-  #   new_size = self.magick.tempfile.size 
-
-  #   space_state = self.user.space_state
-  #   if space_state
-  #     current_size = space_state.space_size
-  #     space_state.update_attributes(:space_size => current_size + new_size)
-  #     space_state.save
-  #     return
-  #   end
-    
-  #   SpaceState.create(:user => self.user, :space_size => new_size)
-  # end
 
   def filesize
     self.meta["filesize"]
