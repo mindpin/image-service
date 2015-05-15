@@ -80,4 +80,9 @@ describe SpaceStateCallback do
     )
     @image.destroy.should == true
   }
+
+  it "image with @user and string filesize should not be raise" do
+    @user = create(:user)
+    create(:image_with_str_filesize, user: @user).should be_valid
+  end
 end
