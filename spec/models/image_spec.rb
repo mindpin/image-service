@@ -106,7 +106,7 @@ RSpec.describe Image, type: :model do
     describe "anonymous" do
       before do
         @images = [create(:image), create(:image)]
-        @image_size = create(:image_size)
+        @image_size = create(:image_size_width)
       end
 
       it "#version(version_id)" do
@@ -124,7 +124,7 @@ RSpec.describe Image, type: :model do
       before do
         @user = create(:user)
         @images = [create(:image, user: @user), create(:image, user: @user)]
-        @image_size = create(:image_size, user: @user)
+        @image_size = create(:image_size_width, user: @user)
       end
 
       it "#version(version_id)" do
@@ -135,6 +135,31 @@ RSpec.describe Image, type: :model do
 
       it "Image.images_url_with_version image_ids, version_id" do
         Image.images_url_with_version(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}.map(&:url)
+      end
+    end
+
+    describe "#to_html" do
+      it "width_height" do
+        @image = create(:image)
+        @image_size = create(:image_size_width_height)
+        p @image_size
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@version.url}' />"
+      end
+
+      it "width" do
+        @image = create(:image)
+        @image_size = create(:image_size_width)
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img width='#{@image_size.width}' src='#{@version.url}' />"
+      end
+
+      it "height" do
+        @image = create(:image)
+        @image_size = create(:image_size_height)
+        p @image_size
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img height='#{@image_size.height}' src='#{@version.url}' />"
       end
     end
   end

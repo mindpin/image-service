@@ -149,6 +149,16 @@ class Image
       end
     end
 
+    def to_html
+      case @image_size.style
+      when 'width_height'
+        "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@url}' />"
+      when 'width'
+        "<img width='#{@image_size.width}' src='#{@url}' />"
+      when 'height'
+        "<img height='#{@image_size.height}' src='#{@url}' />"
+      end
+    end
 
     def ==(another)
       !another.nil? and 
