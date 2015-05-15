@@ -101,4 +101,41 @@ RSpec.describe Image, type: :model do
       }
     end
   end
+
+  describe Image::Version do
+    describe "anonymous" do
+      before do
+        @images = [create(:image), create(:image)]
+        @image_size = create(:image_size)
+      end
+
+      it "#version(version_id)" do
+        @images.each do |image|
+          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+        end
+      end
+
+      it "Image.images_url_with_version image_ids, version_id" do
+        Image.images_url_with_version(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}.map(&:url)
+      end
+    end
+
+    describe "by user" do
+      before do
+        @user = create(:user)
+        @images = [create(:image, user: @user), create(:image, user: @user)]
+        @image_size = create(:image_size, user: @user)
+      end
+
+      it "#version(version_id)" do
+        @images.each do |image|
+          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+        end
+      end
+
+      it "Image.images_url_with_version image_ids, version_id" do
+        Image.images_url_with_version(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}.map(&:url)
+      end
+    end
+  end
 end
