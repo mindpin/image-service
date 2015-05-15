@@ -101,8 +101,12 @@ class Image
     Version.new(self, image_sizes.find(image_size_id))
   end
 
-  def self.images_url_with_version(image_ids, image_size_id)
-    find(image_ids).map{|image| image.version(image_size_id)}.map(&:url)
+  def self.images_versions(image_ids, image_size_id)
+    find(image_ids).map{|image| image.version(image_size_id)}
+  end
+
+  def self.images_to_html_by_ids_and_image_size_id(image_ids, image_size_id)
+    find(image_ids).map{|image| image.version(image_size_id)}.map(&:to_html)
   end
 
   class Version
@@ -161,9 +165,8 @@ class Image
     end
 
     def ==(another)
-      !another.nil? and 
-        self.name == another.name and 
-        self.url == another.url
+      self.name == another.try(:name) and 
+        self.url == another.try(:url)
     end
   end
 end

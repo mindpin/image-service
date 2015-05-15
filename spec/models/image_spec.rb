@@ -115,8 +115,12 @@ RSpec.describe Image, type: :model do
         end
       end
 
-      it "Image.images_url_with_version image_ids, version_id" do
-        Image.images_url_with_version(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}.map(&:url)
+      it "Image.images_versions image_ids, version_id" do
+        Image.images_versions(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}
+      end
+
+      it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
+        Image.images_to_html_by_ids_and_image_size_id(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id).to_html}
       end
     end
 
@@ -133,8 +137,12 @@ RSpec.describe Image, type: :model do
         end
       end
 
-      it "Image.images_url_with_version image_ids, version_id" do
-        Image.images_url_with_version(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}.map(&:url)
+      it "Image.images_versions image_ids, version_id" do
+        Image.images_versions(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}
+      end
+
+      it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
+        Image.images_to_html_by_ids_and_image_size_id(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id).to_html}
       end
     end
 
