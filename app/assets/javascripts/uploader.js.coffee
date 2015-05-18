@@ -5,10 +5,11 @@ class Uploader
     @basepath = data['basepath']
     @file_progresses = {}
     @_init()
+    @_init_paste_event()
 
   _init: ()->
     that = this
-    Qiniu.uploader
+    @qiniu = Qiniu.uploader
       runtimes: 'html5,flash,html4'
       browse_button: that.$browse_button.get(0),
       uptoken_url: '/images/uptoken',
@@ -45,6 +46,61 @@ class Uploader
           ext = file.name.split(".").pop()
           "/#{that.basepath}/#{jQuery.randstr()}.#{ext}"
 
+  _init_paste_event: ()->
+    # 通过粘贴上传文件
+    ###
+      粘贴有六种情况：
+      1. [√] 在 chrome 下通过软件复制图像数据
+      2. [√] 在 chrome 下右键复制网页图片
+      3. [×] 在 chrome 下粘贴磁盘文件句柄 ......
+
+      4. [√] 在 firefox 下通过软件复制图像数据
+      5. [√] 在 firefox 下右键复制网页图片
+      6. [√] 在 firefox 下粘贴磁盘文件句柄
+    ###
+
+
+    # 粘贴剪贴板内容 (chrome)
+    # 在 firefox 下，需要在页面放置一个隐藏的 contenteditable = true 的 dom
+    paste_dom = jQuery '<div contenteditable></div>'
+      .css
+        'position': 'absolute'
+        'left': -99999
+        'top': -99999
+      .appendTo jQuery(document.body)
+      .focus()
+
+    that = this
+    jQuery(document).off 'paste'
+    jQuery(document).on 'paste', (evt)=>
+      # chrome
+      arr = (evt.clipboardData || evt.originalEvent.clipboardData)?.items
+      if arr?.length
+        return @_deal_chrome_paste arr
+
+      # firefox
+      paste_dom.html('').focus()
+      setTimeout =>
+        paste_dom.find('img').each ->
+          $img = jQuery(this)
+          that._deal_firefox_paste $img
+
+  _deal_chrome_paste: (arr)->
+    console.log 'chrome paste'
+    for i in arr
+      if i.type.match(/^image\/\w+$/) 
+        file = i.getAsFile()
+        file.name = "paste-#{(new Date).valueOf()}.png"
+        @qiniu.addFile(file) if file
+
+  _deal_firefox_paste: ($img)->
+    console.log 'firefox paste'
+    src = $img.attr 'src'
+    if src.match /^data\:image\//
+      blob = dataURLtoBlob src
+      blob.name = "paste-#{(new Date).valueOf()}.png"
+      @qiniu.addFile(blob)
+      return
 
 class FileProgress
   constructor: (@$files_ele, @file)->

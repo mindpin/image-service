@@ -58,7 +58,7 @@ class Image
   end
 
   def filesize
-    self.meta["filesize"]
+    self.meta["filesize"].to_i
   end
 
   def filename
