@@ -101,4 +101,74 @@ RSpec.describe Image, type: :model do
       }
     end
   end
+
+  describe Image::Version do
+    describe "anonymous" do
+      before do
+        @images = [create(:image), create(:image)]
+        @image_size = create(:image_size_width)
+      end
+
+      it "#version(version_id)" do
+        @images.each do |image|
+          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+        end
+      end
+
+      it "Image.images_versions image_ids, version_id" do
+        Image.images_versions(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}
+      end
+
+      it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
+        Image.images_to_html_by_ids_and_image_size_id(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id).to_html}
+      end
+    end
+
+    describe "by user" do
+      before do
+        @user = create(:user)
+        @images = [create(:image, user: @user), create(:image, user: @user)]
+        @image_size = create(:image_size_width, user: @user)
+      end
+
+      it "#version(version_id)" do
+        @images.each do |image|
+          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+        end
+      end
+
+      it "Image.images_versions image_ids, version_id" do
+        Image.images_versions(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id)}
+      end
+
+      it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
+        Image.images_to_html_by_ids_and_image_size_id(@images.map(&:id), @image_size.id).should == @images.map{|image| image.version(@image_size.id).to_html}
+      end
+    end
+
+    describe "#to_html" do
+      it "width_height" do
+        @image = create(:image)
+        @image_size = create(:image_size_width_height)
+        p @image_size
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@version.url}' />"
+      end
+
+      it "width" do
+        @image = create(:image)
+        @image_size = create(:image_size_width)
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img width='#{@image_size.width}' src='#{@version.url}' />"
+      end
+
+      it "height" do
+        @image = create(:image)
+        @image_size = create(:image_size_height)
+        p @image_size
+        @version = Image::Version.new(@image, @image_size)
+        @version.to_html.should == "<img height='#{@image_size.height}' src='#{@version.url}' />"
+      end
+    end
+  end
 end

@@ -6,7 +6,7 @@ module SpaceStateCallback
 
     def increase_user_space
       return unless self.user
-      new_size = self.filesize
+      new_size = self.filesize.to_i
       current_size = self.user.space_size
       self.user.update_attributes(:space_size => current_size + new_size)
     end
@@ -15,7 +15,7 @@ module SpaceStateCallback
 
     def decrease_user_space
       return unless self.user
-      new_size = self.filesize
+      new_size = self.filesize.to_i
       current_size = self.user.space_size
       self.user.update_attributes(:space_size => current_size - new_size)
     end

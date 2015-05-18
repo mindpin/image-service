@@ -92,6 +92,23 @@ class Image
     result.unshift(Version.new(self, nil))
   end
 
+  def version(image_size_id)
+    if self.user.blank?
+      image_sizes = ImageSize.anonymous
+    else
+      image_sizes = self.user.image_sizes
+    end
+    Version.new(self, image_sizes.find(image_size_id))
+  end
+
+  def self.images_versions(image_ids, image_size_id)
+    find(image_ids).map{|image| image.version(image_size_id)}
+  end
+
+  def self.images_to_html_by_ids_and_image_size_id(image_ids, image_size_id)
+    find(image_ids).map{|image| image.version(image_size_id)}.map(&:to_html)
+  end
+
   class Version
     attr_reader :name, :url
     def initialize(image, image_size)
@@ -134,6 +151,22 @@ class Image
       when 'height'
         "#{@image.url}?imageView2/2/h/#{@image_size.height}"
       end
+    end
+
+    def to_html
+      case @image_size.style
+      when 'width_height'
+        "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@url}' />"
+      when 'width'
+        "<img width='#{@image_size.width}' src='#{@url}' />"
+      when 'height'
+        "<img height='#{@image_size.height}' src='#{@url}' />"
+      end
+    end
+
+    def ==(another)
+      self.name == another.try(:name) and 
+        self.url == another.try(:url)
     end
   end
 end
