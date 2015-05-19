@@ -115,8 +115,11 @@ class FileProgress
     res = jQuery.parseJSON(info);
     @$file.find('.progress').text("上传成功")
 
-    @$file.find('img').attr('src', res.url)
-    @$file.find('img').show()
+    if res.is_image
+      @$file.find('img').attr('src', res.url)
+      @$file.find('img').show()
+    else
+      @$file.find('img').hide()
 
     @$file.find('a.url').attr('href', res.url)
     @$file.find('a.url').text(res.url)

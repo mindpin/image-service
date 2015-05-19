@@ -25,14 +25,7 @@ class Image
   def self.from_qiniu_callback_body(callback_body)
     token = callback_body[:key].match(/\/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
 
-    rgb   = JSON.parse(callback_body[:imageAve])["RGB"]
-    rgba  = "rgba(#{rgb[2..3].hex},#{rgb[4..5].hex},#{rgb[6..7].hex},0)"
-    hex   = "##{rgb[2..7]}"
-
-    image_info = JSON.parse(callback_body[:imageInfo])
-    width      = image_info["width"]
-    height     = image_info["height"]
-    fsize      = callback_body[:fsize]
+    meta = self.__get_meta_from_callback_body(callback_body)
 
     origin_file_name = callback_body[:origin_file_name]
 
@@ -45,7 +38,23 @@ class Image
       original: origin_file_name, 
       token: token, 
       mime: mime_type, 
-      meta: {
+      meta: meta
+    )
+  end
+
+  def self.__get_meta_from_callback_body(callback_body)
+    # 图片文件
+    if !callback_body[:imageAve].blank? && !callback_body[:imageInfo].blank?
+      rgb   = JSON.parse(callback_body[:imageAve])["RGB"]
+      rgba  = "rgba(#{rgb[2..3].hex},#{rgb[4..5].hex},#{rgb[6..7].hex},0)"
+      hex   = "##{rgb[2..7]}"
+
+      image_info = JSON.parse(callback_body[:imageInfo])
+      width      = image_info["width"]
+      height     = image_info["height"]
+      fsize      = callback_body[:fsize]
+      
+      return {
         "major_color" => {
           "rgba" => rgba, 
           "hex"  => hex
@@ -54,7 +63,14 @@ class Image
         "width"    => width, 
         "filesize" => fsize
       }
-    )
+    else
+      fsize = callback_body[:fsize]
+      return {"filesize" => fsize}
+    end
+  end
+
+  def is_image?
+    self.mime.split("/").first == 'image'
   end
 
   def filesize

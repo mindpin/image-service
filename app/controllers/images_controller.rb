@@ -20,6 +20,7 @@ class ImagesController < ApplicationController
     image = Image.from_qiniu_callback_body(params)
     render json: {
       id: image.id.to_s,
+      is_image: image.is_image?,
       url: image.url
     }
   end
