@@ -82,6 +82,16 @@ class Image
     end
   end
 
+  def path
+    if self.is_oss?
+      File.join("/",ENV['ALIYUN_BASE_DIR'],
+                "#{filename}")
+    else
+      File.join("/",ENV['QINIU_BASE_PATH'],
+                "#{filename}")
+    end
+  end
+
   def versions
     if self.user.blank?
       image_sizes = ImageSize.anonymous
