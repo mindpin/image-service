@@ -8,4 +8,10 @@ Rails.application.routes.draw do
   resources :images do
     get :uptoken,  on: :collection
   end
+
+  namespace :api do
+    resources :images do
+      post :from_remote_url, on: :collection
+    end
+  end
 end

@@ -14,13 +14,47 @@ class Image
   scope :anonymous, -> {where(:user_id => nil)}
   validates :original, :token, :mime, :meta, presence: true
 
+  # 下载 url 的文件，并上传到七牛
+  def self.from_remote_url(url, user)
+    uri = URI(url)
+    res = Net::HTTP.get_response(uri)
+    mine_type = res.header["Content-Type"]
+    ext = mine_type.split("/").last
+
+    token = randstr
+    filename = "#{token}.#{ext}"
+    key = File.join("/", ENV["QINIU_BASE_PATH"], filename)
+
+    tf = Tempfile.new([randstr,".#{ext}"])
+    tf.binmode
+    tf << res.body
+    tf.rewind
+
+    put_policy = Qiniu::Auth::PutPolicy.new(ENV['QINIU_BUCKET'], key)
+    put_policy.return_body = '{"key":$(key),"bucket":$(bucket),"key":$(key),"fsize":$(fsize),"origin_file_name":$(x:origin_file_name),"endUser":$(endUser),"image_rgb":$(imageAve.RGB),"mimeType":$(mimeType),"image_width":$(imageInfo.width),"image_height":$(imageInfo.height)}'
+    if !user.blank?
+      put_policy.end_user = user.id.to_s
+    end
+    uptoken = Qiniu::Auth.generate_uptoken(put_policy)
+
+    code, result, response_headers = Qiniu::Storage.upload_with_put_policy(
+        put_policy, tf, key, x_var = {"x:origin_file_name" => filename}
+    )
+
+    tf.close
+
+    self.from_qiniu_callback_body(result.symbolize_keys)
+  end
+
   # { "bucket"=>"fushang318", 
   #   "key"=>"/i/yscPYbwk.jpeg", 
   #   "fsize"=>"3514", 
   #   "endUser"=>"5551b62b646562104b000000", 
-  #   "imageAve"=>"{\"RGB\":\"0xee4f60\"}", 
+  #   "image_rgb"=>"0xee4f60", 
   #   "origin_file_name"=>"icon200x200.jpeg",
-  #   "imageInfo"=>"{\"format\":\"png\",\"width\":200,\"height\":200,\"colorModel\":\"nrgba\"}"
+  #   "mimeType" => "image/png",
+  #   "image_width"=>"200",
+  #   "image_height"=>"200"
   # }
   def self.from_qiniu_callback_body(callback_body)
     token = callback_body[:key].match(/\/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
@@ -44,14 +78,13 @@ class Image
 
   def self.__get_meta_from_callback_body(callback_body)
     # 图片文件
-    if !callback_body[:imageAve].blank? && !callback_body[:imageInfo].blank?
-      rgb   = JSON.parse(callback_body[:imageAve])["RGB"]
+    if !callback_body[:image_rgb].blank? && !callback_body[:image_width].blank?
+      rgb   = callback_body[:image_rgb]
       rgba  = "rgba(#{rgb[2..3].hex},#{rgb[4..5].hex},#{rgb[6..7].hex},0)"
       hex   = "##{rgb[2..7]}"
 
-      image_info = JSON.parse(callback_body[:imageInfo])
-      width      = image_info["width"]
-      height     = image_info["height"]
+      width      = callback_body[:image_width]
+      height      = callback_body[:image_height]
       fsize      = callback_body[:fsize]
       
       return {
