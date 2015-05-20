@@ -110,6 +110,10 @@ class Image
     self.meta["filesize"].to_i
   end
 
+  def key
+    File.join("/", ENV["QINIU_BASE_PATH"], filename)
+  end
+
   def filename
     "#{token}#{ext}"
   end
