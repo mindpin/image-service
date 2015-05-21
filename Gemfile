@@ -79,4 +79,4 @@ group :development do
   gem 'rb-inotify', :require=>false
 end
 
-
+gem "sidekiq"

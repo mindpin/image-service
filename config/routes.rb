@@ -11,7 +11,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :images do
-      post :from_remote_url, on: :collection
+      post :input_from_remote_url_to_quene, on: :collection
+      get  :get_from_remote_url_status,     on: :collection
     end
   end
 end

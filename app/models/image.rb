@@ -14,36 +14,58 @@ class Image
   scope :anonymous, -> {where(:user_id => nil)}
   validates :original, :token, :mime, :meta, presence: true
 
+
   # 下载 url 的文件，并上传到七牛
   def self.from_remote_url(url, user)
     uri = URI(url)
     res = Net::HTTP.get_response(uri)
     mine_type = res.header["Content-Type"]
     ext = mine_type.split("/").last
-
     token = randstr
     filename = "#{token}.#{ext}"
     key = File.join("/", ENV["QINIU_BASE_PATH"], filename)
 
-    tf = Tempfile.new([randstr,".#{ext}"])
-    tf.binmode
-    tf << res.body
-    tf.rewind
+    new_url = 'http://iovip.qbox.me/fetch/' + 
+      Qiniu::Utils.urlsafe_base64_encode(url) + 
+      '/to/' + 
+      Qiniu::Utils.encode_entry_uri(ENV['QINIU_BUCKET'], key)
 
-    put_policy = Qiniu::Auth::PutPolicy.new(ENV['QINIU_BUCKET'], key)
-    put_policy.return_body = '{"key":$(key),"bucket":$(bucket),"key":$(key),"fsize":$(fsize),"origin_file_name":$(x:origin_file_name),"endUser":$(endUser),"image_rgb":$(imageAve.RGB),"mimeType":$(mimeType),"image_width":$(imageInfo.width),"image_height":$(imageInfo.height)}'
-    if !user.blank?
-      put_policy.end_user = user.id.to_s
+    Qiniu::HTTP.management_post(new_url)
+    callback_body = self._get_meta_from_remote(filename, key, user)
+    self.from_qiniu_callback_body(callback_body)
+  end
+
+  # 通过七牛 HTTP API 获取文件原信息
+  def self._get_meta_from_remote(filename, key, user)
+    base_info  = Qiniu.stat(ENV['QINIU_BUCKET'], key)
+    fsize      = base_info["fsize"]
+    mimeType   = base_info["mimeType"]
+
+    if mimeType.split("/").first == "image"
+      image_info   = Qiniu.image_info(self._get_qiniu_url(filename))
+      image_width  = image_info["width"]
+      image_height = image_info["height"]
+
+      code, ave = Qiniu::HTTP.api_get(self._get_qiniu_url(filename) + '?imageAve')
+      rgb       = ave["RGB"]
+    else
+      image_info   = ""
+      image_width  = ""
+      image_height = ""
+      rgb          = ""
     end
-    uptoken = Qiniu::Auth.generate_uptoken(put_policy)
 
-    code, result, response_headers = Qiniu::Storage.upload_with_put_policy(
-        put_policy, tf, key, x_var = {"x:origin_file_name" => filename}
-    )
-
-    tf.close
-
-    self.from_qiniu_callback_body(result.symbolize_keys)
+    return { 
+      bucket:       ENV["QINIU_BUCKET"], 
+      key:          key, 
+      fsize:        fsize, 
+      endUser:      user.blank? ? nil : user.id.to_s, 
+      image_rgb:    rgb, 
+      mimeType:     mimeType,
+      image_width:  image_width,
+      image_height: image_height,
+      origin_file_name: filename
+    }
   end
 
   # { "bucket"=>"fushang318", 
@@ -128,10 +150,7 @@ class Image
                 ENV['ALIYUN_BASE_DIR'],
                 "#{filename}")
     else
-      File.join(ENV['QINIU_DOMAIN'],
-                "@",
-                ENV['QINIU_BASE_PATH'],
-                "#{filename}")
+      self.class._get_qiniu_url(filename)
     end
   end
 
@@ -162,6 +181,13 @@ class Image
       image_sizes = self.user.image_sizes
     end
     Version.new(self, image_sizes.find(image_size_id))
+  end
+
+  def self._get_qiniu_url(filename)
+    File.join(ENV['QINIU_DOMAIN'],
+              "@",
+              ENV['QINIU_BASE_PATH'],
+              "#{filename}")
   end
 
   def self.images_versions(image_ids, image_size_id)

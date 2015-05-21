@@ -1,6 +1,6 @@
 class Api::ImagesController < ApplicationController
   before_filter :set_access_control_headers
-  skip_before_filter :verify_authenticity_token, only: :from_remote_url
+  skip_before_filter :verify_authenticity_token
 
   def set_access_control_headers
     if !request.headers["Origin"].blank?
@@ -8,17 +8,35 @@ class Api::ImagesController < ApplicationController
     end
   end
 
-  def from_remote_url
-    image = Image.from_remote_url(params[:url], current_user)
+  def input_from_remote_url_to_quene
+    quene_status_id = QueneStatus.create.id.to_s
+    current_user_id = current_user.blank? ? "" : current_user.id
+    FromRemoteUrlWorker.perform_async(params[:url], current_user_id, quene_status_id)
     render json: {
-      id: image.id.to_s,
-      is_image: image.is_image?,
-      url: image.url
+      token: quene_status_id
     }
-  rescue Exception => e
-    p e.message
-    puts e.backtrace*"\n"
-    render :status => 500, :json => {:status => 'error'}
+  end
+
+  def get_from_remote_url_status
+    quene_status = QueneStatus.find(params[:token])
+    case true
+    when quene_status.status.processing?
+      render json: {status: 'processing'}
+    when quene_status.status.failure?
+      render json: {status: 'failure'}
+    when quene_status.status.success?
+      image_id = quene_status.success_data["image_id"]
+      image = Image.find(image_id)
+      render json: {
+        status: 'success',
+        data: {
+          id: image.id.to_s,
+          is_image: image.is_image?,
+          url: image.url
+        }
+      }
+    end
+
   end
 
 end
