@@ -3,6 +3,7 @@ class Image
   include Mongoid::Document
   include Mongoid::Timestamps
   include SpaceStateCallback
+  include TranscodingRecord::ImageMethods
 
   field :original, type: String
   field :token,    type: String
@@ -13,7 +14,6 @@ class Image
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
   validates :original, :token, :mime, :meta, presence: true
-
 
   # 下载 url 的文件，并上传到七牛
   def self.from_remote_url(url, user)
@@ -215,6 +215,11 @@ class Image
 
   def key
     File.join("/", ENV["QINIU_BASE_PATH"], filename)
+  end
+
+  # key 去掉 ext
+  def key_prefix
+    File.join("/", ENV["QINIU_BASE_PATH"], token)
   end
 
   def filename
