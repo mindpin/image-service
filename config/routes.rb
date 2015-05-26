@@ -14,5 +14,6 @@ Rails.application.routes.draw do
       post :input_from_remote_url_to_quene, on: :collection
       get  :get_from_remote_url_status,     on: :collection
     end
+    get  "/auth_check",  to: "auth#check"
   end
 end
