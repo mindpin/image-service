@@ -1,5 +1,6 @@
 # coding: utf-8
 class FileEntity
+  KINDS = [:image, :audio, :video]
   include Mongoid::Document
   include Mongoid::Timestamps
   extend Enumerize
@@ -18,7 +19,7 @@ class FileEntity
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
   validates :original, :token, :mime, :meta, presence: true
-  enumerize :kind, in: [:image, :audio, :video]
+  enumerize :kind, in: KINDS
 
   def filesize
     self.meta["filesize"].to_i
