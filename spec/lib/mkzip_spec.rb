@@ -15,6 +15,9 @@ RSpec.describe Mkzip, type: :lib do
 
     it "#zip" do
       result = @mkzip.zip
+      p "~~~~~~~~~~~~~"
+      p result
+      p "~~~~~~~~~~~~~"
       result.class.name.should == "String"
       result.length.should == 24
     end

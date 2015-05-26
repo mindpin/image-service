@@ -43,4 +43,41 @@ class ImageSize
       errors.add(:height, :format_error) if height.nil?
     end
   end
+
+  module ImageMethods
+    def self.included(base)
+
+      base.send(:extend, ClassMethods)
+    end
+
+    def versions
+      if self.user.blank?
+        image_sizes = ImageSize.anonymous
+      else
+        image_sizes = self.user.image_sizes
+      end
+      result = image_sizes.map{|image_size| ImageVersion.new(self, image_size)}
+      result.unshift(ImageVersion.new(self, nil))
+    end
+
+    def version(image_size_id)
+      if self.user.blank?
+        image_sizes = ImageSize.anonymous
+      else
+        image_sizes = self.user.image_sizes
+      end
+      ImageVersion.new(self, image_sizes.find(image_size_id))
+    end
+
+    module ClassMethods
+      def images_versions(image_ids, image_size_id)
+        find(image_ids).map{|image| image.version(image_size_id)}
+      end
+
+      def images_to_html_by_ids_and_image_size_id(image_ids, image_size_id)
+        find(image_ids).map{|image| image.version(image_size_id)}.map(&:to_html)
+      end
+    end
+  end
+
 end

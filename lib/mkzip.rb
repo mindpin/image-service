@@ -4,7 +4,7 @@ class Mkzip
   end
 
   def zip
-    result = Mkzip.pfop(bucket: 'ddtest', key: @images.first.path, fops: build_fops)
+    result = Mkzip.pfop(bucket: ENV['QINIU_BUCKET'], key: @images.first.path, fops: build_fops)
     return result[1]['persistentId'] if result[0] == 200
     result
   end

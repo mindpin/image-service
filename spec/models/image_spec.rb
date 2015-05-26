@@ -61,10 +61,11 @@ RSpec.describe Image, type: :model do
         bucket: "fushang318", 
         key: "/i/IuR0fINf.jpg", 
         fsize: "25067", 
-        imageAve: "{\"RGB\":\"0x4f4951\"}", 
+        image_rgb: "0x4f4951", 
         origin_file_name: "1-120GQF34TY.jpg", 
         mimeType: "image/jpeg", 
-        imageInfo: "{\"format\":\"jpeg\",\"width\":200,\"height\":200,\"colorModel\":\"ycbcr\"}"
+        image_width: "200",
+        image_height: "200"
       }
 
       @image = Image.from_qiniu_callback_body(callback_body)
@@ -102,7 +103,7 @@ RSpec.describe Image, type: :model do
     end
   end
 
-  describe Image::Version do
+  describe ImageVersion do
     describe "anonymous" do
       before do
         @images = [create(:image), create(:image)]
@@ -111,7 +112,7 @@ RSpec.describe Image, type: :model do
 
       it "#version(version_id)" do
         @images.each do |image|
-          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+          image.version(@image_size.id).should == ImageVersion.new(image, @image_size)
         end
       end
 
@@ -133,7 +134,7 @@ RSpec.describe Image, type: :model do
 
       it "#version(version_id)" do
         @images.each do |image|
-          image.version(@image_size.id).should == Image::Version.new(image, @image_size)
+          image.version(@image_size.id).should == ImageVersion.new(image, @image_size)
         end
       end
 
@@ -151,14 +152,14 @@ RSpec.describe Image, type: :model do
         @image = create(:image)
         @image_size = create(:image_size_width_height)
         p @image_size
-        @version = Image::Version.new(@image, @image_size)
+        @version = ImageVersion.new(@image, @image_size)
         @version.to_html.should == "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@version.url}' />"
       end
 
       it "width" do
         @image = create(:image)
         @image_size = create(:image_size_width)
-        @version = Image::Version.new(@image, @image_size)
+        @version = ImageVersion.new(@image, @image_size)
         @version.to_html.should == "<img width='#{@image_size.width}' src='#{@version.url}' />"
       end
 
@@ -166,7 +167,7 @@ RSpec.describe Image, type: :model do
         @image = create(:image)
         @image_size = create(:image_size_height)
         p @image_size
-        @version = Image::Version.new(@image, @image_size)
+        @version = ImageVersion.new(@image, @image_size)
         @version.to_html.should == "<img height='#{@image_size.height}' src='#{@version.url}' />"
       end
     end
