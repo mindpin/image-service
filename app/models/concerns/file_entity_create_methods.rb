@@ -1,4 +1,4 @@
-module ImageCreateMethods
+module FileEntityCreateMethods
   extend ActiveSupport::Concern
 
   module ClassMethods
@@ -128,13 +128,15 @@ module ImageCreateMethods
       token      = callback_body[:key].match(/\/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
       mime_type  = callback_body[:mimeType]
       meta = __get_meta_from_callback_body(mime_type, callback_body)
+      kind = mime_type.split("/").first.to_sym
 
-      Image.create!(
+      FileEntity.create!(
         user_id:  callback_body[:endUser] || nil,
         original: callback_body[:origin_file_name], 
         token: token, 
         mime: mime_type, 
-        meta: meta
+        meta: meta,
+        kind: kind
       )
     end
 

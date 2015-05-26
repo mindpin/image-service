@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+class FileEntitiesController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
 
   def index
@@ -30,17 +30,17 @@ class ImagesController < ApplicationController
     #   "avinfo_audio_bit_rate"   => "",
     #   "avinfo_audio_duration"   => ""
     # }
-    image = Image.from_qiniu_callback_body(params)
+    file_entity = FileEntity.from_qiniu_callback_body(params)
     render json: {
-      id: image.id.to_s,
-      is_image: image.is_image?,
-      url: image.url
+      id: file_entity.id.to_s,
+      kind: file_entity.kind,
+      url: file_entity.url
     }
   end
 
   def uptoken
     put_policy = Qiniu::Auth::PutPolicy.new(ENV['QINIU_BUCKET'])
-    put_policy.callback_url = File.join(ENV['QINIU_CALLBACK_HOST'], "/images")
+    put_policy.callback_url = File.join(ENV['QINIU_CALLBACK_HOST'], "/file_entities")
     put_policy.callback_body = 'bucket=$(bucket)&key=$(key)&fsize=$(fsize)&endUser=$(endUser)&image_rgb=$(imageAve.RGB)&origin_file_name=$(x:origin_file_name)&mimeType=$(mimeType)&image_width=$(imageInfo.width)&image_height=$(imageInfo.height)&avinfo_format=$(avinfo.format.format_name)&avinfo_total_bit_rate=$(avinfo.format.bit_rate)&avinfo_total_duration=$(avinfo.format.duration)&avinfo_video_codec_name=$(avinfo.video.codec_name)&avinfo_video_bit_rate=$(avinfo.video.bit_rate)&avinfo_video_duration=$(avinfo.video.duration)&avinfo_height=$(avinfo.video.height)&avinfo_width=$(avinfo.video.width)&avinfo_audio_codec_name=$(avinfo.audio.codec_name)&avinfo_audio_bit_rate=$(avinfo.audio.bit_rate)&avinfo_audio_duration=$(avinfo.audio.duration)'
     if !current_user.blank?
       put_policy.end_user = current_user.id.to_s

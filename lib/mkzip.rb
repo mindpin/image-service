@@ -1,6 +1,6 @@
 class Mkzip
-  def initialize(image_ids, opts={})
-    @images = Image.find(image_ids)
+  def initialize(file_entity_ids, opts={})
+    @images = FileEntity.find(file_entity_ids)
   end
 
   def zip

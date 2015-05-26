@@ -15,9 +15,6 @@ RSpec.describe Mkzip, type: :lib do
 
     it "#zip" do
       result = @mkzip.zip
-      p "~~~~~~~~~~~~~"
-      p result
-      p "~~~~~~~~~~~~~"
       result.class.name.should == "String"
       result.length.should == 24
     end
@@ -25,7 +22,6 @@ RSpec.describe Mkzip, type: :lib do
     it ".result" do
       result = Mkzip.result @mkzip.zip
       result[0].should == 200
-      p "result[1]['code']: #{result[1]['code']}"
       [0 ,1].should include(result[1]['code'])
     end
 

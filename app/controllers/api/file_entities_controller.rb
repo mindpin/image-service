@@ -1,4 +1,4 @@
-class Api::ImagesController < ApplicationController
+class Api::FileEntitiesController < ApplicationController
   before_filter :set_access_control_headers
   skip_before_filter :verify_authenticity_token
 
@@ -25,14 +25,14 @@ class Api::ImagesController < ApplicationController
     when quene_status.status.failure?
       render json: {status: 'failure'}
     when quene_status.status.success?
-      image_id = quene_status.success_data["image_id"]
-      image = Image.find(image_id)
+      file_entity_id = quene_status.success_data["file_entity_id"]
+      file_entity = FileEntity.find(file_entity_id)
       render json: {
         status: 'success',
         data: {
-          id: image.id.to_s,
-          is_image: image.is_image?,
-          url: image.url
+          id: file_entity.id.to_s,
+          kind: file_entity.kind,
+          url: file_entity.url
         }
       }
     end

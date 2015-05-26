@@ -9,7 +9,7 @@ describe SpaceStateCallback do
     describe "@user upload a @image" do
       before{
         @filesize = 219350
-        @image = Image.create!(
+        @image = FileEntity.create!(
           original: "paste-1431337971644.png", 
           token: "FlsElzV4", 
           mime: "image/png", 
@@ -40,7 +40,7 @@ describe SpaceStateCallback do
     it{
       @filesizes = 10.times.map{rand(10000)}
       @filesizes.each do |filesize|
-        @image = @user.images.create!(
+        @image = @user.file_entities.create!(
           original: "paste-1431337971644.png", 
           token: "FlsElzV4", 
           mime: "image/png", 
@@ -63,7 +63,7 @@ describe SpaceStateCallback do
   end
 
   it{
-    @image = Image.create!(
+    @image = FileEntity.create!(
       original: "paste-1431337971644.png", 
       token: "FlsElzV4", 
       mime: "image/png", 

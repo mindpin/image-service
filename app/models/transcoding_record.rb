@@ -10,7 +10,7 @@ class TranscodingRecord
   field :quniu_persistance_id,   type: String
 
   enumerize :status, in: [:processing, :success, :failure], default: :processing
-  belongs_to :image
+  belongs_to :file_entity
 
   def url
     File.join(ENV['QINIU_DOMAIN'],
@@ -18,7 +18,7 @@ class TranscodingRecord
               qiniu_key)
   end
 
-  module ImageMethods
+  module FileEntityMethods
     def self.included(base)
       base.has_many :transcoding_records
       base.after_create :put_audio_and_video_transcode_to_quene

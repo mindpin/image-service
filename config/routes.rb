@@ -5,12 +5,12 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :images do
+  resources :file_entities do
     get :uptoken,  on: :collection
   end
 
   namespace :api do
-    resources :images do
+    resources :file_entities do
       post :input_from_remote_url_to_quene, on: :collection
       get  :get_from_remote_url_status,     on: :collection
     end

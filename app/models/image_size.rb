@@ -44,7 +44,7 @@ class ImageSize
     end
   end
 
-  module ImageMethods
+  module FileEntityMethods
     def self.included(base)
 
       base.send(:extend, ClassMethods)
@@ -70,12 +70,12 @@ class ImageSize
     end
 
     module ClassMethods
-      def images_versions(image_ids, image_size_id)
-        find(image_ids).map{|image| image.version(image_size_id)}
+      def images_versions(file_entity_ids, image_size_id)
+        find(file_entity_ids).map{|file_entity| file_entity.version(image_size_id)}
       end
 
-      def images_to_html_by_ids_and_image_size_id(image_ids, image_size_id)
-        find(image_ids).map{|image| image.version(image_size_id)}.map(&:to_html)
+      def images_to_html_by_ids_and_image_size_id(file_entity_ids, image_size_id)
+        find(file_entity_ids).map{|file_entity| file_entity.version(image_size_id)}.map(&:to_html)
       end
     end
   end

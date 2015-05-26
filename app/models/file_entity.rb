@@ -1,25 +1,24 @@
 # coding: utf-8
-class Image
+class FileEntity
   include Mongoid::Document
   include Mongoid::Timestamps
+  extend Enumerize
   include SpaceStateCallback
-  include ImageCreateMethods
-  include ImageSize::ImageMethods
-  include TranscodingRecord::ImageMethods
+  include FileEntityCreateMethods
+  include ImageSize::FileEntityMethods
+  include TranscodingRecord::FileEntityMethods
 
   field :original, type: String
   field :token,    type: String
   field :mime,     type: String
   field :meta,     type: Hash
   field :is_oss,   type: Boolean
+  field :kind,     type: String
 
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
   validates :original, :token, :mime, :meta, presence: true
-
-  def is_image?
-    self.mime.split("/").first == 'image'
-  end
+  enumerize :kind, in: [:image, :audio, :video]
 
   def filesize
     self.meta["filesize"].to_i

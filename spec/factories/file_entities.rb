@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :image do
+  factory :file_entity do
     original "test.jpg"
     sequence(:token) {|n| "test#{n}"}
     mime "image/jpeg"

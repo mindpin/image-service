@@ -6,7 +6,7 @@ module SpaceState
   end
 
   def recount_space_size
-    update_attribute :space_size, images.sum{|image| image.filesize}
+    update_attribute :space_size, file_entities.sum{|file_entity| file_entity.filesize}
   end
 
   module ClassMethods

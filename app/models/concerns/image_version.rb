@@ -1,7 +1,7 @@
  class ImageVersion
   attr_reader :name, :url
-  def initialize(image, image_size)
-    @image = image
+  def initialize(file_entity, image_size)
+    @image = file_entity
     @image_size = image_size
     @name = _init_name
     @url  = _init_url
