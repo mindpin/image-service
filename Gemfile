@@ -80,3 +80,8 @@ group :development do
 end
 
 gem "sidekiq"
+
+gem "unicorn", group: :production
+gem "mina",
+    :git => "git://github.com/fushang318/mina.git",
+    :tag => "v0.2.0fix"
