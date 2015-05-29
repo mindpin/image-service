@@ -1,6 +1,4 @@
 # options = {
-#   qiniu_domain:    "http://7xie1v.com1.z0.glb.clouddn.com/", 
-#   qiniu_basepath:  "i",
 #   uptoken_url:     'http://lifei.com:3000/file_entities/uptoken',
 
 #   browse_button:   'ele id | ele | jquery ele',
@@ -13,8 +11,8 @@
 # }
 class Img4yeUploader
   constructor: (@options)->
-    @qiniu_domain   = @options["qiniu_domain"]
-    @qiniu_basepath = @options["qiniu_basepath"]
+    @qiniu_domain   = "http://7xie1v.com1.z0.glb.clouddn.com/"
+    @qiniu_basepath = "i"
     @uptoken_url    = @options["uptoken_url"]
 
     @browse_button  = @options["browse_button"]
@@ -33,6 +31,9 @@ class Img4yeUploader
     @_process_paste_upload()
     @_process_auto_start()
 
+  add_file: (file)->
+    @qiniu.addFile(file)
+
   add_file_by_base64: (base64)->
     if base64.match /^data\:image\//
       blob = dataURLtoBlob base64
@@ -49,8 +50,6 @@ class Img4yeUploader
   _process_browse_button: ()->
     # 如果 browse_button 是一个 jQuery 对象
     # 就设置 browse_button 是原始的 dom 对象
-    if typeof(@browse_button) == "undefined"
-      @browse_button = "browse_button"
     if typeof(@browse_button) == "object"
       if typeof(@browse_button.get) == "function"
         @browse_button = @browse_button.get(0)
@@ -83,9 +82,14 @@ class Img4yeUploader
           that.file_progresses[file.id].refresh_progress()
           # progress.text "当前进度 #{file.percent}%，速度 #{up.total.bytesPerSec}，#{chunk_size}"
         FileUploaded: (up, file, info)->
-          that.file_progresses[file.id].uploaded(info)
+          info = jQuery.parseJSON(info);
+          fp = that.file_progresses[file.id]
+          fp.upload_end("success")
+          fp.upload_success(info)
         Error: (up, err, errTip)->
-          that.file_progresses[err.file.id].upload_error()
+          fp = that.file_progresses[err.file.id]
+          fp.upload_end("error")
+          fp.upload_error()
         UploadComplete: ()->
           #队列文件处理完毕后,处理相关的事情
         Key: (up, file)->
@@ -161,10 +165,15 @@ class DefualtImg4yeFileProgress
   constructor: (@$files_ele, @file)->
 
   refresh_progress: ->
-    console.log("refresh_progress #{@file.percent}%", )
+    console.log("refresh_progress #{@file.percent}%")
 
-  uploaded: (info)->
-    console.log("uploaded #{info}", )
+  upload_success: (info)->
+    console.log("uploade_success")
+    console.log(info)
+
+  upload_end: (status)->
+    console.log("upload_end")
+    console.log("status #{status}")
 
   upload_error: ->
     console.log("upload_error")

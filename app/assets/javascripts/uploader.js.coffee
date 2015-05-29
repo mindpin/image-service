@@ -35,7 +35,8 @@ class Uploader
           that.file_progresses[file.id].refresh_progress()
           # progress.text "当前进度 #{file.percent}%，速度 #{up.total.bytesPerSec}，#{chunk_size}"
         FileUploaded: (up, file, info)->
-          that.file_progresses[file.id].uploaded(info)
+          info = jQuery.parseJSON(info);
+          that.file_progresses[file.id].upload_success(info)
         Error: (up, err, errTip)->
           that.file_progresses[err.file.id].upload_error()
         UploadComplete: ()->
@@ -111,18 +112,17 @@ class FileProgress
   refresh_progress: ->
     @$file.find('.progress').text("#{@file.percent}%")
 
-  uploaded: (info)->
-    res = jQuery.parseJSON(info);
+  upload_success: (info)->
     @$file.find('.progress').text("上传成功")
 
-    if res.kind == "image"
-      @$file.find('img').attr('src', res.url)
+    if info.kind == "image"
+      @$file.find('img').attr('src', info.url)
       @$file.find('img').show()
     else
       @$file.find('img').hide()
 
-    @$file.find('a.url').attr('href', res.url)
-    @$file.find('a.url').text(res.url)
+    @$file.find('a.url').attr('href', info.url)
+    @$file.find('a.url').text(info.url)
     @$file.find('a.url').show()
 
   upload_error: ->
