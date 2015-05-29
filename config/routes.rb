@@ -5,8 +5,9 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  match "/file_entities/uptoken", to: "file_entities#uptoken_options", via: :options
   resources :file_entities do
-    get :uptoken,  on: :collection
+    get   :uptoken,  on: :collection
   end
 
   namespace :api do

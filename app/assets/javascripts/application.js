@@ -17,4 +17,4 @@
 //= require canvas-to-blob.min
 //= require plupload.full.min
 //= require qiniu.min
-//= require_tree .
+//= require uploader

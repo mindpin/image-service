@@ -1,5 +1,15 @@
 class FileEntitiesController < ApplicationController
-  skip_before_filter :verify_authenticity_token, only: :create
+  skip_before_filter :verify_authenticity_token, only: [:create, :uptoken_options]
+  before_filter :set_access_control_headers, only: [:uptoken_options, :uptoken]
+  def set_access_control_headers
+    if !request.headers["Origin"].blank?
+      response.headers['Access-Control-Allow-Origin']   = request.headers["Origin"]
+
+      response.headers['Access-Control-Allow-Methods'] = "POST, GET, OPTIONS"
+      response.headers['Access-Control-Allow-Headers'] = "X-Requested-With, Content-Type, Accept, If-Modified-Since"
+      response.headers['Access-Control-Max-Age'] = "1728000"
+    end
+  end
 
   def index
   end
@@ -49,5 +59,9 @@ class FileEntitiesController < ApplicationController
     render json: {
       uptoken: uptoken
     }
+  end
+
+  def uptoken_options
+    render :text => 200, :status => 200
   end
 end
