@@ -30,8 +30,13 @@ class Img4yeUploader
     @file_progress_callback = @options["file_progress_callback"] || DefualtImg4yeFileProgress
     @file_progresses = {}
 
-    @auto_start   = @options["auto_start"]
+    @auto_start = @options["auto_start"]
+    if typeof(@auto_start) == "undefined"
+      @auto_start = true
+
     @paste_upload = @options["paste_upload"]
+    if typeof(@paste_upload) == "undefined"
+      @paste_upload = false
 
     @_process_browse_button();
 
