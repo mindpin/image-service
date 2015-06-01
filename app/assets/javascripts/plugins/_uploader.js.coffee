@@ -1,31 +1,39 @@
 # options = {
 #   uptoken_url:     'http://lifei.com:3000/file_entities/uptoken',
 
-#   browse_button:   'ele id | ele | jquery ele',
-#   drag_area:       'ele id | ele | jquery ele',
-#   file_list_area:  'ele id | ele | jquery ele',
+#   browse_button:   'jquery selector str | ele | jquery ele',
+
+#   drag_area:       'jquery selector str | ele | jquery ele',
+#   file_list_area:  'jquery selector str | ele | jquery ele',
 #   file_progress_callback: FileProgress,
 
 #   auto_start: false,
 #   paste_upload: false
 # }
+QINIU_CONFIG = {
+  domain:      "http://7xie1v.com1.z0.glb.clouddn.com/",
+  basepath:    "i",
+  uptoken_url: "http://img.4ye.me/file_entities/uptoken"
+}
 class Img4yeUploader
   constructor: (@options)->
-    @qiniu_domain   = "http://7xie1v.com1.z0.glb.clouddn.com/"
-    @qiniu_basepath = "i"
-    @uptoken_url    = @options["uptoken_url"]
+    @qiniu_domain   = QINIU_CONFIG["domain"]
+    @qiniu_basepath = QINIU_CONFIG["basepath"]
+    @uptoken_url    = @options["uptoken_url"] || QINIU_CONFIG["uptoken_url"]
 
-    @browse_button  = @options["browse_button"]
-    @drag_area      = @options["drag_area"]
-    @file_list_area = @options["file_list_area"]
-    @file_progress_callback = @options["file_progress_callback"] || DefualtImg4yeFileProgress
+    @browse_button  = jQuery(@options["browse_button"]).get(0)
+
+    @drag_area      = jQuery(@options["drag_area"]).get(0)
     @dragdrop = (typeof(@drag_area) != "undefined")
+
+    @file_list_area = jQuery(@options["file_list_area"]).get(0)
+    @file_progress_callback = @options["file_progress_callback"] || DefualtImg4yeFileProgress
     @file_progresses = {}
+
     @auto_start   = @options["auto_start"]
     @paste_upload = @options["paste_upload"]
 
     @_process_browse_button();
-    @_process_drag_area();
 
     @_init();
     @_process_paste_upload()
@@ -40,19 +48,9 @@ class Img4yeUploader
       blob.name = "paste-#{(new Date).valueOf()}.png"
       @qiniu.addFile(blob)
 
-  _process_drag_area: ()->
-    # 如果 drag_area 是一个 jQuery 对象
-    # 就设置 drag_area 是原始的 dom 对象
-    if typeof(@drag_area) == "object"
-      if typeof(@drag_area.get) == "function"
-        @drag_area = @drag_area.get(0)
-
   _process_browse_button: ()->
-    # 如果 browse_button 是一个 jQuery 对象
-    # 就设置 browse_button 是原始的 dom 对象
-    if typeof(@browse_button) == "object"
-      if typeof(@browse_button.get) == "function"
-        @browse_button = @browse_button.get(0)
+    if typeof(@browse_button) == "undefined"
+      throw "没有指定 browse_button 参数，或者 browse_button 参数指定的 dom 不存在"
 
   _init: ()->
     that = this
