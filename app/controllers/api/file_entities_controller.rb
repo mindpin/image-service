@@ -11,7 +11,7 @@ class Api::FileEntitiesController < ApplicationController
   def input_from_remote_url_to_quene
     quene_status_id = QueneStatus.create.id.to_s
     current_user_id = current_user.blank? ? "" : current_user.id
-    FromRemoteUrlWorker.perform_async(params[:url], current_user_id, quene_status_id)
+    FromRemoteUrlWorker.perform_async(params[:url], current_user_id.to_s, quene_status_id)
     render json: {
       token: quene_status_id
     }
