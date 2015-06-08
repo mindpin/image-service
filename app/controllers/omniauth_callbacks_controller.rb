@@ -11,6 +11,8 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     token      = auth_hash["credentials"]["token"]
     expires_at = auth_hash["credentials"]["expires_at"]
     expires    = auth_hash["credentials"]["expires"]
+    avatar_url = auth_hash["extra"]["raw_info"]["avatar_large"]
+    user_name  = auth_hash["info"]["nickname"]
 
     user_token = UserToken.where(
       :uid      => uid,
@@ -18,9 +20,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     ).first
 
     if user_token.blank?
-
-      user = User.create!(:name => auth_hash["info"]["nickname"])
-      user_token = user.user_tokens.create(
+      user_token = UserToken.create(
         :uid        => uid,
         :provider   => provider,
         :token      => token,
@@ -34,7 +34,18 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
         :expires    => expires
       )
     end
+    user = user_token.user
+    if user.blank?
+      user = User.create!(
+        :name => user_name,
+        :user_token => user_token
+      )
+    end
 
-    sign_in_and_redirect(:user, user_token.user)
+    user.update_attributes(
+      :name => user_name,
+      :avatar_url => avatar_url
+    )
+    sign_in_and_redirect(:user, user)
   end
 end

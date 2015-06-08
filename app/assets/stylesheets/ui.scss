@@ -4,20 +4,468 @@ $futura-font-path: "fonts/futura";
 $fa-font-path: "fonts"; // 自行修改字体路径
 @import "css/lily.scss";
 
-
+$gap: 15px;
 //---------------
-.page-file-entities{
-  .drag-area{
-    background-color: #fa9915;
-    height: 200px;
-    width: 200px;
+@mixin height($h) {
+  display: block;
+  height: $h;
+  line-height: $h;
+}
+
+@mixin circle($h) {
+  @include height($h);
+  width: $h;
+  border-radius: 100%;
+}
+
+@mixin logo {
+  font-family: "Futura-Condensed";
+  // font-family: "Sirichana Thai Std Bold";
+  // font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-weight: bold;
+  span.s1 {color: #374F00;}
+  span.s2 {color: #7DB500;}
+}
+
+@mixin default-transition {
+  @include transition(all ease-out .3s)
+}
+
+// nono scroller
+
+/** initial setup **/
+.nano {
+  position : relative;
+  width    : 100%;
+  height   : 100%;
+  overflow : hidden;
+}
+.nano > .nano-content {
+  position      : absolute;
+  overflow      : scroll;
+  overflow-x    : hidden;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+}
+.nano > .nano-content:focus {
+  outline: thin dotted;
+}
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+}
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+.nano > .nano-pane {
+  background : rgba(0,0,0,.25);
+  position   : absolute;
+  width      : 10px;
+  right      : 0;
+  top        : 0;
+  bottom     : 0;
+  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : .01;
+  -webkit-transition    : .2s;
+  -moz-transition       : .2s;
+  -o-transition         : .2s;
+  transition            : .2s;
+  // -moz-border-radius    : 5px;
+  // -webkit-border-radius : 5px;
+  // border-radius         : 5px;
+}
+.nano > .nano-pane > .nano-slider {
+  background: #444;
+  background: rgba(0,0,0,.5);
+  position              : relative;
+  margin                : 0 1px;
+  // -moz-border-radius    : 3px;
+  // -webkit-border-radius : 3px;
+  // border-radius         : 3px;
+}
+.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
+  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : 0.99;
+}
+
+///////////////
+
+
+.container {
+  // @include -above(wide) { 
+  //   // width: calc(100% - 300px);
+  //   // width: 100%;
+  //   // min-width: $container-wide;
+  //   // max-width: $container-xwide; 
+  // }
+}
+
+html, body {
+  overflow: hidden;
+}
+
+body.app {
+  background-color: #F7F7F7;
+  color: #555;
+  font-size: 16px;
+}
+
+body.app .page-auth {
+  width: 320px; margin:0 auto;
+
+  .logo {
+    @include logo;
+    @include height(200px);
+    font-size: 120px;
+    padding-bottom: 60px;
+    text-align: center;
   }
-  .files{
-    .file{
-      img{
-        width: 200px;
-        height: 200px;
+
+  .desc {
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  a.login {
+    @include height(60px);
+    background-color: #fc5728;
+    color: white;
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 100px;
+    position: relative;
+    margin-bottom: 30px;
+    &:hover {
+      background-color: #ee3703;
+    }
+  }
+
+  .team {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+body.app .page-dashboard {
+  position: absolute;
+  top:0;left:0;bottom:0;right:0;
+  $header-height: 50px;
+  $control-height: 130px;
+  $opbar-height: 50px;
+
+  .header {
+    @include height($header-height);
+    background-color: #f1f1f1;
+    position: relative;
+
+    .logo {
+      @include logo;
+      @include height(50px);
+      font-size: 32px;
+      // margin:0 auto;
+      width: 80px;
+      text-align: center;
+    }
+
+    .top-control {
+      position: absolute;
+      top:0;right: $grid-gap / 2;
+
+      .user {
+        float: left;
+        margin-right: 30px;
+        .avatar {
+          $w: 30px;
+          @include circle($w);
+          img {@include circle($w);}
+          float: left;
+          margin-top: (50px - $w) / 2;
+          margin-right: 15px;
+        }
+        .name {
+          font-size: 18px;
+          float: left;
+        }
+      }
+      .config {
+        float: right;
+        a.signout {
+          color: #555;
+          font-size: 16px;
+          text-decoration: none;
+          background-color: #e3e3e3;
+          border-radius: 16px;
+          @include height(30px);
+          padding:0 15px;
+          margin-top: 10px;
+          &:hover {
+            background-color: #f7f7f7;
+          }
+        }
       }
     }
-  }  
+  }
+  .main {
+    position: absolute;
+    top:$header-height;left:0;right:0;bottom:0;
+    .control {
+      $ch: $control-height;
+
+      .upload-control {
+        height: $ch;
+        position: relative;
+        float: left;
+        padding: 0 $grid-gap / 2;
+        width: 326px + 138px - 15px;
+
+        a.btn-upload {
+          $btnh: 80px;
+          position: relative;
+          top:50%;margin-top:- $btnh / 2;
+          left:0;
+          @include circle($btnh);
+          background-color: #ffeebe;
+          text-decoration: none;
+          i {
+            @include circle($btnh);
+            color: #a57900;
+            text-align: center;
+            font-size: $btnh / 2;
+            @include default-transition;
+          }
+          &:before {
+            content: "";
+            position: absolute;
+            @include circle($btnh);
+            border: solid 3px rgba(#a57900, 0.2);
+            padding: 2px;
+            left: -5px; top: -5px;
+            @include default-transition;
+          }
+          &:hover i {
+            color: white;
+            background-color: #a57900;
+          }
+          &:hover:before {
+            padding: 8px;
+            left: -11px; top: -11px;
+            border-color: #a57900;
+          }
+        }
+        .helpinfo {
+          $lh: 24px;
+          $pd: 14px;
+          line-height: $lh;
+          font-size: 16px;
+          position: absolute;
+          left: 108px + 20px + 10px;
+          top: 50%;
+          margin-top: - $lh * 3 / 2 - $pd;
+          background-color: rgba(#fff,0.8);
+          padding: $pd 20px;
+          border-radius: 20px;
+          &:before {
+            $arrowh: 40px;
+            content: "";
+            border:solid $arrowh / 2 transparent;
+            border-right: solid $arrowh / 2 rgba(#fff,0.8);
+            position: absolute;
+            left:- $arrowh;
+            top:($lh * 3 + $pd * 2 - $arrowh) / 2;
+          }
+        }
+      }
+      .stat {
+        height:$ch;
+        position: relative;
+        float: left;
+        padding: 0 $grid-gap / 2;
+        width: 500px;
+
+        .sts {
+          $lh: 36px;
+          padding: 14px 20px;
+          position: absolute;
+          top: 50%; margin-top: - $lh - 14px;
+          .st {
+            line-height: $lh;
+            span.t {
+              color:#999;
+              font-size: 18px;
+              margin-left: 5px;
+            }
+            span.c {
+              font-size: 24px;
+              font-family: Futura-Condensed;
+              font-weight: bold;
+            }
+          }
+          a.btn {
+            @include height(28px);
+            display: inline-block;
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+    .opbar {
+      background-color:#F1F1F1;
+      @include height($opbar-height);
+      font-size: 16px;
+
+      a {
+        float: left;
+        color: #555;
+        text-decoration: none;
+        margin-right: 30px;
+      }
+
+      a.bttn {
+        background-color: #e3e3e3;
+        @include height(30px);
+        border-radius:16px;
+        margin-top: 10px;
+        padding: 0 15px;
+        margin-right: 10px;
+        &:hover {
+          background-color: #f7f7f7;
+        }
+        &.disabled {
+          color: #ccc;
+          background-color: rgba(#e3e3e3, 0);
+          pointer-events: none;
+        }
+      }
+
+      .check {
+        .cb {
+          float: left;
+          margin-right: 10px;
+          width:16px;height:16px;
+          border:solid 2px #666;
+          border-radius:3px;
+          margin-top: 15px;
+          background-color: #FFF;
+          i {
+            color: #666;
+            display: block;
+            width:16px;height:16px;
+            text-align: center;
+          }
+        }
+      }
+    }
+    .grid {
+      position: absolute;
+      bottom:0;left:0;right:0;
+      top: $control-height + $opbar-height;
+      height: auto;
+
+      .blank {
+        margin-top: 40px;
+        .ac {width:150px;height:130px;
+          background-image: url(http://img.teamkn.com/i/x44OFVHe.png);
+        }
+        .s {
+          margin-top: 20px;
+        }
+      }
+
+      .images {
+        .image {
+          background-color: #FFF;
+          overflow: hidden;
+          @include default-transition;
+
+          .icheck {
+            $fc: rgba(white, 0.8);
+            $bc: rgba(black, 0.3);
+            position: absolute;
+            top: 15px; left: 15px;
+            width: 30px; height: 30px;
+            border-radius: 100%;
+            background-color: $bc;
+            box-shadow:0 0 0 3px $fc;
+            &:before {
+              content: "\f00c";
+              font-family: "FontAwesome";
+              color: $fc;
+              text-align: center;
+              position: absolute;
+              width:30px;height:30px;
+              line-height: 30px;
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+    .upload-panel {
+      background-color: rgba(black, 0.5);
+      position: absolute;
+      top: $control-height;
+      left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      @include transition(all 0.6s);
+
+      .panel {
+        margin-top: -100%;
+        border-top: dashed 2px #ddd;
+        position: absolute;
+        top:0; left:0; right: 0;
+        background-color: #f1f1f1;
+        box-shadow:0 0 10px black;
+        @include transition(all 0.6s);
+        .pbox {
+          padding-bottom:50%;
+          position: relative;
+
+          a.close-panel {
+            $w: 60px;
+            box-sizing: border-box;
+            position: absolute;
+            width: $w; height: $w; line-height: $w;
+            background-color: #444;
+            border-radius: 100px;
+            bottom: -$w/2;
+            left: 50%; margin-left: -$w/2;
+            border: solid 4px white;
+            opacity: 0;
+            i {
+              position: absolute;
+              top: 0px;left:0px;right:0px;bottom:0px;
+              line-height: 52px;
+              color: white;
+              text-align: center;
+              font-size: 36px;
+            }
+            box-shadow:0 0 10px rgba(black, 0.5);
+            @include default-transition;
+            &:hover {
+              background-color: #222;
+              box-shadow:0 0 20px rgba(black, 1);
+            }
+          }
+        }
+      }
+
+      &.opened {
+        opacity: 1;
+        pointer-events: all;
+        .panel {
+          margin-top: 0;
+          a.close-panel {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
 }

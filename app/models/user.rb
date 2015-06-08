@@ -35,7 +35,9 @@ class User
   # field :failed_attempts, type: Integer, default: 0 # Only if lock strategy is :failed_attempts
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
-
+  ######
+  field :avatar_url,    type: String
+  field :name,          type: String
   ######################### issues/3626 ###########################
   # https://github.com/mongoid/mongoid/issues/3626#issuecomment-64700154
   def self.serialize_from_session(key, salt)

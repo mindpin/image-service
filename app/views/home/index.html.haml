@@ -1,7 +1,89 @@
--if user_signed_in?
-  = current_user.name
-  = link_to "登出", "/sign_out",:method => :delete
-  %a.file_entities{href: '/file_entities'} 上传文件
--else
-  .weibo
-    = link_to "微博登陆", "/auth/weibo"
+.page-dashboard
+  .header
+    .container
+      .row
+        .col-pad-12
+          .logo 
+            %span.s1> img
+            %span.s2> 4ye
+          .top-control
+            .user
+              .avatar
+                %img{:src => current_user.avatar_url}
+              .name= current_user.name
+            .config
+              %a.signout{:href => "/sign_out", :rel => "nofollow", :'data-method'=>"delete"}
+                %i.fa.fa-power-off
+                %span 退出
+  .main
+    .control
+      .container
+        .row
+          .upload-control
+            %a.btn-upload{:href => 'javascript:;'}
+              %i.fa.fa-upload
+            .helpinfo
+              .h 点击上传本地图片
+              .h 
+                %span 或者 按下 
+                %span.k CTRL 
+                %span + 
+                %span.k V 
+                %span 粘贴剪贴板里的图片
+              .h 或者 拖拽图片文件到浏览器
+          .stat
+            .sts
+              .st.uploaded
+                %span.c= current_user.file_entities.images.count
+                %span.t 张图片，
+                %span.c= current_user.space_size.to_human_format_filesize
+                %span.t 空间占用，
+                %span.c= current_user.image_sizes.count
+                %span.t 个尺寸配置
+              %a.btn.btn-pill.btn-flat-success.btn-mini{:href => 'javascript:;'}
+                %i.fa.fa-cog
+                %span 编辑尺寸配置
+
+
+    .opbar
+      .container
+        .row
+          .col-pad-12
+            %a.check{:href => 'javascript:;'}
+              .cb
+                %i.fa.fa-check
+              %span 选择所有图片
+            %a.bttn.copylink.disabled{:href => 'javascript:;'}
+              %i.fa.fa-copy
+              %span 复制链接
+            %a.bttn.download.disabled{:href => 'javascript:;'}
+              %i.fa.fa-download
+              %span 下载
+            %a.bttn.delete.disabled{:href => 'javascript:;'}
+              %i.fa.fa-trash
+              %span 删除
+
+    .grid.nano
+      .nano-content
+        .container
+          .row
+            .col-pad-12
+              .blank{:style => 'display:none;'}
+                .ac
+                .s 还没有上传过图片噢 ~
+
+              - # 集成注意：load-more-url 应填写加载下一页用到的地址
+              - # 图片数组要改成从控制器层获取
+              .images{:data => {:'load-more-url' => 'home-1-dashboard.html'}}
+                - current_user.file_entities.images.each do |img|
+                  .image{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url}}
+
+
+    .upload-panel
+      .panel
+        .container
+          .row
+            .col-pad-12
+              .pbox
+                %a.close-panel{:href => 'javascript:;'}
+                  %i.fa.fa-close

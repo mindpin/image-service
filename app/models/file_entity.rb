@@ -18,11 +18,26 @@ class FileEntity
 
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
+  scope :images, -> {where(:kind => :image)}
+  scope :is_oss, -> {where(:is_oss => true)}
+  scope :is_qiniu, -> {where(:is_oss => false)}
   validates :original, :token, :mime, :meta, presence: true
   enumerize :kind, in: KINDS
 
   def filesize
     self.meta["filesize"].to_i
+  end
+
+  def ave
+    self.meta["major_color"]["hex"]
+  end
+
+  def width
+    self.meta["width"]
+  end
+
+  def height
+    self.meta["height"]
   end
 
   def key
