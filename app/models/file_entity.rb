@@ -21,7 +21,7 @@ class FileEntity
   scope :images, -> {where(:kind => :image)}
   scope :avs,    -> {where(:kind.in => [:audio, :video])}
   scope :is_oss, -> {where(:is_oss => true)}
-  scope :is_qiniu, -> {where(:is_oss => false)}
+  scope :is_qiniu, -> {where(:is_oss => nil)}
   validates :original, :token, :mime, :meta, presence: true
   enumerize :kind, in: KINDS
 

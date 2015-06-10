@@ -97,26 +97,54 @@ window.GridLayout = class GridLayout
   BOTTOM_MARGIN: 80
 
   constructor: (@host)->
+    @data = {}
+    @layout_version = 0
+    @compute_data()
 
-  render: ->
-    container_width = @host.get_width()
-    columns_count = ~~(container_width / 200)
-    grid_data = Util.spacing_grid_data container_width, columns_count, @GRID_SPACING
-    side_length = grid_data.side_length
-    cols = Util.array_init columns_count, => 
-      height: @GRID_SPACING
+  compute_data: ->
+    ###
+      性能改进策略：
+      如果显示区域宽度不变，那么
+        网格边长 side_length
+        网格列信息 cols
+      都不会变化，无需重新计算。
+      相应地，如果调用重新布局方法时，以上数据未变化，则不对已经放置好位置的布局对象进行处理
+    ###
+    width = @host.get_width()
+    return if width is @data.container_width
 
+    cols_count = ~~(width / 200)
+    pos_data = Util.spacing_grid_data width, cols_count, @GRID_SPACING
+    
+    @data =
+      container_width: width
+      side_length: pos_data.side_length
+      cols: Util.array_init cols_count, (idx)=>
+        left: pos_data.positions[idx]
+        height: @GRID_SPACING
+    @layout_version += 1
+
+  relayout: (force = false)->
+    if force
+      @data = {}
+      @layout_version += 1
+    
+    @compute_data()
+
+    cols = @data.cols
+    slen = @data.side_length
     @host.each_image (idx, image)=>
+      return if image.layout_version is @layout_version
+      image.layout_version = @layout_version
+
       heights = cols.map (col)-> col.height
       top = Util.array_min heights
       x = heights.indexOf top
-      left = grid_data.positions[x]
-      cols[x].height += side_length + @GRID_SPACING
+      left = cols[x].left
+      cols[x].height += slen + @GRID_SPACING
 
-      image.pos left, top, side_length, side_length
-      setTimeout ->
-        image.lazy_load()
-      , 100
+      image.pos left, top, slen, slen
+      image.lazy_load()
 
     max_height = Util.array_max cols.map (col)-> col.height
     @host.$el.css 'height', max_height + @BOTTOM_MARGIN

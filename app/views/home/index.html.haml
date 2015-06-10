@@ -9,10 +9,10 @@
           .top-control
             .user
               .avatar
-                %img{:src => current_user.avatar_url}
-              .name= current_user.name
+                %img{:src => 'http://img.teamkn.com/i/RTB15zIX.png'}
+              .name 洋气书生
             .config
-              %a.signout{:href => "/sign_out", :rel => "nofollow", :'data-method'=>"delete"}
+              %a.signout{:href => 'home-0-auth.html'}
                 %i.fa.fa-power-off
                 %span 退出
   .main
@@ -34,11 +34,11 @@
           .stat
             .sts
               .st.uploaded
-                %span.c= current_user.file_entities.images.count
+                %span.c 152
                 %span.t 张图片，
-                %span.c= current_user.space_size.to_human_format_filesize
+                %span.c 32.63 MB
                 %span.t 空间占用，
-                %span.c= current_user.image_sizes.count
+                %span.c 3 
                 %span.t 个尺寸配置
               %a.btn.btn-pill.btn-flat-success.btn-mini{:href => 'javascript:;'}
                 %i.fa.fa-cog
@@ -49,19 +49,26 @@
       .container
         .row
           .col-pad-12
-            %a.check{:href => 'javascript:;'}
-              .cb
-                %i.fa.fa-check
-              %span 选择所有图片
-            %a.bttn.copylink.disabled{:href => 'javascript:;'}
-              %i.fa.fa-copy
-              %span 复制链接
-            %a.bttn.download.disabled{:href => 'javascript:;'}
-              %i.fa.fa-download
-              %span 下载
-            %a.bttn.delete.disabled{:href => 'javascript:;'}
-              %i.fa.fa-trash
-              %span 删除
+            .checkstatus.none
+              %a.check{:href => 'javascript:;'}
+                .cb
+                  %i.fa.fa-check
+                %span.txt.t1> 选择所有图片
+                %span.txt.t2> 取消所选
+              %span.point> ·
+              %span 已选
+              %span.n 0
+              %span 张
+            .btns
+              %a.bttn.copylink.disabled{:href => 'javascript:;'}
+                %i.fa.fa-copy
+                %span 复制链接
+              %a.bttn.download.disabled{:href => 'javascript:;'}
+                %i.fa.fa-download
+                %span 下载
+              %a.bttn.delete.disabled{:href => 'javascript:;'}
+                %i.fa.fa-trash
+                %span 删除
 
     .grid.nano
       .nano-content
@@ -75,9 +82,8 @@
               - # 集成注意：load-more-url 应填写加载下一页用到的地址
               - # 图片数组要改成从控制器层获取
               .images{:data => {:'load-more-url' => 'home-1-dashboard.html'}}
-                - current_user.file_entities.images.each do |img|
-                  .image{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url}}
-
+                - current_user.file_entities.images.is_qiniu.each do |img|
+                  .image{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url, :id => img.id}}
 
     .upload-panel
       .panel
@@ -85,5 +91,58 @@
           .row
             .col-pad-12
               .pbox
+                .uploading-images.nano
+                  .nano-content
+                    .w1
+                      - current_user.file_entities.images.is_qiniu.each do |img|
+                        .image{:data => {:url => img.url}}
+                          .ibox{:style => "background-image:url(#{img.url})"}
+                          .percent
+                            .bar{:style => 'width:100%'}
+                            .txt
+                              %span.p 0
+                              %span %
+                            .done
+                              %i.fa.fa-check
+                          .cancel
+                            %i.fa.fa-close
+
+
+                .image-urls
+                  %select.form-control
+                    %option 原始尺寸链接
+                  %textarea.urls.form-control{:placeholder => '这里将显示图片链接', :readonly => true}
+
                 %a.close-panel{:href => 'javascript:;'}
-                  %i.fa.fa-close
+                  %i.fa.fa-arrow-up
+
+  .popbox.template.delete
+    .ac
+    .tip
+      %span 你确定要删除这
+      %span.n 5
+      %span 张图片吗？
+    .tip
+      %span 删除了就找不回来了！
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat-danger.btn-large.popbox.action.ok{:href => 'javascript:;'}
+        %i.fa.fa-trash
+        %span 确定删除
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
+
+  .popbox.template.download
+    .ac
+    .icon
+      %i.fa.fa-file-zip-o
+      %span.t zip file
+    .tip
+      %span 你要打包下载这
+      %span.n 5
+      %span 张图片吗？
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat-success.btn-large.popbox.action.ok{:href => 'javascript:;'}
+        %i.fa.fa-download
+        %span 下载压缩包
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
