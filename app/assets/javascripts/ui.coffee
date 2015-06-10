@@ -27,7 +27,7 @@ class Image
       .appendTo @$el
 
   get_png_url: (width, height)->
-    "#{@url}@#{width}w_#{height}h_1e_1c.png"
+    "#{@url}?imageView2/1/w/#{width}/h/#{height}"
 
   pos: (left, top, width, height)->
     @$el.css
@@ -245,11 +245,11 @@ jQuery(document).on 'ready page:load', ->
         popbox_delete.bind_ok ->
           ids = for image in ise.get_selected()
             jQuery(image).data('id')
-          console.log ids
           jQuery.ajax
-            url: '/'
+            url: '/file_entities/batch_delete'
+            type: 'DELETE'
             data: 
-              ids: ids
+              ids: ids.join(',')
             success: (res)->
               igird.remove_img_ids ids
               popbox_delete.close()
