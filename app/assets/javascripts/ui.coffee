@@ -148,11 +148,11 @@ class ImageGrid
   load_more: ->
     return if @$el.hasClass('end') or @$el.hasClass('loading')
     @$el.addClass 'loading'
-    curr_page = @$el.data('page') || 1
-    next_page = curr_page + 1
+    
+    less_than_id = jQuery('.grid .images .image').last().data('id')
 
     jQuery.get @load_more_url, { 
-      page: next_page 
+      less_than_id: less_than_id 
     }
     .done (res)=>
       $images = jQuery(res).find('.grid .images .image')
@@ -160,15 +160,11 @@ class ImageGrid
       if $images.length
         $images.each (idx, el)=>
           $image = jQuery(el)
-          id = $image.data('id')                 # 这两行用于静态页面，
-          $image.data('id', "#{id}#{curr_page}") # 集成时去掉
           @$el.append $image
           @add_image $image
 
         @relayout()
         @$el.removeClass 'loading'
-        @$el.data 'page', next_page
-
       else
         @$el.removeClass 'loading'
         @$el.addClass 'end'

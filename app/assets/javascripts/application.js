@@ -20,6 +20,7 @@
 //= require qiniu.min
 //= require uploader
 
+//= require lib/jquery.nanoscroller.min
 //= require util
 //= require layouts
 //= require popbox

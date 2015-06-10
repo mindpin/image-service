@@ -429,13 +429,30 @@ body.app .page-dashboard {
         margin-top: 40px;
         .ac {width:150px;height:130px;
           background-image: url(http://img.teamkn.com/i/x44OFVHe.png);
+          margin:0 auto;
         }
         .s {
           margin-top: 20px;
+          text-align: center;
         }
       }
 
       .images {
+        .loading-icon, .end-text{
+          display: none;
+          position: absolute;
+          left:0;right:0;
+          bottom:35px;
+          font-size: 30px;
+          line-height:30px;
+          text-align: center;
+        }
+        .end-text {
+          font-family: Futura-Condensed;
+        }
+        &.loading .loading-icon {display:block;}
+        &.end .end-text {display:block;}
+
         .image {
           background-color: #FFF;
           overflow: hidden;

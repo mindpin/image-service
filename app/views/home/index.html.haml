@@ -75,14 +75,16 @@
         .container
           .row
             .col-pad-12
-              .blank{:style => 'display:none;'}
+              - style = @images.blank? ? 'auto' : 'none'
+              .blank{:style => "display:#{style};"}
                 .ac
                 .s 还没有上传过图片噢 ~
 
-              - # 集成注意：load-more-url 应填写加载下一页用到的地址
-              - # 图片数组要改成从控制器层获取
-              .images{:data => {:'load-more-url' => 'home-1-dashboard.html'}}
-                - current_user.file_entities.images.is_qiniu.each do |img|
+              .images{:data => {:'load-more-url' => './'}}
+                .loading-icon
+                  %i.fa.fa-refresh.fa-spin
+                .end-text the end
+                - @images.each do |img|
                   .image{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url, :id => img.id}}
 
     .upload-panel
