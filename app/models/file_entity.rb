@@ -17,6 +17,7 @@ class FileEntity
   field :kind,     type: String
 
   belongs_to :user
+  default_scope -> {order(:id => :desc)}
   scope :anonymous, -> {where(:user_id => nil)}
   scope :images, -> {where(:kind => :image)}
   scope :avs,    -> {where(:kind.in => [:audio, :video])}
