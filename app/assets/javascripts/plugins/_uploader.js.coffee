@@ -99,6 +99,7 @@ class Img4yeUploader
           # // domain 为七牛空间（bucket)对应的域名，选择某个空间后，可通过"空间设置->基本设置->域名设置"查看获取
           # // uploader 为一个plupload对象，继承了所有plupload的方法，参考http://plupload.com/docs
           ext = file.name.split(".").pop()
+          ext = ext.toLowerCase()
           "/#{that.qiniu_basepath}/#{jQuery.randstr()}.#{ext}"
 
   _process_auto_start: ()->
