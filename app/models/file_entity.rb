@@ -19,6 +19,7 @@ class FileEntity
   belongs_to :user
   scope :anonymous, -> {where(:user_id => nil)}
   scope :images, -> {where(:kind => :image)}
+  scope :avs,    -> {where(:kind.in => [:audio, :video])}
   scope :is_oss, -> {where(:is_oss => true)}
   scope :is_qiniu, -> {where(:is_oss => false)}
   validates :original, :token, :mime, :meta, presence: true

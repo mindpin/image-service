@@ -7,12 +7,15 @@ describe SpaceState do
     }
 
     it{
-      @user.space_size.should == 0
+      @user.qiniu_image_space_size.should == 0
+      @user.av_space_size.should == 0
+      
     }
 
     it{
       @user.recount_space_size.should == true
-      @user.space_size.should == 0
+      @user.qiniu_image_space_size.should == 0
+      @user.av_space_size.should == 0
     }
   end
 end

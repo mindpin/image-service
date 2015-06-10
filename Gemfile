@@ -48,25 +48,32 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
 end
 
+# 以下是根据需要手动增加的
 gem "mongoid", "4.0.0"
 gem 'figaro', '>= 1.0.0'
 
 gem 'devise'
 gem "omniauth-weibo-oauth2"
 gem "haml"
+gem 'kaminari'
 
 # enum
 gem 'enumerize'
-
-group :test do
-  gem "database_cleaner", "~> 1.4.0"
-end
-
 gem 'qiniu', '~> 6.4.1'
 # image
 gem "carrierwave", "0.8.0"
 gem 'carrierwave-mongoid'
 gem "mini_magick"
+gem "sidekiq"
+
+gem "unicorn", group: :production
+gem "mina",
+    :git => "git://github.com/fushang318/mina.git",
+    :tag => "v0.2.0fix"
+
+group :test do
+  gem "database_cleaner", "~> 1.4.0"
+end
 
 group :development do
   gem 'guard-bundler'
@@ -79,9 +86,3 @@ group :development do
   gem 'rb-inotify', :require=>false
 end
 
-gem "sidekiq"
-
-gem "unicorn", group: :production
-gem "mina",
-    :git => "git://github.com/fushang318/mina.git",
-    :tag => "v0.2.0fix"
