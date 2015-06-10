@@ -74,4 +74,25 @@ class FileEntitiesController < ApplicationController
   rescue
     render :text => 500, :status => 500
   end
+
+  def create_zip
+    ids = params[:ids].split(",")
+    mkzip = Mkzip.new ids
+    task_id = @mkzip.zip
+    render json: {task_id: task_id}
+  end
+
+  def get_create_zip_task_state
+    result = Mkzip.result task_id
+    case result[1]["code"]
+    when 0
+      json = {state: "success", url: File.join(ENV["QINIU_DOMAIN"], result[1]["items"][0]["key"]) }
+    when 3
+      json = {state: "failure", url: ""}
+    else
+      json = {state: "processing", url: ""}
+    end
+    render json: result
+  end
+
 end

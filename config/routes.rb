@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   resources :file_entities do
     get    :uptoken,      on: :collection
     delete :batch_delete, on: :collection
+
+    # zip 下载
+    post   :create_zip,                on: :collection
+    get    :get_create_zip_task_state, on: :collection
   end
 
   namespace :api do
