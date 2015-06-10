@@ -7,7 +7,8 @@ Rails.application.routes.draw do
 
   match "/file_entities/uptoken", to: "file_entities#uptoken_options", via: :options
   resources :file_entities do
-    get   :uptoken,  on: :collection
+    get    :uptoken,      on: :collection
+    delete :batch_delete, on: :collection
   end
 
   namespace :api do

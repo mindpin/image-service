@@ -64,4 +64,14 @@ class FileEntitiesController < ApplicationController
   def uptoken_options
     render :text => 200, :status => 200
   end
+
+  def batch_delete
+    ids = params[:ids].split(",")
+    current_user.file_entities.find(ids).each do |f|
+      f.destroy
+    end
+    render :text => 200, :status => 200
+  rescue
+    render :text => 500, :status => 500
+  end
 end
