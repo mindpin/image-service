@@ -9,8 +9,8 @@
           .top-control
             .user
               .avatar
-                %img{:src => 'http://img.teamkn.com/i/RTB15zIX.png'}
-              .name 洋气书生
+                %img{:src => current_user.avatar_url}
+              .name= current_user.name
             .config
               %a.signout{:href => 'home-0-auth.html'}
                 %i.fa.fa-power-off
@@ -34,11 +34,11 @@
           .stat
             .sts
               .st.uploaded
-                %span.c 152
+                %span.c= current_user.file_entities.images.is_qiniu.count
                 %span.t 张图片，
-                %span.c 32.63 MB
+                %span.c= current_user.qiniu_image_space_size.to_human_format_filesize
                 %span.t 空间占用，
-                %span.c 3 
+                %span.c= current_user.image_sizes.count
                 %span.t 个尺寸配置
               %a.btn.btn-pill.btn-flat-success.btn-mini{:href => 'javascript:;'}
                 %i.fa.fa-cog
