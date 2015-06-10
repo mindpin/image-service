@@ -270,7 +270,9 @@ jQuery(document).on 'ready page:load', ->
           data:
             ids: ids.join(',')
           success: (res)->
-            test_dabao popbox_download.$inner, res.task_id
+            $elm = popbox_download.$inner
+            $elm.find('.wait').html ''
+            test_dabao $elm, res.task_id
 
 test_dabao = ($elm, task_id)->
   jQuery.ajax
@@ -281,10 +283,15 @@ test_dabao = ($elm, task_id)->
     success: (res)->
       console.log res
       if res.state is 'processing'
-        jQuery('.tip.dabao span.w').append jQuery('<span>。</span>')
+        if $elm.find('.wait span').length > 32
+          $elm.find('.wait').html ''
+        $elm.find('.wait').append jQuery('<span>.</span>')
+        test_dabao $elm, task_id
+
         setTimeout ->
-          test_dabao(task_id)
-        , 500
+          test_dabao $elm, task_id
+        , 200
+        
       if res.state is 'success'
         $elm
           .removeClass 'error success dabao'

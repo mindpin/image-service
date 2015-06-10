@@ -766,6 +766,11 @@ body.app .page-dashboard {
       color: $area-hot;
       font-size: 24px;
     }
+    .wait {
+      word-break: break-all;
+      word-wrap: break-word;
+      overflow:hidden;
+    }
   }
   .popbox.actions {
     margin-top: 30px;
