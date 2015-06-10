@@ -134,17 +134,30 @@
         %span 关闭
 
   .popbox.template.download
-    .ac
+    .ac.dabao
+    .ac.success
+    .ac.error
+
     .icon
       %i.fa.fa-file-zip-o
       %span.t zip file
-    .tip
-      %span 你要打包下载这
-      %span.n 5
-      %span 张图片吗？
+
+    .state.dabao
+      .tip.dabao
+        %span 正在打包
+        %span.n 5
+        %span 张图片
+      .tip.dabao
+        %span 需要一些时间，请稍等
+        %span.w> 。
+    .state.success
+      .b
+        %a.download-zip.btn.btn-pill.btn-flat-success.btn-large{:href => 'javascript:;', :targer => '_blank'}
+          %i.fa.fa-download
+          %span 打包完毕！点我下载
+    .state.error
+      .tip 打包出错啦！请重试 :(
+
     .popbox.actions
-      %a.btn.btn-pill.btn-flat-success.btn-large.popbox.action.ok{:href => 'javascript:;'}
-        %i.fa.fa-download
-        %span 下载压缩包
       %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
         %span 关闭

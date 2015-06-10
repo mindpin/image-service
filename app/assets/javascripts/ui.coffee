@@ -257,11 +257,47 @@ jQuery(document).on 'ready page:load', ->
       popbox_download.show ->
         len = ise.get_selected().length
         popbox_download.$inner.find('span.n').text len
-        popbox_download.bind_ok ->
-          ids = for image in ise.get_selected()
-            jQuery(image).data('id')
-          console.log ids
-          alert('下载')
+        ids = for image in ise.get_selected()
+          jQuery(image).data('id')
+
+        # 发起打包请求
+        popbox_download.$inner
+          .removeClass 'error success dabao'
+          .addClass 'dabao'
+        jQuery.ajax
+          url: '/file_entities/create_zip'
+          type: 'POST'
+          data:
+            ids: ids.join(',')
+          success: (res)->
+            test_dabao popbox_download.$inner, res.task_id
+
+test_dabao = ($elm, task_id)->
+  jQuery.ajax
+    url: '/file_entities/get_create_zip_task_state'
+    type: 'GET'
+    data:
+      task_id: task_id
+    success: (res)->
+      console.log res
+      if res.state is 'processing'
+        jQuery('.tip.dabao span.w').append jQuery('<span>。</span>')
+        setTimeout ->
+          test_dabao(task_id)
+        , 500
+      if res.state is 'success'
+        $elm
+          .removeClass 'error success dabao'
+          .addClass 'success'
+
+        $elm.find('a.download-zip').attr('href', res.url)
+
+      if res.state is 'failure'
+        $elm
+          .removeClass 'error success dabao'
+          .addClass 'error'
+
+
 
 # jQuery(document).on 'click', 'textarea.urls', ->
 #   jQuery(this).select()

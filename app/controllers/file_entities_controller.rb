@@ -78,12 +78,12 @@ class FileEntitiesController < ApplicationController
   def create_zip
     ids = params[:ids].split(",")
     mkzip = Mkzip.new ids
-    task_id = @mkzip.zip
+    task_id = mkzip.zip
     render json: {task_id: task_id}
   end
 
   def get_create_zip_task_state
-    result = Mkzip.result task_id
+    result = Mkzip.result params[:task_id]
     case result[1]["code"]
     when 0
       json = {state: "success", url: File.join(ENV["QINIU_DOMAIN"], result[1]["items"][0]["key"]) }
@@ -92,7 +92,7 @@ class FileEntitiesController < ApplicationController
     else
       json = {state: "processing", url: ""}
     end
-    render json: result
+    render json: json
   end
 
 end

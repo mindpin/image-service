@@ -728,17 +728,34 @@ body.app .page-dashboard {
 }
 
 .popbox.template.download {
+  position: relative;
   .ac {
-    background: url(http://img.teamkn.com/i/iyAond62.png);
-    width:150px;height:130px;
-    margin:0 auto 30px;
+    @include default-transition;
+    height:142px;
+    pointer-events:none;
+    position: absolute;
+    top:0;left:0;right:0;
   }
+  .ac.dabao { background: url(http://img.teamkn.com/i/xOR8Q26v.gif) no-repeat center center; 
+    opacity: 0; @include transform(scale(0.1));
+  }
+  .ac.success { background: url(http://img.teamkn.com/i/iyAond62.png) no-repeat center center; 
+    opacity: 0; @include transform(scale(0.1));
+  }
+  .ac.error { background: url("http://img.teamkn.com/i/soH9vsDw.png") no-repeat center center; 
+    opacity: 0; @include transform(scale(0.1));
+  }
+
   .icon {
     text-align: center;
     font-size: 48px;
+    padding-top: 160px;
     margin-bottom: 30px;
     span.t {
       font-family: Futura-Condensed;
+    }
+    i {
+      font-size: 30px;
     }
   }
   .tip {
@@ -761,5 +778,30 @@ body.app .page-dashboard {
         width: 200px;
       }
     }
+  }
+
+  .state.dabao {display:none;}
+  .state.success {
+    display:none;
+    .b {
+      text-align: center;
+    }
+  }
+  .state.error {
+    display:none;
+    color:$area-danger;
+  }
+
+  &.dabao {
+    .ac.dabao {opacity: 1; @include transform(scale(1));}
+    .state.dabao {display:block;}
+  }
+  &.success {
+    .ac.success {opacity: 1; @include transform(scale(1));}
+    .state.success {display:block;}
+  }
+  &.error {
+    .ac.error {opacity: 1; @include transform(scale(1));}
+    .state.error {display:block;}
   }
 }
