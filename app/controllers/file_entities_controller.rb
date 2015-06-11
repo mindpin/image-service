@@ -41,11 +41,24 @@ class FileEntitiesController < ApplicationController
     #   "avinfo_audio_duration"   => ""
     # }
     file_entity = FileEntity.from_qiniu_callback_body(params)
-    render json: {
-      id: file_entity.id.to_s,
-      kind: file_entity.kind,
-      url: file_entity.url
-    }
+    if !current_user.blank?
+      render json: {
+        id: file_entity.id.to_s,
+        kind: file_entity.kind,
+        url: file_entity.url,
+        stat: {
+          user_id:  current_user.id,
+          image_count: current_user.file_entities.images.is_qiniu.count,
+          space_used: current_user.qiniu_image_space_size.to_human_format_filesize
+        }
+      }
+    else
+      render json: {
+        id: file_entity.id.to_s,
+        kind: file_entity.kind,
+        url: file_entity.url
+      }
+    end
   end
 
   def uptoken
@@ -70,7 +83,13 @@ class FileEntitiesController < ApplicationController
     current_user.file_entities.find(ids).each do |f|
       f.destroy
     end
-    render :text => 200, :status => 200
+    render json: {
+      stat: {
+        user_id:  current_user.id,
+        image_count: current_user.file_entities.images.is_qiniu.count,
+        space_used: current_user.qiniu_image_space_size.to_human_format_filesize
+      }
+    }
   rescue
     render :text => 500, :status => 500
   end
