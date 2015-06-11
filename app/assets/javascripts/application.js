@@ -14,10 +14,11 @@
 //= require jquery_ujs
 //= require turbolinks
 
+//= require lib/canvas-to-blob.min.js
+//= require lib/plupload.full.min.js
+//= require lib/qiniu.min.js
 //= require randstr
-//= require canvas-to-blob.min
-//= require plupload.full.min
-//= require qiniu.min
+//= require paste-image
 //= require uploader
 
 //= require lib/jquery.nanoscroller.min

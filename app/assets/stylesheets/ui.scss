@@ -138,6 +138,8 @@ body.app {
   background-color: #F7F7F7;
   color: #555;
   font-size: 16px;
+  position: absolute;
+  top:0;left:0;right:0;bottom:0;
 }
 
 body.app .page-auth {
@@ -580,7 +582,7 @@ body.app .page-dashboard {
                   top:0;right:0;bottom:0;
                   background-color: rgba(white, 0.618);
                 }
-                .txt, .done{
+                .txt, .done, .err{
                   position:absolute;
                   left:0;right:0;
                   top:50%;
@@ -598,6 +600,12 @@ body.app .page-dashboard {
                   font-size: 50px;
                   opacity: 0;
                   @include transform(scale(0.1));
+                }
+                .err {
+                  font-size: 50px;
+                  opacity: 0;
+                  @include transform(scale(0.1));
+                  color: lighten($area-danger, 10%);
                 }
               }
               .cancel {
@@ -636,6 +644,16 @@ body.app .page-dashboard {
                 .cancel {
                   opacity: 0;
                   pointer-events:none;
+                }
+              }
+              &.error {
+                .percent .txt {
+                  opacity: 0;
+                  @include transform(scale(0.1));
+                }
+                .percent .err {
+                  opacity: 1;
+                  @include transform(scale(1));
                 }
               }
             }

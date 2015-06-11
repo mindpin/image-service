@@ -121,6 +121,7 @@ class ImageGrid
       img.remove()
       delete @image_hash[id]
     @relayout(true)
+    @load_more() if @layout.need_load_more()
 
   each_image: (func)->
     # for idx in [0 ... @images.length]
@@ -251,7 +252,6 @@ jQuery(document).on 'ready page:load', ->
               popbox_delete.close()
               ise.refresh_selected()
 
-
     popbox_download = new PopBox jQuery('.popbox.template.download')
     jQuery('.opbar a.bttn.download').on 'click', ->
       popbox_download.show ->
@@ -308,39 +308,6 @@ test_dabao = ($elm, task_id)->
 
 # jQuery(document).on 'click', 'textarea.urls', ->
 #   jQuery(this).select()
-
-jQuery(document).on 'click', 'a.btn-upload', ->
-  $panel = jQuery('.upload-panel')
-  $panel.addClass('opened')
-  jQuery('.uploading-images.nano').nanoScroller {
-    alwaysVisible: true
-  }
-  # 这里先临时放一些视觉效果，集成时要修改
-  jQuery('.uploading-images .image').removeClass('done')
-  setTimeout ->
-    demo_progress()
-  , 300
-
-demo_progress = ->
-  $image = jQuery('.uploading-images .image:not(.done)').first()
-  return if not $image.length
-  $image.find('.bar')
-    .animate {
-      'width': '0%'
-    }, {
-      duration: 3000
-      step: (num)->
-        percent = 100 - Math.ceil num
-        $image.find('.txt .p').text percent
-      complete: ->
-        $image.addClass('done')
-        demo_progress()
-        arr = []
-        jQuery('.uploading-images .image.done').each ->
-          arr.push jQuery(this).data('url')
-        jQuery('textarea.urls').val arr.join("\n")
-
-    }
 
 jQuery(document).on 'click', 'a.close-panel', ->
   $panel = jQuery('.upload-panel')

@@ -1,3 +1,7 @@
+:ruby
+  domain = ENV['QINIU_DOMAIN']
+  basepath = ENV['QINIU_BASE_PATH']
+
 .page-dashboard
   .header
     .container
@@ -20,7 +24,7 @@
       .container
         .row
           .upload-control
-            %a.btn-upload{:href => 'javascript:;'}
+            %a.btn-upload{:href => 'javascript:;', :data => {:domain => domain, :basepath => basepath}}
               %i.fa.fa-upload
             .helpinfo
               .h 点击上传本地图片
@@ -95,20 +99,20 @@
               .pbox
                 .uploading-images.nano
                   .nano-content
+                    .template-image{:style => 'display:none;'}
+                      .ibox{:style => "background-image:;"}
+                      .percent
+                        .bar{:style => 'width:100%'}
+                        .txt
+                          %span.p 0
+                          %span %
+                        .done
+                          %i.fa.fa-check
+                        .err
+                          %i.fa.fa-warning
+                      .cancel
+                        %i.fa.fa-close
                     .w1
-                      - current_user.file_entities.images.is_qiniu.each do |img|
-                        .image{:data => {:url => img.url}}
-                          .ibox{:style => "background-image:url(#{img.url})"}
-                          .percent
-                            .bar{:style => 'width:100%'}
-                            .txt
-                              %span.p 0
-                              %span %
-                            .done
-                              %i.fa.fa-check
-                          .cancel
-                            %i.fa.fa-close
-
 
                 .image-urls
                   %select.form-control
