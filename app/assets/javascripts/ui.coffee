@@ -27,7 +27,8 @@ class Image
       .appendTo @$el
 
   get_png_url: (width, height)->
-    "#{@url}?imageView2/1/w/#{width}/h/#{height}"
+    # "#{@url}?imageView2/1/w/#{width}/h/#{height}"
+    "#{@url}?imageMogr2/thumbnail/!#{width}x#{height}r/gravity/Center/crop/#{width}x#{height}"
 
   pos: (left, top, width, height)->
     @$el.css
@@ -170,6 +171,14 @@ class ImageGrid
         @$el.removeClass 'loading'
         @$el.addClass 'end'
 
+  refresh_stat: (statdata)->
+    jQuery('.control .stat')
+      .find('span.c.fcount').text(statdata.image_count).end()
+      .find('span.c.space').text(statdata.space_used).end()
+
+    if statdata.image_count is 0
+      jQuery('.grid .blank').show()
+
 
 
 # ----------
@@ -219,7 +228,7 @@ class ImageSelector
 
 jQuery(document).on 'ready page:load', ->
   if jQuery('.grid .images').length
-    igird = new ImageGrid jQuery('.grid .images'), {
+    window.igird = new ImageGrid jQuery('.grid .images'), {
       # layout: FlowLayout
       layout: GridLayout
       viewport: jQuery('.grid .nano-content')
@@ -251,6 +260,8 @@ jQuery(document).on 'ready page:load', ->
               igird.remove_img_ids ids
               popbox_delete.close()
               ise.refresh_selected()
+              jQuery(document).trigger 'img4ye:file-changed', res.stat
+
 
     popbox_download = new PopBox jQuery('.popbox.template.download')
     jQuery('.opbar a.bttn.download').on 'click', ->
@@ -281,12 +292,11 @@ test_dabao = ($elm, task_id)->
     data:
       task_id: task_id
     success: (res)->
-      console.log res
+      console.log 'complete', res
       if res.state is 'processing'
         if $elm.find('.wait span').length > 32
           $elm.find('.wait').html ''
         $elm.find('.wait').append jQuery('<span>.</span>')
-        test_dabao $elm, task_id
 
         setTimeout ->
           test_dabao $elm, task_id
@@ -298,12 +308,12 @@ test_dabao = ($elm, task_id)->
           .addClass 'success'
 
         $elm.find('a.download-zip').attr('href', res.url)
+        location.href = res.url
 
       if res.state is 'failure'
         $elm
           .removeClass 'error success dabao'
           .addClass 'error'
-
 
 
 # jQuery(document).on 'click', 'textarea.urls', ->
@@ -320,9 +330,6 @@ jQuery(document).on 'click', 'a.close-panel', ->
   jQuery('.uploading-images .image .txt .p').text('0')
   jQuery('textarea.urls').val ''
 
-jQuery(document).on 'click', '.uploading-images .image .cancel', ->
-  $image = jQuery(this).closest('.image')
-  $image.hide 300, ->
-    $image.remove()
-    demo_progress()
-  jQuery('.uploading-images .image .bar').stop()
+
+jQuery(document).on 'img4ye:file-changed', (evt, statdata)->
+  window.igird?.refresh_stat statdata

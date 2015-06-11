@@ -40,16 +40,19 @@ class FileEntitiesController < ApplicationController
     #   "avinfo_audio_bit_rate"   => "",
     #   "avinfo_audio_duration"   => ""
     # }
+    user = User.where(:id => params[:endUser]).first
+
     file_entity = FileEntity.from_qiniu_callback_body(params)
-    if !current_user.blank?
+    if user.present?
+      user.reload
       render json: {
         id: file_entity.id.to_s,
         kind: file_entity.kind,
         url: file_entity.url,
         stat: {
-          user_id:  current_user.id,
-          image_count: current_user.file_entities.images.is_qiniu.count,
-          space_used: current_user.qiniu_image_space_size.to_human_format_filesize
+          user_id:  user.id.to_s,
+          image_count: user.file_entities.images.is_qiniu.count,
+          space_used: user.qiniu_image_space_size.to_human_format_filesize
         }
       }
     else
@@ -83,9 +86,10 @@ class FileEntitiesController < ApplicationController
     current_user.file_entities.find(ids).each do |f|
       f.destroy
     end
+    current_user.reload
     render json: {
       stat: {
-        user_id:  current_user.id,
+        user_id:  current_user.id.to_s,
         image_count: current_user.file_entities.images.is_qiniu.count,
         space_used: current_user.qiniu_image_space_size.to_human_format_filesize
       }

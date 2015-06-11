@@ -24,7 +24,7 @@ class Uploader
       max_retries: 1,
       dragdrop: true,
       drop_element: @$drag_area_ele.get(0),
-      chunk_size: '1mb',
+      chunk_size: '4mb',
       auto_start: true,
       x_vars:
         origin_file_name: (up, file)->
@@ -46,7 +46,7 @@ class Uploader
         BeforeUpload: (up, file)=>
           console.debug 'before upload'
           if not @file_progresses[file.id]?
-            @file_progresses[file.id] = new FileProgress(file)
+            @file_progresses[file.id] = new FileProgress(file, up)
 
         # 该方法第三个被触发，上传结束前持续被触发
         UploadProgress: (up, file)=> 
@@ -71,10 +71,10 @@ class Uploader
           console.debug 'many files'
           plupload.each files, (file)=>
             if not @file_progresses[file.id]?
-              @file_progresses[file.id] = new FileProgress(file)
+              @file_progresses[file.id] = new FileProgress(file, up)
 
         # 该方法在整个队列处理完毕后触发
-        UploadComplete: ()->
+        UploadComplete: ->
           #队列文件处理完毕后,处理相关的事情
 
 ###
@@ -82,9 +82,10 @@ class Uploader
   里面规定了上传进度如何被显示的一些方法
 ###
 class FileProgress
-  constructor: (qiniu_uploading_file)->
+  constructor: (qiniu_uploading_file, @uploader)->
     @file = qiniu_uploading_file
     console.log @file
+    window.afile = @file
 
     @ready()
 
@@ -117,15 +118,23 @@ class FileProgress
       @$dom.find('.ibox').css
         'background-image': "url(#{e.target.result})"
 
+    ## 绑定取消上传事件
+    @$dom.on 'click', '.cancel', =>
+      @uploader.removeFile @file
+      @$dom.hide 300, =>
+        @$dom.remove()
+
   # 上传进度进度更新时调用此方法
   update: ->
     @$dom.find('.bar')
+      .stop()
       .animate {
         'width': "#{100 - @file.percent}%"
       }, {
         step: (num)=>
+          text = @$dom.find('.txt .p').text()
           percent = 100 - Math.ceil num
-          @$dom.find('.txt .p').text percent
+          @$dom.find('.txt .p').text percent if percent > text
       }
 
   # 上传成功时调用此方法
@@ -135,6 +144,10 @@ class FileProgress
     jQuery('.uploading-images .image.done').each ->
       arr.push jQuery(this).data('url')
     jQuery('textarea.urls').val arr.join("\n")
+
+    # 处理页面上的统计信息显示
+    console.log info
+    jQuery(document).trigger 'img4ye:file-changed', info.stat
 
   # 上传出错时调用此方法
   error: ->
