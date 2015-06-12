@@ -1,5 +1,5 @@
 class Uploader
-  constructor: (@$browse_button, @$drag_area_ele, @$files)->
+  constructor: (@$browse_button, @$drag_area_ele)->
     data = @$browse_button.data()
     @domain = data['domain']
     @basepath = data['basepath']
@@ -146,8 +146,10 @@ class FileProgress
     jQuery('textarea.urls').val arr.join("\n")
 
     # 处理页面上的统计信息显示
-    console.log info
     jQuery(document).trigger 'img4ye:file-changed', info.stat
+
+    # 增加图片 dom
+    jQuery(document).trigger 'img4ye:file-uploaded', info
 
   # 上传出错时调用此方法
   error: ->

@@ -427,19 +427,20 @@ body.app .page-dashboard {
       top: $control-height + $opbar-height;
       height: auto;
 
-      .blank {
-        margin-top: 40px;
-        .ac {width:150px;height:130px;
-          background-image: url(http://img.teamkn.com/i/x44OFVHe.png);
-          margin:0 auto;
-        }
-        .s {
-          margin-top: 20px;
-          text-align: center;
-        }
-      }
-
       .images {
+        .blank {
+          display: none;
+          margin-top: 40px;
+          .ac {width:150px;height:130px;
+            background-image: url(http://img.teamkn.com/i/x44OFVHe.png);
+            margin:0 auto;
+          }
+          .s {
+            margin-top: 20px;
+            text-align: center;
+          }
+        }
+
         .loading-icon, .end-text{
           display: none;
           position: absolute;
@@ -454,6 +455,10 @@ body.app .page-dashboard {
         }
         &.loading .loading-icon {display:block;}
         &.end .end-text {display:block;}
+        &.blank {
+          .end-text {display:none;}
+          .blank {display:block;}
+        }
 
         .image {
           background-color: #FFF;

@@ -88,15 +88,16 @@ class Image
 ###
 class ImageGrid
   constructor: (@$el, config = {})->
+    # @$el 对应 .grid .images
     @$viewport = config.viewport || jQuery(document)
     @layout = new (config.layout || GridLayout) @
 
     @$el.css
       'position': 'relative'
     
-    @image_hash = {}
+    @image_hash = new OrderedHash
     for dom in @$el.find('.image')
-      @add_image jQuery(dom)
+      @append_image jQuery(dom)
 
     @load_more_url = @$el.data('load-more-url')
     @bind_events()
@@ -109,18 +110,25 @@ class ImageGrid
     @$viewport.on 'mindpin', ->
       alert(1)
 
-  add_image: ($image)->
+  append_image: ($image)->
     img = new Image $image
     jQuery('<div>')
       .addClass('icheck')
       .appendTo img.$el
-    @image_hash[$image.data('id')] = img
+    @image_hash.append $image.data('id'), img
+
+  prepend_image: ($image)->
+    img = new Image $image
+    jQuery('<div>')
+      .addClass('icheck')
+      .appendTo img.$el
+    @image_hash.prepend $image.data('id'), img
 
   remove_img_ids: (ids)->
     for id in ids
-      img = @image_hash[id]
+      img = @image_hash.get id
       img.remove()
-      delete @image_hash[id]
+      @image_hash.del id
     @relayout(true)
     @load_more() if @layout.need_load_more()
 
@@ -128,7 +136,7 @@ class ImageGrid
     # for idx in [0 ... @images.length]
     #   func idx, @images[idx] 
     idx = 0
-    for id, img of @image_hash
+    @image_hash.each (id, img)->
       func idx, img
       idx++
 
@@ -142,7 +150,8 @@ class ImageGrid
       }
 
   lazy_load_images: ->
-    image.lazy_load() for id, image of @image_hash
+    @image_hash.each (id, img)->
+      img.lazy_load()
 
   get_width: ->
     @$el.width()
@@ -163,7 +172,7 @@ class ImageGrid
         $images.each (idx, el)=>
           $image = jQuery(el)
           @$el.append $image
-          @add_image $image
+          @append_image $image
 
         @relayout()
         @$el.removeClass 'loading'
@@ -177,7 +186,9 @@ class ImageGrid
       .find('span.c.space').text(statdata.space_used).end()
 
     if statdata.image_count is 0
-      jQuery('.grid .blank').show()
+      @$el.addClass('blank')
+    else
+      @$el.removeClass('blank')
 
 
 
@@ -228,18 +239,18 @@ class ImageSelector
 
 jQuery(document).on 'ready page:load', ->
   if jQuery('.grid .images').length
-    window.igird = new ImageGrid jQuery('.grid .images'), {
+    window.igrid = new ImageGrid jQuery('.grid .images'), {
       # layout: FlowLayout
       layout: GridLayout
       viewport: jQuery('.grid .nano-content')
     }
 
-    igird.relayout()
+    igrid.relayout()
 
     jQuery(window)
       .off 'resize'
       .on 'resize', -> 
-        igird.relayout()
+        igrid.relayout()
 
     ise = new ImageSelector jQuery('.grid .images')
 
@@ -257,7 +268,7 @@ jQuery(document).on 'ready page:load', ->
             data: 
               ids: ids.join(',')
             success: (res)->
-              igird.remove_img_ids ids
+              igrid.remove_img_ids ids
               popbox_delete.close()
               ise.refresh_selected()
               jQuery(document).trigger 'img4ye:file-changed', res.stat
@@ -332,4 +343,19 @@ jQuery(document).on 'click', 'a.close-panel', ->
 
 
 jQuery(document).on 'img4ye:file-changed', (evt, statdata)->
-  window.igird?.refresh_stat statdata
+  window.igrid?.refresh_stat statdata
+
+jQuery(document).on 'img4ye:file-uploaded', (evt, info)->
+  if igrid = window.igrid
+    $image = jQuery('<div>')
+      .addClass('image')
+      .attr
+        'data-ave': info.ave
+        'data-width': info.width
+        'data-height': info.height
+        'data-url': info.url
+        'data-id': info.id
+
+    igrid.$el.prepend $image
+    igrid.prepend_image $image
+    igrid.relayout(true)

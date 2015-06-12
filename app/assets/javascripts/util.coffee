@@ -41,6 +41,48 @@ jQuery.fn.is_in_screen = ->
   return false if oow.right > jqw.width()
   return true
 
+###
+  顺序 hash，一种便于操作的数据结构
+  f = new OrderedHash
+  f.append('a', 1)
+  f.prepend('b', 2)
+  f.each (k, v)-> {}
+  f.keys
+  f.values
+  f.get('a')
+###
+window.OrderedHash = class OrderedHash
+  constructor: ->
+    @_keys = []
+    @_vals = {}
+
+  append: (k, v)->
+    if not @_vals[k]
+      @_keys.push k
+    @_vals[k] = v
+
+  prepend: (k, v)->
+    if not @_vals[k]
+      @_keys.unshift k
+    @_vals[k] = v
+
+  length: -> @_keys.length
+  keys: -> @_keys
+  values: ->
+    @_vals[k] for k in @_keys
+  each: (func)->
+    for k in @_keys
+      func k, @_vals[k]
+  get: (k)->
+    @_vals[k]
+  del: (k)->
+    arr = []
+    for k0 in @_keys
+      arr.push k0 if k0 isnt k
+    @_keys = arr
+    delete @_vals[k]
+
+
 
 window.Util = 
   ###

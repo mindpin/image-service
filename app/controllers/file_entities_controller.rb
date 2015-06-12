@@ -46,9 +46,12 @@ class FileEntitiesController < ApplicationController
     if user.present?
       user.reload
       render json: {
-        id: file_entity.id.to_s,
-        kind: file_entity.kind,
-        url: file_entity.url,
+        id:     file_entity.id.to_s,
+        kind:   file_entity.kind,
+        url:    file_entity.url,
+        ave:    file_entity.ave,
+        width:  file_entity.width,
+        height: file_entity.height,
         stat: {
           user_id:  user.id.to_s,
           image_count: user.file_entities.images.is_qiniu.count,
@@ -57,9 +60,12 @@ class FileEntitiesController < ApplicationController
       }
     else
       render json: {
-        id: file_entity.id.to_s,
-        kind: file_entity.kind,
-        url: file_entity.url
+        id:     file_entity.id.to_s,
+        kind:   file_entity.kind,
+        url:    file_entity.url,
+        ave:    file_entity.ave,
+        width:  file_entity.width,
+        height: file_entity.height
       }
     end
   end
