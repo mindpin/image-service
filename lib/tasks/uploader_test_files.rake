@@ -34,18 +34,18 @@ namespace :uploader_test_files do
       {ave: "#4E331D", height: 525, token: "gjhLX2HZ", width: 600},
       {ave: "#BA7074", height: 720, token: "NjbKPqT2", width: 720},
       {ave: "#80632D", height: 640, token: "i6FYzfMS", width: 640},
-      {ave: "#435464", height: 675, token: "qZnvgddO", width: 477},
-      {ave: "#40BA9F", height: 467, token: "C8p1BZ3m", width: 477},
-      {ave: "#2C3338", height: 675, token: "sFokcStZ", width: 477},
-      {ave: "#BA7A68", height: 467, token: "D4Tkko8b", width: 477},
-      {ave: "#80632D", height: 467, token: "GvadbyxR", width: 477},
-      {ave: "#676968", height: 467, token: "wVAEKa0F", width: 477},
-      {ave: "#656360", height: 467, token: "DhxsQ6lq", width: 477},
-      {ave: "#020203", height: 467, token: "BqRxa0pO", width: 477},
-      {ave: "#0D1D28", height: 675, token: "QQXGPAWH", width: 477},
-      {ave: "#3E3C36", height: 467, token: "CwifcMsv", width: 477},
-      {ave: "#4C6861", height: 467, token: "CcwraYrJ", width: 477},
-      {ave: "#8E644D", height: 675, token: "bWwThUfi", width: 477},
+      {ave: "#435464", height: 675, token: "qZnvgddO", width: 477, ext: 'jpg'},
+      {ave: "#40BA9F", height: 467, token: "C8p1BZ3m", width: 477, ext: 'jpg'},
+      {ave: "#2C3338", height: 675, token: "sFokcStZ", width: 477, ext: 'jpg'},
+      {ave: "#BA7A68", height: 467, token: "D4Tkko8b", width: 477, ext: 'jpg'},
+      {ave: "#80632D", height: 467, token: "GvadbyxR", width: 477, ext: 'jpg'},
+      {ave: "#676968", height: 467, token: "wVAEKa0F", width: 477, ext: 'jpg'},
+      {ave: "#656360", height: 467, token: "DhxsQ6lq", width: 477, ext: 'jpg'},
+      {ave: "#020203", height: 467, token: "BqRxa0pO", width: 477, ext: 'jpg'},
+      {ave: "#0D1D28", height: 675, token: "QQXGPAWH", width: 477, ext: 'jpg'},
+      {ave: "#3E3C36", height: 467, token: "CwifcMsv", width: 477, ext: 'jpg'},
+      {ave: "#4C6861", height: 467, token: "CcwraYrJ", width: 477, ext: 'jpg'},
+      {ave: "#8E644D", height: 675, token: "bWwThUfi", width: 477, ext: 'jpg'},
       {ave: "#E2D67C", height: 400, token: "sEmGzY2U", width: 600},
       {ave: "#FDCC97", height: 400, token: "o3LntKdn", width: 600},
       {ave: "#E59370", height: 400, token: "ka3r5ZC4", width: 600},
@@ -61,8 +61,10 @@ namespace :uploader_test_files do
 
     user = User.first
     infos.each do |info|
+      ext = info[:ext] || 'png'
+
       FileEntity.create!(
-        original: "paste-#{randstr}.png", 
+        original: "paste-#{randstr}.#{ext}", 
         token: info[:token], 
         mime: "image/png", 
         meta: {

@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  # 查看阿里云旧文件
+  get '/aliyun' => 'home#aliyun'
+
   match "/file_entities/uptoken", to: "file_entities#uptoken_options", via: :options
   resources :file_entities do
     get    :uptoken,      on: :collection

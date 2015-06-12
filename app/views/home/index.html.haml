@@ -7,16 +7,19 @@
     .container
       .row
         .col-pad-12
-          .logo 
+          %a.logo{:href => '/'} 
             %span.s1> img
             %span.s2> 4ye
           .top-control
+            - if has_oss_file
+              %a.show-oss-file{:href => '/aliyun'}
+                %span 查看阿里云旧文件
             .user
               .avatar
                 %img{:src => current_user.avatar_url}
               .name= current_user.name
             .config
-              %a.signout{:href => 'home-0-auth.html'}
+              %a.signout{:href => '/sign_out', :data => {:method => :delete}}
                 %i.fa.fa-power-off
                 %span 退出
   .main

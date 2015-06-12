@@ -1,0 +1,27 @@
+.page-dashboard
+  .header
+    .container
+      .row
+        .col-pad-12
+          %a.logo{:href => '/'} 
+            %span.s1> img
+            %span.s2> 4ye
+          .aliyun aliyun files
+
+  .main
+    .grid.nano.aliyun
+      .nano-content
+        .container
+          .row
+            .col-pad-12
+              - klass = @images.blank? ? 'blank' : ''
+              .images{:class => klass, :data => {:'load-more-url' => '/aliyun'}}
+                .blank
+                  .ac
+                  .s 还没有上传过图片噢 ~
+
+                .loading-icon
+                  %i.fa.fa-refresh.fa-spin
+                .end-text the end
+                - @images.each do |img|
+                  .image.aliyun{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url, :id => img.id}}

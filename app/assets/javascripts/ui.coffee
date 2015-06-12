@@ -26,8 +26,15 @@ class Image
         'bottom': 0
       .appendTo @$el
 
+    if not @$el.hasClass 'aliyun'
+      jQuery('<div>')
+        .addClass('icheck')
+        .appendTo @$el
+
   get_png_url: (width, height)->
-    # "#{@url}?imageView2/1/w/#{width}/h/#{height}"
+    if @$el.hasClass 'aliyun'
+      return "#{@url}@#{width}w_#{height}h_1e_1c"
+
     "#{@url}?imageMogr2/thumbnail/!#{width}x#{height}r/gravity/Center/crop/#{width}x#{height}"
 
   pos: (left, top, width, height)->
@@ -112,16 +119,10 @@ class ImageGrid
 
   append_image: ($image)->
     img = new Image $image
-    jQuery('<div>')
-      .addClass('icheck')
-      .appendTo img.$el
     @image_hash.append $image.data('id'), img
 
   prepend_image: ($image)->
     img = new Image $image
-    jQuery('<div>')
-      .addClass('icheck')
-      .appendTo img.$el
     @image_hash.prepend $image.data('id'), img
 
   remove_img_ids: (ids)->

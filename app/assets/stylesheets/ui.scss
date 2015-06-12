@@ -201,11 +201,26 @@ body.app .page-dashboard {
       // margin:0 auto;
       width: 80px;
       text-align: center;
+      float: left;
+      text-decoration: none;
+    }
+    .aliyun {
+      @include height(50px);
+      font-size: 32px;
+      font-family: Futura-Condensed;
+      color: #555;
+      margin-left: 15px;
+      float: left;
     }
 
     .top-control {
       position: absolute;
       top:0;right: $grid-gap / 2;
+
+      .show-oss-file {
+        float: left;
+        margin-right: 30px;
+      }
 
       .user {
         float: left;
@@ -426,6 +441,9 @@ body.app .page-dashboard {
       bottom:0;left:0;right:0;
       top: $control-height + $opbar-height;
       height: auto;
+      &.aliyun {
+        top: 0;
+      }
 
       .images {
         .blank {
