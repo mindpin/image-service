@@ -75,7 +75,7 @@ class Uploader
 
         # 该方法在整个队列处理完毕后触发
         UploadComplete: ->
-          #队列文件处理完毕后,处理相关的事情
+          FileProgress.alldone()
 
 ###
   用于显示上传进度的类
@@ -97,8 +97,11 @@ class FileProgress
 
   _open_panel: ->
     $panel = jQuery('.upload-panel')
+    $panel.removeClass('uploaded')
     return if $panel.hasClass('opened')
     $panel.addClass('opened')
+    jQuery('.uploading-images .w1 .image').remove()
+
     setTimeout ->
       jQuery('.uploading-images.nano').nanoScroller {
         alwaysVisible: true
@@ -106,7 +109,6 @@ class FileProgress
     , 1
 
   _make_dom: ->
-    console.log 'make dom'
     @$dom = jQuery('.uploading-images .template-image')
       .clone().show()
       .removeClass('template-image').addClass('image')
@@ -154,6 +156,9 @@ class FileProgress
   # 上传出错时调用此方法
   error: ->
     @$dom.addClass('error')
+
+  @alldone: ->
+    jQuery('.upload-panel').addClass 'uploaded'
 
 
 jQuery(document).on 'ready page:load', ->

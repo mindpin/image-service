@@ -271,9 +271,8 @@ body.app .page-dashboard {
 
         a.btn-upload {
           $btnh: 80px;
-          position: relative;
-          top:50%;margin-top:- $btnh / 2;
-          left:0;
+          position: absolute;
+          top:0;bottom:0;margin:auto;
           @include circle($btnh);
           background-color: #ffeebe;
           text-decoration: none;
@@ -310,8 +309,9 @@ body.app .page-dashboard {
           font-size: 16px;
           position: absolute;
           left: 108px + 20px + 10px;
-          top: 50%;
-          margin-top: - $lh * 3 / 2 - $pd;
+          top:0;bottom:0;
+          margin:auto;
+          height: $lh * 3;
           background-color: rgba(#fff,0.8);
           padding: $pd 20px;
           border-radius: 20px;
@@ -337,8 +337,11 @@ body.app .page-dashboard {
           $lh: 36px;
           padding: 14px 20px;
           position: absolute;
-          top: 50%; margin-top: - $lh - 14px;
+          margin:auto;
+          top:0;bottom:0;
+          height:72px;
           .st {
+            height: $lh;
             line-height: $lh;
             span.t {
               color:#999;
@@ -356,6 +359,7 @@ body.app .page-dashboard {
             @include height(28px);
             display: inline-block;
             margin-top: 4px;
+            margin-bottom: 4px;
           }
         }
       }
@@ -483,6 +487,10 @@ body.app .page-dashboard {
           overflow: hidden;
           @include default-transition;
 
+          .ibox {
+            @include default-transition;
+          }
+
           .icheck {
             box-sizing: border-box;
             $w: 48px;
@@ -494,9 +502,8 @@ body.app .page-dashboard {
             border-radius: 100%;
             background-color: $bc;
             border:solid 3px $fc;
-            cursor: pointer;
             color: $fc;
-            opacity: 0.8;
+            opacity: 0.5;
             @include default-transition;
             &:before {
               $w1: $w - 6px;
@@ -509,11 +516,51 @@ body.app .page-dashboard {
               line-height:$w1;
               @include default-transition;
             }
-            &:hover {
+          }
+
+          a.show-detail {
+            pointer-events: none;
+            position: absolute;
+            left: 0; right:0;
+            bottom: -20px;opacity:0;
+            color: white;
+            text-align: center;
+            background-color: rgba(black, 0.4);
+            box-sizing:border-box;
+            text-decoration: none;
+            @include height(40px);
+            @include default-transition;
+            text-shadow: 1px 1px 3px black;
+            font-weight: bold;
+            i {margin-right: 5px;}
+          }
+
+          &:hover {
+            .ibox {
+              @include transform(scale(1.1));
+            }
+            .icheck {
               opacity: 1;
               box-shadow: 0 0 5px white;
             }
-            &.selected {
+            a.show-detail {
+              pointer-events: auto;
+              bottom:0;opacity:1;
+            }
+          }
+          &.selected {
+            // &:after {
+            //   content: "";
+            //   pointer-events: none;
+            //   position: absolute;
+            //   top:0;left:0;right:0;bottom:0;
+            //   border:solid 5px rgba($area-info, 1);
+            // }
+
+            .ibox {
+              @include transform(scale(1.1));
+            }
+            .icheck {
               border-color:$area-info;
               background-color: $area-info;
               opacity: 1;
@@ -550,13 +597,11 @@ body.app .page-dashboard {
             $w: 60px;
             box-sizing: border-box;
             position: absolute;
-            width: $w; height: $w; line-height: $w;
-            background-color: #444;
+            width: $w * 2; height: $w; line-height: $w;
             border-radius: 100px;
-            bottom: -$w/2;
-            left: 50%; margin-left: -$w/2;
+            bottom: -$w * 2 / 3;
+            left: 50%; margin-left: -$w;
             border: solid 4px white;
-            opacity: 0;
             i {
               position: absolute;
               top: 0px;left:0px;right:0px;bottom:0px;
@@ -565,7 +610,11 @@ body.app .page-dashboard {
               text-align: center;
               font-size: 36px;
             }
+            background-color: #444;
             box-shadow:0 0 10px rgba(black, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            @include transform(scale(0.1));
             @include default-transition;
             &:hover {
               background-color: #222;
@@ -708,9 +757,14 @@ body.app .page-dashboard {
         pointer-events: all;
         .panel {
           margin-top: 0;
-          a.close-panel {
-            opacity: 1;
-          }
+        }
+      }
+
+      &.uploaded {
+        .panel .pbox .close-panel {
+          opacity: 1;
+          pointer-events: auto;
+          @include transform(scale(1));
         }
       }
     }

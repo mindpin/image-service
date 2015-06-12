@@ -31,6 +31,15 @@ class Image
         .addClass('icheck')
         .appendTo @$el
 
+    jQuery('<a>')
+      .addClass('show-detail')
+      .attr 
+        'href': "/f/#{@$el.data('id')}"
+        'target': '_blank'
+      .append jQuery('<i>').addClass('fa fa-image')
+      .append jQuery('<span>').text '查看详情'
+      .appendTo @$el
+
   get_png_url: (width, height)->
     if @$el.hasClass 'aliyun'
       return "#{@url}@#{width}w_#{height}h_1e_1c"
@@ -112,7 +121,7 @@ class ImageGrid
   bind_events: ->
     @$viewport.on 'scroll', (evt)=>
       @lazy_load_images()
-      @load_more() if @layout.need_load_more()
+      jQuery(document).trigger 'img4ye:try-loadmore'
 
     @$viewport.on 'mindpin', ->
       alert(1)
@@ -131,7 +140,6 @@ class ImageGrid
       img.remove()
       @image_hash.del id
     @relayout(true)
-    @load_more() if @layout.need_load_more()
 
   each_image: (func)->
     # for idx in [0 ... @images.length]
@@ -149,6 +157,7 @@ class ImageGrid
         alwaysVisible: true
         # flash: true
       }
+      jQuery(document).trigger 'img4ye:try-loadmore'
 
   lazy_load_images: ->
     @image_hash.each (id, img)->
@@ -202,24 +211,27 @@ class ImageSelector
 
   bind_events: ->
     that = this
-    @$el.on 'click', '.image .icheck', ->
+    @$el.on 'click', '.image', ->
       jQuery(this).toggleClass('selected')
       that.refresh_selected()
 
     jQuery('.checkstatus a.check').on 'click', ->
       $checkstatus = jQuery(this).closest('.checkstatus')
       if $checkstatus.hasClass('none') or $checkstatus.hasClass('some')
-        that.$el.find('.image .icheck').addClass('selected')
+        that.$el.find('.image').addClass('selected')
         that.refresh_selected()
         return
       if $checkstatus.hasClass('all')
-        that.$el.find('.image .icheck').removeClass('selected')
+        that.$el.find('.image').removeClass('selected')
         that.refresh_selected()
         return
 
+    @$el.on 'click', '.image a.show-detail', (evt)->
+      evt.stopPropagation()
+
   refresh_selected: ->
-    length = @$el.find('.image .icheck.selected').length
-    all_length = @$el.find('.image .icheck').length
+    length = @$el.find('.image.selected').length
+    all_length = @$el.find('.image').length
     jQuery('.opbar .checkstatus span.n').text length
     jQuery('.opbar .checkstatus').removeClass('none some all')
     if length is 0
@@ -235,7 +247,7 @@ class ImageSelector
       jQuery('.opbar .btns .bttn').addClass('disabled')
 
   get_selected: ->
-    @$el.find('.image .icheck.selected').closest('.image')
+    @$el.find('.image.selected').closest('.image')
 
 
 jQuery(document).on 'ready page:load', ->
@@ -342,6 +354,9 @@ jQuery(document).on 'click', 'a.close-panel', ->
   jQuery('.uploading-images .image .txt .p').text('0')
   jQuery('textarea.urls').val ''
 
+jQuery(document).on 'img4ye:try-loadmore', ->
+  if igrid = window.igrid
+    igrid.load_more() if igrid.layout.need_load_more()
 
 jQuery(document).on 'img4ye:file-changed', (evt, statdata)->
   window.igrid?.refresh_stat statdata

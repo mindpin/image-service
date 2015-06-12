@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   # 查看阿里云旧文件
   get '/aliyun' => 'home#aliyun'
 
+  # 查看文件详情
+  get '/f/:id' => 'file_entities#show'
+
   match "/file_entities/uptoken", to: "file_entities#uptoken_options", via: :options
   resources :file_entities do
     get    :uptoken,      on: :collection

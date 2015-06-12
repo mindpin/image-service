@@ -124,4 +124,8 @@ class FileEntitiesController < ApplicationController
     render json: json
   end
 
+  def show
+    @file_entity = FileEntity.find params[:id]
+  end
+
 end
