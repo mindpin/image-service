@@ -2,6 +2,8 @@ window.PopBox = class PopBox
   constructor: (@$template)->
 
   show: (func)->
+    @is_show = true
+
     @$overlay = jQuery('<div>')
       .addClass 'popbox popbox-overlay'
       .fadeIn(300)
@@ -29,6 +31,8 @@ window.PopBox = class PopBox
     func()
 
   close: ->
+    @is_show = false
+
     @$box.animate
       'top': '0'
     , 200

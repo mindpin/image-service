@@ -287,7 +287,7 @@ jQuery(document).on 'ready page:load', ->
               jQuery(document).trigger 'img4ye:file-changed', res.stat
 
 
-    popbox_download = new PopBox jQuery('.popbox.template.download')
+    window.popbox_download = new PopBox jQuery('.popbox.template.download')
     jQuery('.opbar a.bttn.download').on 'click', ->
       popbox_download.show ->
         len = ise.get_selected().length
@@ -316,7 +316,8 @@ test_dabao = ($elm, task_id)->
     data:
       task_id: task_id
     success: (res)->
-      console.log 'complete', res
+      return if not window.popbox_download.is_show
+
       if res.state is 'processing'
         if $elm.find('.wait span').length > 32
           $elm.find('.wait').html ''
