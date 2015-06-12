@@ -121,11 +121,11 @@ RSpec.describe FileEntity, type: :model do
       end
 
       it "Image.images_versions image_ids, version_id" do
-        FileEntity.images_versions(@file_entities.map(&:id), @image_size.id).should == @file_entities.map{|file_entity| file_entity.version(@image_size.id)}
+        FileEntity.images_versions(@file_entities.map(&:id), @image_size.id).should =~ @file_entities.map{|file_entity| file_entity.version(@image_size.id)}
       end
 
       it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
-        FileEntity.images_to_html_by_ids_and_image_size_id(@file_entities.map(&:id), @image_size.id).should == @file_entities.map{|file_entity| file_entity.version(@image_size.id).to_html}
+        FileEntity.images_to_html_by_ids_and_image_size_id(@file_entities.map(&:id), @image_size.id).should =~ @file_entities.map{|file_entity| file_entity.version(@image_size.id).to_html}
       end
     end
 
@@ -143,11 +143,11 @@ RSpec.describe FileEntity, type: :model do
       end
 
       it "Image.images_versions image_ids, version_id" do
-        FileEntity.images_versions(@file_entities.map(&:id), @image_size.id).should == @file_entities.map{|file_entity| file_entity.version(@image_size.id)}
+        FileEntity.images_versions(@file_entities.map(&:id), @image_size.id).should =~ @file_entities.map{|file_entity| file_entity.version(@image_size.id)}
       end
 
       it "Image.images_to_html_by_ids_and_image_size_id image_ids, version_id" do
-        FileEntity.images_to_html_by_ids_and_image_size_id(@file_entities.map(&:id), @image_size.id).should == @file_entities.map{|file_entity| file_entity.version(@image_size.id).to_html}
+        FileEntity.images_to_html_by_ids_and_image_size_id(@file_entities.map(&:id), @image_size.id).should =~ @file_entities.map{|file_entity| file_entity.version(@image_size.id).to_html}
       end
     end
 

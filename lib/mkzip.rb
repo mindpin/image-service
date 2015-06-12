@@ -1,11 +1,20 @@
 class Mkzip
   def initialize(file_entity_ids, opts={})
+    @file_entity_ids = file_entity_ids
     @images = FileEntity.find(file_entity_ids)
   end
 
   def zip
+    # 先查询缓存
+    task_id = MkzipCache.new(@file_entity_ids).zip_cache
+    return task_id if !task_id.blank?
+    
     result = Mkzip.pfop(bucket: ENV['QINIU_BUCKET'], key: @images.first.path, fops: build_fops)
-    return result[1]['persistentId'] if result[0] == 200
+    if result[0] == 200
+      task_id = result[1]['persistentId']
+      MkzipCache.new(@file_entity_ids).set_zip_cache(task_id)
+      return task_id
+    end
     result
   end
 
@@ -19,7 +28,17 @@ class Mkzip
   end
 
   def self.result (persistent_id)
-    Mkzip.prefop persistent_id
+    # 先查询缓存
+    res = MkzipCache.result_cache(persistent_id)
+    return res if !res.blank?
+
+    res = Mkzip.prefop persistent_id
+
+    if res[1]["code"] == 0
+      MkzipCache.set_result_cache(persistent_id, res)
+    end
+
+    res
   end
 
   protected
