@@ -10,9 +10,9 @@ module FileEntityCreateMethods
       filename = "#{token}.#{ext}"
       key = File.join("/", ENV["QINIU_BASE_PATH"], filename)
 
-      new_url = 'http://iovip.qbox.me/fetch/' + 
-        Qiniu::Utils.urlsafe_base64_encode(url) + 
-        '/to/' + 
+      new_url = 'http://iovip.qbox.me/fetch/' +
+        Qiniu::Utils.urlsafe_base64_encode(url) +
+        '/to/' +
         Qiniu::Utils.encode_entry_uri(ENV['QINIU_BUCKET'], key)
 
       Qiniu::HTTP.management_post(new_url)
@@ -78,17 +78,17 @@ module FileEntityCreateMethods
 
       end
 
-      return { 
-        bucket:       ENV["QINIU_BUCKET"], 
-        key:          key, 
-        fsize:        fsize, 
-        endUser:      user.blank? ? nil : user.id.to_s, 
+      return {
+        bucket:       ENV["QINIU_BUCKET"],
+        key:          key,
+        fsize:        fsize,
+        endUser:      user.blank? ? nil : user.id.to_s,
         mimeType:     mimeType,
         origin_file_name: filename,
 
         image_width:  image_width,
         image_height: image_height,
-        image_rgb:    image_rgb, 
+        image_rgb:    image_rgb,
         avinfo_format: avinfo_format,
         avinfo_total_bit_rate:   avinfo_total_bit_rate,
         avinfo_total_duration:   avinfo_total_duration,
@@ -103,11 +103,11 @@ module FileEntityCreateMethods
       }
     end
 
-    # { "bucket"=>"fushang318", 
-    #   "key"=>"/i/yscPYbwk.jpeg", 
-    #   "fsize"=>"3514", 
-    #   "endUser"=>"5551b62b646562104b000000", 
-    #   "image_rgb"=>"0xee4f60", 
+    # { "bucket"=>"fushang318",
+    #   "key"=>"/i/yscPYbwk.jpeg",
+    #   "fsize"=>"3514",
+    #   "endUser"=>"5551b62b646562104b000000",
+    #   "image_rgb"=>"0xee4f60",
     #   "origin_file_name"=>"icon200x200.jpeg",
     #   "mimeType" => "image/png",
     #   "image_width"=>"200",
@@ -129,16 +129,22 @@ module FileEntityCreateMethods
       mime_type  = callback_body[:mimeType]
       meta = __get_meta_from_callback_body(mime_type, callback_body)
       kind = mime_type.split("/").first.to_sym
-      if !FileEntity::KINDS.include?(kind)
+      if kind != "image"
         Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
-        raise '不允许上传 图片 音频 视频 以外类型的资源'
+        raise '不允许上传 图片 以外类型的资源'
       end
+
+      # TODO 暂时只允许图片上传，以后再增加音频视频的上传
+      # if !FileEntity::KINDS.include?(kind)
+      #   Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
+      #   raise '不允许上传 图片 音频 视频 以外类型的资源'
+      # end
 
       FileEntity.create!(
         user_id:  callback_body[:endUser] || nil,
-        original: callback_body[:origin_file_name], 
-        token: token, 
-        mime: mime_type, 
+        original: callback_body[:origin_file_name],
+        token: token,
+        mime: mime_type,
         meta: meta,
         kind: kind
       )
@@ -154,14 +160,14 @@ module FileEntityCreateMethods
         width      = callback_body[:image_width]
         height     = callback_body[:image_height]
         fsize      = callback_body[:fsize]
-        
+
         return {
           "major_color" => {
-            "rgba" => rgba, 
+            "rgba" => rgba,
             "hex"  => hex
-          }, 
-          "height"   => height, 
-          "width"    => width, 
+          },
+          "height"   => height,
+          "width"    => width,
           "filesize" => fsize
         }
       when "video"
@@ -179,7 +185,7 @@ module FileEntityCreateMethods
             "avinfo_audio_bit_rate" => callback_body[:avinfo_audio_bit_rate],
             "avinfo_audio_duration" => callback_body[:avinfo_audio_duration]
           },
-          "filesize" => callback_body[:fsize] 
+          "filesize" => callback_body[:fsize]
         }
       when "audio"
         {
