@@ -783,7 +783,8 @@ body.app .page-dashboard {
     width: $w;
     min-height: $h;
     position: absolute;
-    left: 50%; margin-left: -$w/2;
+    left:0;right:0;
+    margin:auto;
     top: 180px;
     background-color: #FFF;
     box-shadow:0 0 5px black;
@@ -903,6 +904,99 @@ body.app .page-dashboard {
   &.error {
     .ac.error {opacity: 1; @include transform(scale(1));}
     .state.error {display:block;}
+  }
+}
+
+.popbox.template.presets {
+  .panel {
+    padding-bottom: 30px;
+    border-bottom: solid 1px #eee;
+    position: relative;
+    .control {
+      width:50%;
+
+      .radios {
+        margin-bottom: 20px;
+      }
+      .radios .r {
+        height:30px;line-height:30px;
+        margin-bottom: 5px;
+      }
+
+      .inputs {
+        @include clearfix;
+        margin-bottom: 20px;
+        .in {
+          float: left;
+        }
+        .in input {
+          width:120px;
+          border-radius:3px;
+        }
+        .cheng {
+          float: left;
+          height:34px;line-height:34px;
+          margin:0 10px;
+          font-size: 20px;
+        }
+      }
+    }
+    .records {
+      position: absolute;
+      top:-10px;right:0;bottom:20px;width:50%;
+      background-color: #f7f7f7;
+      // border-radius:3px;
+      box-sizing:border-box;
+      font-size: 14px;
+      .rbox {
+        position: absolute;
+        top:0px;left:10px;bottom:0px;
+        width:290px;
+      }
+
+      .blank {
+        color:#999;
+        display: none;
+      }
+      &.blank {
+        .blank {display: block;}
+      }
+      .preset {
+        @include height(40px);
+        border-bottom:dashed 1px #ddd;
+        margin-right: 10px;
+        &:last-child {
+          border-bottom:0 none;
+        }
+        position: relative;
+        a.delete {
+          position: absolute;
+          @include circle(24px);
+          top:8px;right:18px;
+          background-color: $area-danger;
+          color: white;
+          text-align: center;
+          font-size: 16px;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .popbox.actions {
+    margin-top: 30px;
+    text-align: center;
+    .popbox.action {
+      display: inline-block;
+      width: 150px;
+      margin:0 15px;
+      &:first-child {
+        width: 200px;
+      }
+    }
   }
 }
 

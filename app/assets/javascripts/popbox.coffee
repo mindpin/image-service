@@ -1,5 +1,6 @@
 window.PopBox = class PopBox
-  constructor: (@$template)->
+  constructor: (@$template, conf = {})->
+    @box_width = conf.box_width
 
   show: (func)->
     @is_show = true
@@ -20,6 +21,7 @@ window.PopBox = class PopBox
       .addClass 'popbox box'
       .css
         'top': '0'
+        'width': @box_width
       .animate
         'top': '180px'
       , 200

@@ -313,6 +313,15 @@ jQuery(document).on 'ready page:load', ->
             $elm.find('.wait').html ''
             test_dabao $elm, res.task_id
 
+    popbox_presets = new PopBox jQuery('.popbox.template.presets'), {
+      box_width: '660px'
+    }
+    jQuery('.stat a.preset-config').on 'click', ->
+      popbox_presets.show ->
+        jQuery('.rbox.nano').nanoScroller {
+          alwaysVisible: true
+        }
+
 test_dabao = ($elm, task_id)->
   jQuery.ajax
     url: '/file_entities/get_create_zip_task_state'
