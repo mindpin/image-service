@@ -251,6 +251,10 @@ class ImageSelector
 
 
 jQuery(document).on 'ready page:load', ->
+  jQuery('.image-info.nano').nanoScroller {
+    alwaysVisible: true
+  }
+
   if jQuery('.grid .images').length
     window.igrid = new ImageGrid jQuery('.grid .images'), {
       # layout: FlowLayout
@@ -341,8 +345,8 @@ test_dabao = ($elm, task_id)->
           .addClass 'error'
 
 
-# jQuery(document).on 'click', 'textarea.urls', ->
-#   jQuery(this).select()
+jQuery(document).on 'click', '.preset .field input', ->
+  jQuery(this).select()
 
 jQuery(document).on 'click', 'a.close-panel', ->
   $panel = jQuery('.upload-panel')

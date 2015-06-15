@@ -905,3 +905,119 @@ body.app .page-dashboard {
     .state.error {display:block;}
   }
 }
+
+.page-file-show {
+  position: absolute;
+  top:0;left:0;right:0;bottom:0;
+  // background: url(http://img.teamkn.com/i/u47lLxxc.png);
+  // color: white;
+
+  .image-show {
+    position: absolute;
+    top:0;bottom:0;left:0;
+    width:percentage(1/2);
+    .filename {
+      position: absolute;
+      top:0;left:0;right:15px;
+      height:80px;line-height:80px;
+      font-size:20px;
+      text-align: right;
+    }
+    .ibox {
+      position: absolute;
+      top:80px;left:50px;right:15px;bottom:50px;
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        position: absolute;
+        right:0;top:0;
+        box-shadow:0 0 10px rgba(black, 0.5);
+        // box-shadow:0 0 20px rgba(black, 0.8);
+      }
+    }
+  }
+  .image-info {
+    position: absolute;
+    top:0;bottom:0;left:50%;
+    width:50%;
+    .base {
+      max-width:500px;
+      line-height: 20px;
+      margin-top: 30px;
+      margin-left: 15px;
+      margin-bottom: 15px;
+      margin-right: 30px;
+      .info {
+        margin-bottom: 10px;
+        i {margin-right: 5px;}
+      }
+    }
+    .presets {
+      margin-left: 15px;
+      max-width:500px;
+      margin-bottom: 50px;
+      margin-right: 30px;
+      .preset {
+        background-color: #F0F0F0;
+        // background-color: rgba(white, 0.1);
+        margin-bottom: 15px;
+        padding:10px;
+        border-radius:5px;
+        position: relative;
+        a.open {
+          position: absolute;
+          top:6px;right:10px;
+          width:24px;height:24px;line-height:24px;
+          color:white;
+          font-size: 14px;
+          text-align: center;
+          border-radius:3px;
+          background-color: #999;
+          // background-color: rgba(white, 0.2);
+        }
+        .name {
+          line-height: 20px;
+          font-size: 14px;
+          margin-bottom: 6px;
+          i {color:#999;}
+          position: relative;
+          top:-2px;
+        }
+        .field {
+          margin-bottom: 10px;
+          position: relative;
+          &:last-child {margin-bottom: 0;}
+          label {
+            position: absolute;
+            font-size: 12px;
+            height:20px;line-height:20px;
+            width:40px;
+            top:5px;left:5px;
+            text-align: center;
+            font-weight: bold;
+            pointer-events:none;
+            border-radius:2px;
+            background-color: #f1f1f1;
+            color:#999;
+            // background-color: rgba(#f1f1f1, 0.3);
+            // color:#ccc;
+          }
+          input {
+            // font-family: "source-code";
+            font-family: $font-family-monospace;
+            display: block;
+            border:0 none;
+            width:100%;
+            box-sizing:border-box;
+            border-radius:4px;
+            padding:0 10px 0 50px;
+            font-size: 14px;
+            height:30px;line-height:30px;
+            background-color: #FFF;
+            // background-color: rgba(black, 0.2);
+          }
+        }
+      }
+    }
+  }
+}

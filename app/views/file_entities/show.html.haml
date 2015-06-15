@@ -1,10 +1,57 @@
 .page-file-show
-  .container
-    .row
-      .col-pad-12
-        %h3.file-name
-          %i.fa.fa-image
-          %span 这里显示文件名
-    .row
-      .col-pad-5
-      .col-pad-7
+  .image-show
+    .filename
+      %i.fa.fa-image
+      %span= @file_entity.original
+    .ibox
+      %a{:href => @file_entity.url, :target => '_blank'}
+        %img{:src => @file_entity.url}
+  .image-info.nano
+    .nano-content
+      .base
+        .info
+          %i.fa.fa-clock-o
+          %span 上传时间：
+          %span= @file_entity.created_at.localtime.to_s(:db)
+        .info
+          %i.fa.fa-expand
+          %span 原图尺寸：
+          %span #{@file_entity.width} × #{@file_entity.height}
+        .info
+          %i.fa.fa-file-o
+          %span 原图大小：
+          %span= @file_entity.filesize.to_human_format_filesize
+      .presets
+        :ruby
+          preset = Struct.new(:name)
+          presets = [
+            preset.new('配置一'),
+            preset.new('配置二'),
+            preset.new('配置三'),
+            preset.new('配置四'),
+            preset.new('配置五'),
+            preset.new('配置六'),
+          ]
+
+        - presets.each do |preset|
+          .preset
+            :ruby
+              url = @file_entity.url
+              html = "<img src='#{url}' />"
+              md = "![](#{url})"
+
+            .name
+              %i.fa.fa-asterisk
+              %span= preset.name
+            %a.open{:href => url, :target => '_blank'}
+              %i.fa.fa-external-link
+
+            .field
+              %label url
+              %input.url{:type => :text, :value => url, :readonly => true}
+            .field
+              %label html
+              %input.html{:type => :text, :value => html, :readonly => true}
+            .field
+              %label md
+              %input.md{:type => :text, :value => md, :readonly => true}
