@@ -14,7 +14,7 @@ namespace "from_0.2_to_0.3" do
         file_entity.is_oss = true
 
         kind = file_entity.mime.split("/").first.to_sym
-        if kind != "image"
+        if kind == "image"
           file_entity.kind = kind
           file_entity.save!
         end
