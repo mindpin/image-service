@@ -22,23 +22,12 @@
           %span 原图大小：
           %span= @file_entity.filesize.to_human_format_filesize
       .presets
-        :ruby
-          preset = Struct.new(:name)
-          presets = [
-            preset.new('配置一'),
-            preset.new('配置二'),
-            preset.new('配置三'),
-            preset.new('配置四'),
-            preset.new('配置五'),
-            preset.new('配置六'),
-          ]
-
-        - presets.each do |preset|
+        - @file_entity.versions.each do |preset|
           .preset
             :ruby
-              url = @file_entity.url
-              html = "<img src='#{url}' />"
-              md = "![](#{url})"
+              url = preset.url
+              html = preset.to_html
+              md = preset.to_md
 
             .name
               %i.fa.fa-asterisk

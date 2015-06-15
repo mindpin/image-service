@@ -317,16 +317,6 @@ jQuery(document).on 'ready page:load', ->
       box_width: '660px'
     }
     jQuery('.stat a.preset-config').on 'click', ->
-      desc_str = (preset)->
-        switch preset.style
-          when 'width_height'
-            "宽度 #{preset.width}px, 高度 #{preset.height}px"
-          when 'width'
-            "宽度 #{preset.width}px, 高度自适应"
-          when 'height'
-            "高度 #{preset.height}px, 宽度自适应"
-          else '???'
-
       append_preset_dom = ($inner, preset)->
         $inner.find('.records').removeClass('blank')
         $preset = $inner.find('.preset-template').clone()
@@ -334,7 +324,7 @@ jQuery(document).on 'ready page:load', ->
           .addClass('preset')
           .attr('data-id', preset.id)
           .show()
-          .find('.desc').text(desc_str(preset)).end()
+          .find('.desc').text(preset.name).end()
           .appendTo $inner.find('.records .list')
 
           $inner.find('.rbox.nano').nanoScroller()

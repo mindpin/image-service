@@ -20,11 +20,11 @@ class ImageSize
   def name
     case style
     when 'width_height'
-      "宽度 #{width}px，高度 #{height}px"
+      "宽度 #{width}px, 高度 #{height}px"
     when 'width'
-      "宽度 #{width}px，高度按比例缩放"
+      "宽度 #{width}px, 高度自适应"
     when 'height'
-      "高度 #{height}px，宽度按比例缩放"
+      "高度 #{height}px, 宽度自适应"
     end
   end
 
@@ -33,7 +33,8 @@ class ImageSize
       id: self.id.to_s,
       style: self.style,
       width: self.width,
-      height: self.height
+      height: self.height,
+      name: self.name
     }
   end
 
