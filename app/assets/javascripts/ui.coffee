@@ -322,6 +322,39 @@ jQuery(document).on 'ready page:load', ->
           alwaysVisible: true
         }
 
+    popbox_links = new PopBox jQuery('.popbox.template.links'), {
+      box_width: '860px'
+    }
+    jQuery('.opbar .bttn.copylink').on 'click', ->
+      popbox_links.show ->
+        len = ise.get_selected().length
+        popbox_links.$inner.find('span.n').text len
+        ids = for dom in ise.get_selected()
+          $image = jQuery(dom)
+
+          $simg = jQuery('<div>')
+            .addClass('image')
+            .appendTo popbox_links.$inner.find('.w1')
+          
+          url = "#{$image.data('url')}?imageMogr2/thumbnail/!#{100}x#{100}r/gravity/Center/crop/#{100}x#{100}"
+
+          $ibox = jQuery('<div>')
+            .addClass('ibox')
+            .css
+              'background-image': "url(#{url})"
+            .appendTo $simg
+
+
+          jQuery($image).data('id')
+
+        setTimeout ->
+          jQuery('.copylink-images.nano').nanoScroller {
+            alwaysVisible: true
+          }
+
+
+        console.log ids
+
 test_dabao = ($elm, task_id)->
   jQuery.ajax
     url: '/file_entities/get_create_zip_task_state'

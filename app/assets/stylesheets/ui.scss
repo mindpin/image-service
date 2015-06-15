@@ -1000,6 +1000,49 @@ body.app .page-dashboard {
   }
 }
 
+.popbox.template.links {
+  .panel {
+    .copylink-images {
+      background-color: #f1f1f1;
+      width:310px + 8px;height:310px;
+    }
+    .w1 {
+      padding-top: 10px;
+      padding-left: 10px;
+      width:300px;
+      overflow: hidden;
+      .image {
+        width:75px;height:75px;
+        position: relative;
+        float: left;
+        .ibox {
+          position: absolute;
+          left:0;top:0;right:10px;bottom:10px;
+          background-size:cover;
+          background-position: center center;
+          background-repeat: no-repeat;
+          box-sizing:border-box;
+          border:solid 3px white;
+          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+
+  .popbox.actions {
+    margin-top: 30px;
+    text-align: center;
+    .popbox.action {
+      display: inline-block;
+      width: 150px;
+      margin:0 15px;
+      &:first-child {
+        width: 200px;
+      }
+    }
+  }
+}
+
 .page-file-show {
   position: absolute;
   top:0;left:0;right:0;bottom:0;
