@@ -284,27 +284,10 @@ jQuery(document).on 'ready page:load', ->
     jQuery('.stat a.preset-config').on 'click', ->
       new PresetPopboxAdapter(popbox_presets)
 
+    # 下载对话框
     window.popbox_download = new PopBox jQuery('.popbox.template.download')
     jQuery('.opbar a.bttn.download').on 'click', ->
-      popbox_download.show ->
-        len = ise.get_selected().length
-        popbox_download.$inner.find('span.n').text len
-        ids = for image in ise.get_selected()
-          jQuery(image).data('id')
-
-        # 发起打包请求
-        popbox_download.$inner
-          .removeClass 'error success dabao'
-          .addClass 'dabao'
-        jQuery.ajax
-          url: '/file_entities/create_zip'
-          type: 'POST'
-          data:
-            ids: ids.join(',')
-          success: (res)->
-            $elm = popbox_download.$inner
-            $elm.find('.wait').html ''
-            test_dabao $elm, res.task_id
+      new DownloadPopboxAdapter(popbox_download, ise)
 
 
     popbox_links = new PopBox jQuery('.popbox.template.links'), {
@@ -339,37 +322,6 @@ jQuery(document).on 'ready page:load', ->
 
 
         console.log ids
-
-test_dabao = ($elm, task_id)->
-  jQuery.ajax
-    url: '/file_entities/get_create_zip_task_state'
-    type: 'GET'
-    data:
-      task_id: task_id
-    success: (res)->
-      return if not window.popbox_download.is_show
-
-      if res.state is 'processing'
-        if $elm.find('.wait span').length > 32
-          $elm.find('.wait').html ''
-        $elm.find('.wait').append jQuery('<span>.</span>')
-
-        setTimeout ->
-          test_dabao $elm, task_id
-        , 200
-        
-      if res.state is 'success'
-        $elm
-          .removeClass 'error success dabao'
-          .addClass 'success'
-
-        $elm.find('a.download-zip').attr('href', res.url)
-        location.href = res.url
-
-      if res.state is 'failure'
-        $elm
-          .removeClass 'error success dabao'
-          .addClass 'error'
 
 
 jQuery(document).on 'click', '.preset .field input', ->

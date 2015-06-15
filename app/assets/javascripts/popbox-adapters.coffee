@@ -170,11 +170,13 @@ window.DeletePopboxAdapter = class DeletePopboxAdapter
   constructor: (@popbox, @iselector)->
     @popbox.run_adapter @
 
+  find: (str)->
+    @$inner.find(str)
+
   on_show: ($inner)->
     @$inner = $inner
 
-    len = @iselector.get_selected().length
-    @find('span.n').text len
+    @find('span.n').text @iselector.get_selected().length
     @popbox.bind_ok =>
       ids = @iselector.get_selected_ids()
 
@@ -189,5 +191,62 @@ window.DeletePopboxAdapter = class DeletePopboxAdapter
           @iselector.refresh_selected()
           jQuery(document).trigger 'img4ye:file-changed', res.stat
 
+
+
+window.DownloadPopboxAdapter = class DownloadPopboxAdapter
+  constructor: (@popbox, @iselector)->
+    @popbox.run_adapter @
+
   find: (str)->
     @$inner.find(str)
+
+  on_show: ($inner)->
+    @$inner = $inner
+
+    @find('span.n').text @iselector.get_selected().length
+    ids = @iselector.get_selected_ids()
+
+    # 发起打包请求
+    @$inner
+      .removeClass 'error success dabao'
+      .addClass 'dabao'
+
+    jQuery.ajax
+      url: '/file_entities/create_zip'
+      type: 'POST'
+      data:
+        ids: ids.join(',')
+      success: (res)=>
+        @find('.wait').html ''
+        @test_dabao res.task_id
+
+  test_dabao: (task_id)->
+    jQuery.ajax
+      url: '/file_entities/get_create_zip_task_state'
+      type: 'GET'
+      data:
+        task_id: task_id
+      success: (res)=>
+        return if not @popbox.is_show
+
+        if res.state is 'processing'
+          if @find('.wait span').length > 32
+            @find('.wait').html ''
+          @find('.wait').append jQuery('<span>.</span>')
+
+          setTimeout =>
+            @test_dabao task_id
+          , 200
+          
+        if res.state is 'success'
+          @$inner
+            .removeClass 'error success dabao'
+            .addClass 'success'
+
+          @find('a.download-zip').attr('href', res.url)
+          location.href = res.url
+
+        if res.state is 'failure'
+          @$inner
+            .removeClass 'error success dabao'
+            .addClass 'error'
