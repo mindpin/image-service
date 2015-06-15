@@ -28,6 +28,15 @@ class ImageSize
     end
   end
 
+  def to_hash
+    {
+      id: self.id.to_s,
+      style: self.style,
+      width: self.width,
+      height: self.height
+    }
+  end
+
   protected
   validate :validate_style_and_size
   def validate_style_and_size
