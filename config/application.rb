@@ -16,6 +16,7 @@ Bundler.require(*Rails.groups)
 
 module ImageService
   class Application < Rails::Application
+    config.assets.precompile += ['*.png', '*.ttf','*.eot','*.svg','*.woff','*.otf']
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
