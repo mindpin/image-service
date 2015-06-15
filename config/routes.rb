@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, 
+  devise_for :users,
     :path => "",
     :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
 
@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     post   :create_zip,                on: :collection
     get    :get_create_zip_task_state, on: :collection
   end
+
+  resource :image_sizes
 
   namespace :api do
     resources :file_entities do
