@@ -32,25 +32,26 @@
 
   # 获取 qiniu 云存储 自定义尺寸图片url
   def _get_qiniu_url
+    url = @image.url
+    width = @image_size.width
+    height = @image_size.height
+
     case @image_size.style
     when 'width_height'
-      "#{@image.url}?imageView2/1/w/#{@image_size.width}/h/#{@image_size.height}"
+      "#{url}?imageMogr2/thumbnail/!#{width}x#{height}r/gravity/Center/crop/#{width}x#{height}"
     when 'width'
-      "#{@image.url}?imageView2/2/w/#{@image_size.width}"
+      "#{url}?imageMogr2/thumbnail/#{width}x"
     when 'height'
-      "#{@image.url}?imageView2/2/h/#{@image_size.height}"
+      "#{url}?imageMogr2/thumbnail/x#{height}"
     end
   end
 
   def to_html
-    case @image_size.style
-    when 'width_height'
-      "<img width='#{@image_size.width}' height='#{@image_size.height}' src='#{@url}' />"
-    when 'width'
-      "<img width='#{@image_size.width}' src='#{@url}' />"
-    when 'height'
-      "<img height='#{@image_size.height}' src='#{@url}' />"
-    end
+    "<img src='#{@url}' />"
+  end
+
+  def to_md
+    "![](#{@url})"
   end
 
   def ==(another)
