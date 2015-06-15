@@ -129,7 +129,7 @@ module FileEntityCreateMethods
       mime_type  = callback_body[:mimeType]
       meta = __get_meta_from_callback_body(mime_type, callback_body)
       kind = mime_type.split("/").first.to_sym
-      if kind != "image"
+      if kind != :image
         Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
         raise '不允许上传 图片 以外类型的资源'
       end
