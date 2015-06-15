@@ -194,40 +194,12 @@
 
       .records
         .rbox.nano
-          .nano-content
+          .preset-template{:style => 'display:none;'}
+            .desc 宽度 600px, 高度自适应
+            %a.delete{:href =>'javascript:;', :title => '删除配置'}
+              %i.fa.fa-trash
+          .list.nano-content
             .blank 还没有任何配置
-            .preset
-              .desc 宽度 600px, 高度自适应
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 128px, 高度 128px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
-            .preset
-              .desc 宽度 300px, 高度 300px
-              %a.delete{:href =>'javascript:;', :title => '删除配置'}
-                %i.fa.fa-trash
 
     .popbox.actions
       %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}

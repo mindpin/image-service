@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     get    :get_create_zip_task_state, on: :collection
   end
 
-  resource :image_sizes
+  resources :image_sizes
 
   namespace :api do
     resources :file_entities do

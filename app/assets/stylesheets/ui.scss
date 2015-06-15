@@ -959,12 +959,18 @@ body.app .page-dashboard {
 
       .blank {
         color:#999;
+        @include height(40px);
         display: none;
       }
       &.blank {
         .blank {display: block;}
       }
       .preset {
+        @include default-transition;
+        &.high {
+          background-color: $area-dawn;
+        }
+
         @include height(40px);
         border-bottom:dashed 1px #ddd;
         margin-right: 10px;

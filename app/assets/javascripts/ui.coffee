@@ -317,31 +317,66 @@ jQuery(document).on 'ready page:load', ->
       box_width: '660px'
     }
     jQuery('.stat a.preset-config').on 'click', ->
+      desc_str = (preset)->
+        switch preset.style
+          when 'width_height'
+            "宽度 #{preset.width}px, 高度 #{preset.height}px"
+          when 'width'
+            "宽度 #{preset.width}px, 高度自适应"
+          when 'height'
+            "高度 #{preset.height}px, 宽度自适应"
+          else '???'
+
+      append_preset_dom = ($inner, preset)->
+        $inner.find('.records').removeClass('blank')
+        $preset = $inner.find('.preset-template').clone()
+          .removeClass('preset-template')
+          .addClass('preset')
+          .attr('data-id', preset.id)
+          .show()
+          .find('.desc').text(desc_str(preset)).end()
+          .appendTo $inner.find('.records .list')
+
+          $inner.find('.rbox.nano').nanoScroller()
+          $inner.find('.rbox.nano').nanoScroller {
+            alwaysVisible: true
+            scroll: 'bottom'
+          }
+        return $preset
+
       popbox_presets.show ->
-        jQuery('.rbox.nano').nanoScroller {
-          alwaysVisible: true
-        }
+        $inner = popbox_presets.$inner
+
+        # 读取已有配置
+        jQuery.ajax
+          url: ' /image_sizes'
+          type: 'GET'
+          success: (res)->
+            if res.length is 0
+              $inner.find('.records').addClass('blank')
+            for preset in res
+              append_preset_dom $inner, preset
 
         popbox_presets.$inner.find('input')
           .first().attr 'checked', true
 
-        popbox_presets.$inner.find('.r0 input').on 'change', ->
-          popbox_presets.$inner.find('input.h').attr('disabled', false).val('')
-          popbox_presets.$inner.find('input.w').attr('disabled', false).val('')
-          popbox_presets.$inner.find('a.add').addClass('disabled')
+        $inner.find('.r0 input').on 'change', ->
+          $inner.find('input.h').attr('disabled', false).val('')
+          $inner.find('input.w').attr('disabled', false).val('')
+          $inner.find('a.add').addClass('disabled')
 
-        popbox_presets.$inner.find('.r1 input').on 'change', ->
-          popbox_presets.$inner.find('input.h').attr('disabled', true).val('auto')
-          popbox_presets.$inner.find('input.w').attr('disabled', false).val('')
-          popbox_presets.$inner.find('a.add').addClass('disabled')
+        $inner.find('.r1 input').on 'change', ->
+          $inner.find('input.h').attr('disabled', true).val('auto')
+          $inner.find('input.w').attr('disabled', false).val('')
+          $inner.find('a.add').addClass('disabled')
 
-        popbox_presets.$inner.find('.r2 input').on 'change', ->
-          popbox_presets.$inner.find('input.h').attr('disabled', false).val('')
-          popbox_presets.$inner.find('input.w').attr('disabled', true).val('auto')
-          popbox_presets.$inner.find('a.add').addClass('disabled')
+        $inner.find('.r2 input').on 'change', ->
+          $inner.find('input.h').attr('disabled', false).val('')
+          $inner.find('input.w').attr('disabled', true).val('auto')
+          $inner.find('a.add').addClass('disabled')
 
         # http://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
-        popbox_presets.$inner.find('.inputs input')
+        $inner.find('.inputs input')
           .on 'keydown', (evt)->
             key_code = evt.keyCode
             # backspace, delete, tab, escape, enter and .
@@ -363,49 +398,69 @@ jQuery(document).on 'ready page:load', ->
             val = jQuery(this).val()
             jQuery(this).val(3000) if val > 3000
 
-            val1 = popbox_presets.$inner.find('input.w').val()
-            val2 = popbox_presets.$inner.find('input.h').val()
+            val1 = $inner.find('input.w').val()
+            val2 = $inner.find('input.h').val()
 
             if (val1 > 0 or val1 is 'auto') and 
             (val2 > 0 or val2 is 'auto')
-              popbox_presets.$inner.find('a.add').removeClass('disabled')
+              $inner.find('a.add').removeClass('disabled')
             else
-              popbox_presets.$inner.find('a.add').addClass('disabled')
+              $inner.find('a.add').addClass('disabled')
 
-        popbox_presets.$inner.find('a.add').on 'click', ->
+        $inner.find('a.add').on 'click', ->
           return if jQuery(this).hasClass 'disabled'
           $control = jQuery(this).closest('.control')
-          style = $control.find('input[checked]').val()
+          style = $control.find('input:checked').val()
           width = $control.find('input.w').val()
           height = $control.find('input.h').val()
           
-          if style is 'width_height'
-            data = {
-              style: style
-              width: width
-              height: height
-            }
-
-          if style is 'width'
-            data = {
-              style: style
-              width: width
-            }
-
-          if style is 'height'
-            data = {
-              style: style
-              height: height
-            }
+          data = switch style
+            when 'width_height'
+              {
+                style: style
+                width: width
+                height: height
+              }
+            when 'width'
+              {
+                style: style
+                width: width
+              }
+            when 'height'
+              {
+                style: style
+                height: height
+              }
 
           jQuery.ajax
             url: '/image_sizes'
             type: 'POST'
             data: data
             success: (res)->
-              alert(1)
+              $p = append_preset_dom($inner, res)
+                .addClass 'high'
+              setTimeout ->
+                $p.removeClass('high')
+              , 200
 
+        $inner.on 'click', '.preset a.delete', ->
+          if confirm '确定要删除这个配置吗？'
+            $preset = jQuery(this).closest('.preset')
+            id = $preset.data('id')
+            jQuery.ajax
+              url: "/image_sizes/#{id}"
+              type: 'DELETE'
+              success: ->
+                $preset.hide 200, ->
+                  $preset.remove()
+                  if $inner.find('.preset').length is 0
+                    $inner.find('.records').addClass('blank')
 
+                  $inner.find('.rbox.nano').nanoScroller()
+                  $inner.find('.rbox.nano').nanoScroller {
+                    alwaysVisible: true
+                    scroll: 'bottom'
+                  }
 
     popbox_links = new PopBox jQuery('.popbox.template.links'), {
       box_width: '860px'
