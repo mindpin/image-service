@@ -250,3 +250,41 @@ window.DownloadPopboxAdapter = class DownloadPopboxAdapter
           @$inner
             .removeClass 'error success dabao'
             .addClass 'error'
+
+
+window.LinksPopboxAdapter = class LinksPopboxAdapter
+  constructor: (@popbox, @iselector)->
+    @popbox.run_adapter @
+
+  find: (str)->
+    @$inner.find(str)
+
+  on_show: ($inner)->
+    @$inner = $inner
+
+    len = @iselector.get_selected().length
+    ids = []
+    for dom in @iselector.get_selected()
+      ids.push jQuery($image).data('id')
+
+      $image = jQuery(dom)
+
+      $simg = jQuery('<div>')
+        .addClass('image')
+        .appendTo @find('.w1')
+      
+      url = "#{$image.data('url')}?imageMogr2/thumbnail/!#{100}x#{100}r/gravity/Center/crop/#{100}x#{100}"
+
+      $ibox = jQuery('<div>')
+        .addClass('ibox')
+        .css
+          'background-image': "url(#{url})"
+        .appendTo $simg
+
+    jQuery('.copylink-images.nano')
+      .nanoScroller()
+      .nanoScroller {
+        alwaysVisible: true
+      }
+
+    console.log ids
