@@ -1,5 +1,5 @@
 //= require ../randstr
-//= require ../canvas-to-blob.min
-//= require ../plupload.full.min
-//= require ../qiniu.min
+//= require ../lib/canvas-to-blob.min
+//= require ../lib/plupload.full.min
+//= require ../lib/qiniu.min
 //= require ./_uploader
