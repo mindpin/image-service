@@ -1002,29 +1002,57 @@ body.app .page-dashboard {
 
 .popbox.template.links {
   .panel {
+    position: relative;
     .copylink-images {
       background-color: #f1f1f1;
       width:310px + 8px;height:310px;
-    }
-    .w1 {
-      padding-top: 10px;
-      padding-left: 10px;
-      width:300px;
-      overflow: hidden;
-      .image {
-        width:75px;height:75px;
-        position: relative;
-        float: left;
-        .ibox {
-          position: absolute;
-          left:0;top:0;right:10px;bottom:10px;
-          background-size:cover;
-          background-position: center center;
-          background-repeat: no-repeat;
-          box-sizing:border-box;
-          border:solid 3px white;
-          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+      .w1 {
+        padding-top: 10px;
+        padding-left: 10px;
+        width:300px;
+        overflow: hidden;
+        .image {
+          width:75px;height:75px;
+          position: relative;
+          float: left;
+          .ibox {
+            position: absolute;
+            left:0;top:0;right:10px;bottom:10px;
+            background-size:cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            box-sizing:border-box;
+            border:solid 3px white;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+          }
         }
+      }
+    }
+    .linksform {
+      position: absolute;
+      top:0;right:0;height:310px;
+      width:800px - 310px - 8px - 30px;
+      .selector {
+        margin-right: -15px;
+        margin-bottom: 15px;
+        overflow: hidden;
+        .sel {
+          box-sizing:border-box;
+          width: 50%;
+          padding-right: 15px;
+          float: left;
+        }
+      }
+      textarea.urls {
+        resize: none;
+        height: 310px - 34px - 15px;
+        width: 100%;
+        box-sizing:border-box;
+        font-family: $font-family-monospace;
+        padding: 12px;
+        font-size: 16px;
+        background-color: #FFF;
+        cursor: default;
       }
     }
   }
