@@ -173,22 +173,22 @@
     .panel
       .control
         .radios
-          .r
-            %input{:name => :mode, :type => :radio, :checked => true}
+          .r.r0
+            %input{:name => :mode, :type => :radio, :value => 'width_height'}
             %span 限定宽高
-          .r
-            %input{:name => :mode, :type => :radio}
-            %span 限定高度，宽度自适应
-          .r
-            %input{:name => :mode, :type => :radio}
+          .r.r1
+            %input{:name => :mode, :type => :radio, :value => 'width'}
             %span 限定宽度，高度自适应
+          .r.r2
+            %input{:name => :mode, :type => :radio, :value => 'height'}
+            %span 限定高度，宽度自适应
         .inputs
           .in.w
-            %input.form-control{:type => :text, :placeholder => '输入宽度'}
+            %input.w.form-control{:type => :text, :placeholder => '输入宽度'}
           .cheng ×
           .in.h
-            %input.form-control{:type => :text, :placeholder => '输入高度'}
-        %a.btn.btn-pill.btn-flat-success.btn-small{:href => 'javascript:;'}
+            %input.h.form-control{:type => :text, :placeholder => '输入高度'}
+        %a.disabled.add.btn.btn-pill.btn-flat-success.btn-small{:href => 'javascript:;'}
           %i.fa.fa-plus
           %span 增加配置
 

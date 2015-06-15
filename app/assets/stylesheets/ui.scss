@@ -930,8 +930,11 @@ body.app .page-dashboard {
           float: left;
         }
         .in input {
-          width:120px;
+          width:100px;
           border-radius:3px;
+          &[disabled] {
+            color: #999;
+          }
         }
         .cheng {
           float: left;

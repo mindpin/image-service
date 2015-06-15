@@ -322,6 +322,91 @@ jQuery(document).on 'ready page:load', ->
           alwaysVisible: true
         }
 
+        popbox_presets.$inner.find('input')
+          .first().attr 'checked', true
+
+        popbox_presets.$inner.find('.r0 input').on 'change', ->
+          popbox_presets.$inner.find('input.h').attr('disabled', false).val('')
+          popbox_presets.$inner.find('input.w').attr('disabled', false).val('')
+          popbox_presets.$inner.find('a.add').addClass('disabled')
+
+        popbox_presets.$inner.find('.r1 input').on 'change', ->
+          popbox_presets.$inner.find('input.h').attr('disabled', true).val('auto')
+          popbox_presets.$inner.find('input.w').attr('disabled', false).val('')
+          popbox_presets.$inner.find('a.add').addClass('disabled')
+
+        popbox_presets.$inner.find('.r2 input').on 'change', ->
+          popbox_presets.$inner.find('input.h').attr('disabled', false).val('')
+          popbox_presets.$inner.find('input.w').attr('disabled', true).val('auto')
+          popbox_presets.$inner.find('a.add').addClass('disabled')
+
+        # http://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
+        popbox_presets.$inner.find('.inputs input')
+          .on 'keydown', (evt)->
+            key_code = evt.keyCode
+            # backspace, delete, tab, escape, enter and .
+            if (jQuery.inArray(key_code, [46, 8, 9, 27, 13, 110, 190]) != -1) or
+            # ctrl + A
+            (key_code is 65 and evt.ctrlKey is true) or
+            # ctrl + C
+            (key_code is 67 and evt.ctrlKey is true) or
+            # ctrl + X
+            (key_code is 88 and evt.ctrlKey is true) or
+            # home, end, left, right
+            (key_code >= 35 and key_code <= 39)
+              return
+
+            if ((evt.shiftKey or (key_code < 48 or key_code > 57)) and (key_code < 96 or key_code > 105))
+              evt.preventDefault()
+
+          .on 'input', ->
+            val = jQuery(this).val()
+            jQuery(this).val(3000) if val > 3000
+
+            val1 = popbox_presets.$inner.find('input.w').val()
+            val2 = popbox_presets.$inner.find('input.h').val()
+
+            if (val1 > 0 or val1 is 'auto') and 
+            (val2 > 0 or val2 is 'auto')
+              popbox_presets.$inner.find('a.add').removeClass('disabled')
+            else
+              popbox_presets.$inner.find('a.add').addClass('disabled')
+
+        popbox_presets.$inner.find('a.add').on 'click', ->
+          return if jQuery(this).hasClass 'disabled'
+          $control = jQuery(this).closest('.control')
+          style = $control.find('input[checked]').val()
+          width = $control.find('input.w').val()
+          height = $control.find('input.h').val()
+          
+          if style is 'width_height'
+            data = {
+              style: style
+              width: width
+              height: height
+            }
+
+          if style is 'width'
+            data = {
+              style: style
+              width: width
+            }
+
+          if style is 'height'
+            data = {
+              style: style
+              height: height
+            }
+
+          jQuery.ajax
+            url: '/image_sizes'
+            type: 'POST'
+            data: data
+            success: (res)->
+              alert(1)
+
+
+
     popbox_links = new PopBox jQuery('.popbox.template.links'), {
       box_width: '860px'
     }
