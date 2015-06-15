@@ -1,4 +1,4 @@
-# source 'https://rubygems.org' 
+# source 'https://rubygems.org'
 source 'http://ruby.taobao.org'
 
 
@@ -86,3 +86,4 @@ group :development do
   gem 'rb-inotify', :require=>false
 end
 
+gem "non-stupid-digest-assets"
