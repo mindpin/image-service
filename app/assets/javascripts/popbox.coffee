@@ -32,6 +32,14 @@ window.PopBox = class PopBox
 
     func()
 
+  new_instance: (func)->
+    @show =>
+      func @$inner
+
+  run_adapter: (adapter)->
+    @new_instance ($inner)->
+      adapter.on_show $inner
+
   close: ->
     @is_show = false
 

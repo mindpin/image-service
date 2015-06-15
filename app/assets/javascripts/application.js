@@ -25,4 +25,5 @@
 //= require util
 //= require layouts
 //= require popbox
+//= require popbox-adapters
 //= require ui

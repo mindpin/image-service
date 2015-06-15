@@ -966,7 +966,6 @@ body.app .page-dashboard {
         .blank {display: block;}
       }
       .preset {
-        @include default-transition;
         &.high {
           background-color: $area-dawn;
         }
@@ -981,7 +980,7 @@ body.app .page-dashboard {
         a.delete {
           position: absolute;
           @include circle(24px);
-          top:8px;right:18px;
+          top:8px;right:8px;
           background-color: $area-danger;
           color: white;
           text-align: center;

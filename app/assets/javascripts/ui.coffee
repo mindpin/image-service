@@ -313,144 +313,14 @@ jQuery(document).on 'ready page:load', ->
             $elm.find('.wait').html ''
             test_dabao $elm, res.task_id
 
+    # 尺寸配置对话框
     popbox_presets = new PopBox jQuery('.popbox.template.presets'), {
       box_width: '660px'
     }
+    popbox_presets_adapter = new PresetPopboxAdapter()
     jQuery('.stat a.preset-config').on 'click', ->
-      append_preset_dom = ($inner, preset)->
-        $inner.find('.records').removeClass('blank')
-        $preset = $inner.find('.preset-template').clone()
-          .removeClass('preset-template')
-          .addClass('preset')
-          .attr('data-id', preset.id)
-          .show()
-          .find('.desc').text(preset.name).end()
-          .appendTo $inner.find('.records .list')
+      popbox_presets.run_adapter popbox_presets_adapter
 
-          $inner.find('.rbox.nano').nanoScroller()
-          $inner.find('.rbox.nano').nanoScroller {
-            alwaysVisible: true
-            scroll: 'bottom'
-          }
-        return $preset
-
-      popbox_presets.show ->
-        $inner = popbox_presets.$inner
-
-        # 读取已有配置
-        jQuery.ajax
-          url: ' /image_sizes'
-          type: 'GET'
-          success: (res)->
-            if res.length is 0
-              $inner.find('.records').addClass('blank')
-            for preset in res
-              append_preset_dom $inner, preset
-
-        popbox_presets.$inner.find('input')
-          .first().attr 'checked', true
-
-        $inner.find('.r0 input').on 'change', ->
-          $inner.find('input.h').attr('disabled', false).val('')
-          $inner.find('input.w').attr('disabled', false).val('')
-          $inner.find('a.add').addClass('disabled')
-
-        $inner.find('.r1 input').on 'change', ->
-          $inner.find('input.h').attr('disabled', true).val('auto')
-          $inner.find('input.w').attr('disabled', false).val('')
-          $inner.find('a.add').addClass('disabled')
-
-        $inner.find('.r2 input').on 'change', ->
-          $inner.find('input.h').attr('disabled', false).val('')
-          $inner.find('input.w').attr('disabled', true).val('auto')
-          $inner.find('a.add').addClass('disabled')
-
-        # http://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
-        $inner.find('.inputs input')
-          .on 'keydown', (evt)->
-            key_code = evt.keyCode
-            # backspace, delete, tab, escape, enter and .
-            if (jQuery.inArray(key_code, [46, 8, 9, 27, 13, 110, 190]) != -1) or
-            # ctrl + A
-            (key_code is 65 and evt.ctrlKey is true) or
-            # ctrl + C
-            (key_code is 67 and evt.ctrlKey is true) or
-            # ctrl + X
-            (key_code is 88 and evt.ctrlKey is true) or
-            # home, end, left, right
-            (key_code >= 35 and key_code <= 39)
-              return
-
-            if ((evt.shiftKey or (key_code < 48 or key_code > 57)) and (key_code < 96 or key_code > 105))
-              evt.preventDefault()
-
-          .on 'input', ->
-            val = jQuery(this).val()
-            jQuery(this).val(3000) if val > 3000
-
-            val1 = $inner.find('input.w').val()
-            val2 = $inner.find('input.h').val()
-
-            if (val1 > 0 or val1 is 'auto') and 
-            (val2 > 0 or val2 is 'auto')
-              $inner.find('a.add').removeClass('disabled')
-            else
-              $inner.find('a.add').addClass('disabled')
-
-        $inner.find('a.add').on 'click', ->
-          return if jQuery(this).hasClass 'disabled'
-          $control = jQuery(this).closest('.control')
-          style = $control.find('input:checked').val()
-          width = $control.find('input.w').val()
-          height = $control.find('input.h').val()
-          
-          data = switch style
-            when 'width_height'
-              {
-                style: style
-                width: width
-                height: height
-              }
-            when 'width'
-              {
-                style: style
-                width: width
-              }
-            when 'height'
-              {
-                style: style
-                height: height
-              }
-
-          jQuery.ajax
-            url: '/image_sizes'
-            type: 'POST'
-            data: data
-            success: (res)->
-              $p = append_preset_dom($inner, res)
-                .addClass 'high'
-              setTimeout ->
-                $p.removeClass('high')
-              , 200
-
-        $inner.on 'click', '.preset a.delete', ->
-          if confirm '确定要删除这个配置吗？'
-            $preset = jQuery(this).closest('.preset')
-            id = $preset.data('id')
-            jQuery.ajax
-              url: "/image_sizes/#{id}"
-              type: 'DELETE'
-              success: ->
-                $preset.hide 200, ->
-                  $preset.remove()
-                  if $inner.find('.preset').length is 0
-                    $inner.find('.records').addClass('blank')
-
-                  $inner.find('.rbox.nano').nanoScroller()
-                  $inner.find('.rbox.nano').nanoScroller {
-                    alwaysVisible: true
-                    scroll: 'bottom'
-                  }
 
     popbox_links = new PopBox jQuery('.popbox.template.links'), {
       box_width: '860px'
