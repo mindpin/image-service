@@ -249,6 +249,9 @@ class ImageSelector
   get_selected: ->
     @$el.find('.image.selected').closest('.image')
 
+  get_selected_ids: ->
+    jQuery(image).data('id') for image in @get_selected()
+
 
 jQuery(document).on 'ready page:load', ->
   jQuery('.image-info.nano').nanoScroller {
@@ -271,25 +274,15 @@ jQuery(document).on 'ready page:load', ->
 
     ise = new ImageSelector jQuery('.grid .images')
 
+    # 删除对话框
     popbox_delete = new PopBox jQuery('.popbox.template.delete')
     jQuery('.opbar a.bttn.delete').on 'click', ->
-      popbox_delete.show ->
-        len = ise.get_selected().length
-        popbox_delete.$inner.find('span.n').text len
-        popbox_delete.bind_ok ->
-          ids = for image in ise.get_selected()
-            jQuery(image).data('id')
-          jQuery.ajax
-            url: '/file_entities/batch_delete'
-            type: 'DELETE'
-            data: 
-              ids: ids.join(',')
-            success: (res)->
-              igrid.remove_img_ids ids
-              popbox_delete.close()
-              ise.refresh_selected()
-              jQuery(document).trigger 'img4ye:file-changed', res.stat
+      new DeletePopboxAdapter(popbox_delete, ise)
 
+    # 尺寸配置对话框
+    popbox_presets = new PopBox jQuery('.popbox.template.presets'), { box_width: '660px' }
+    jQuery('.stat a.preset-config').on 'click', ->
+      new PresetPopboxAdapter(popbox_presets)
 
     window.popbox_download = new PopBox jQuery('.popbox.template.download')
     jQuery('.opbar a.bttn.download').on 'click', ->
@@ -312,14 +305,6 @@ jQuery(document).on 'ready page:load', ->
             $elm = popbox_download.$inner
             $elm.find('.wait').html ''
             test_dabao $elm, res.task_id
-
-    # 尺寸配置对话框
-    popbox_presets = new PopBox jQuery('.popbox.template.presets'), {
-      box_width: '660px'
-    }
-    popbox_presets_adapter = new PresetPopboxAdapter()
-    jQuery('.stat a.preset-config').on 'click', ->
-      popbox_presets.run_adapter popbox_presets_adapter
 
 
     popbox_links = new PopBox jQuery('.popbox.template.links'), {

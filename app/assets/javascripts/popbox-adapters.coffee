@@ -1,5 +1,6 @@
 window.PresetPopboxAdapter = class PresetPopboxAdapter
   constructor: (@popbox)->
+    @popbox.run_adapter @
 
   on_show: ($inner)->
     @$inner = $inner
@@ -164,3 +165,29 @@ window.PresetPopboxAdapter = class PresetPopboxAdapter
               if that.find('.preset').length is 0
                 that.find('.records').addClass('blank')
               that.refresh_nano()
+
+window.DeletePopboxAdapter = class DeletePopboxAdapter
+  constructor: (@popbox, @iselector)->
+    @popbox.run_adapter @
+
+  on_show: ($inner)->
+    @$inner = $inner
+
+    len = @iselector.get_selected().length
+    @find('span.n').text len
+    @popbox.bind_ok =>
+      ids = @iselector.get_selected_ids()
+
+      jQuery.ajax
+        url: '/file_entities/batch_delete'
+        type: 'DELETE'
+        data: 
+          ids: ids.join(',')
+        success: (res)=>
+          igrid.remove_img_ids ids
+          @popbox.close()
+          @iselector.refresh_selected()
+          jQuery(document).trigger 'img4ye:file-changed', res.stat
+
+  find: (str)->
+    @$inner.find(str)

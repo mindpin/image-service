@@ -441,6 +441,7 @@ body.app .page-dashboard {
       }
     }
     .grid {
+      @include unselectable;
       position: absolute;
       bottom:0;left:0;right:0;
       top: $control-height + $opbar-height;
