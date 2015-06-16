@@ -15,7 +15,8 @@
           .row
             .col-pad-12
               - klass = @images.blank? ? 'blank' : ''
-              .images{:class => klass, :data => {:'load-more-url' => '/aliyun'}}
+              - url = current_user.present? ? '/aliyun' : '/zmkm_aliyun'
+              .images{:class => klass, :data => {:'load-more-url' => url}}
                 .blank
                   .ac
                   .s 还没有上传过图片噢 ~
