@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 
+//= require lib/fastclick.js
 //= require lib/canvas-to-blob.min.js
 //= require lib/plupload.full.min.js
 //= require lib/qiniu.min.js

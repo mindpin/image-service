@@ -272,6 +272,8 @@ class ImageSelector
 
 
 jQuery(document).on 'ready page:load', ->
+  FastClick.attach document.body
+
   jQuery('.image-info.nano').nanoScroller {
     alwaysVisible: true
   }
