@@ -113,7 +113,15 @@ window.GridLayout = class GridLayout
     width = @host.get_width()
     return if width is @data.container_width
 
-    cols_count = ~~(width / 200)
+    if width < 800
+      cols_count = 3
+      @GRID_SPACING = 10
+      start_height = 0
+    else
+      cols_count = ~~(width / 200)
+      @GRID_SPACING = 15
+      start_height = @GRID_SPACING
+    
     pos_data = Util.spacing_grid_data width, cols_count, @GRID_SPACING
     
     @data =
@@ -121,7 +129,8 @@ window.GridLayout = class GridLayout
       side_length: pos_data.side_length
       cols: Util.array_init cols_count, (idx)=>
         left: pos_data.positions[idx]
-        height: @GRID_SPACING
+        height: start_height
+
     @layout_version += 1
 
   relayout: (force = false)->

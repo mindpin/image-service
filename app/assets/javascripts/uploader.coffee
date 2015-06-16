@@ -102,11 +102,11 @@ class FileProgress
     $panel.addClass('opened')
     jQuery('.uploading-images .w1 .image').remove()
 
-    setTimeout ->
-      jQuery('.uploading-images.nano').nanoScroller {
+    jQuery('.uploading-images.nano')
+      .nanoScroller()
+      .nanoScroller {
         alwaysVisible: true
       }
-    , 1
 
     window.upload_links_form.load_presets()
 

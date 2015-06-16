@@ -10,6 +10,7 @@
           %a.logo{:href => '/'} 
             %span.s1> img
             %span.s2> 4ye
+            %span.mobile mobile
           .top-control
             - if has_oss_file
               %a.show-oss-file{:href => '/aliyun', :target => '_blank'}
@@ -38,13 +39,17 @@
                 %span.k V 
                 %span 粘贴剪贴板里的图片
               .h 或者 拖拽图片文件到浏览器
+              .hp 点击拍照
+              .hp 或上传相册照片
           .stat
             .sts
               .st.uploaded
                 %span.c.fcount= current_user.file_entities.images.is_qiniu.count
                 %span.t 张图片，
                 %span.c.space= current_user.qiniu_image_space_size.to_human_format_filesize
-                %span.t 空间占用，
+                %span.t 
+                  %span> 空间占用
+                  %span.comma>，
                 %span.c.sizes= current_user.image_sizes.count
                 %span.t 个尺寸配置
               %a.btn.btn-pill.btn-flat-success.btn-mini.preset-config{:href => 'javascript:;'}
