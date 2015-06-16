@@ -2,9 +2,22 @@
 # turbolinks 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
-###
-  图片加载类
-###
+# 处理七牛图片网址
+window.QiniuURLFormater = class QiniuURLFormater 
+  @format: (conf)->
+    url    = conf.url
+    width  = conf.width
+    height = conf.height
+
+    switch conf.style
+      when 'width_height'
+        "#{url}?imageMogr2/thumbnail/!#{width}x#{height}r/gravity/Center/crop/#{width}x#{height}"
+      when 'width'
+        "#{url}?imageMogr2/thumbnail/#{width}x"
+      when 'height'
+        "#{url}?imageMogr2/thumbnail/x#{height}"
+
+# 图片加载类
 class Image
   constructor: (@$el)->
     @ave    = @$el.data 'ave' # 平均色值
@@ -44,7 +57,12 @@ class Image
     if @$el.hasClass 'aliyun'
       return "#{@url}@#{width}w_#{height}h_1e_1c"
 
-    "#{@url}?imageMogr2/thumbnail/!#{width}x#{height}r/gravity/Center/crop/#{width}x#{height}"
+    QiniuURLFormater.format {
+      url: @url
+      width: width
+      height: height
+      style: 'width_height'
+    }
 
   pos: (left, top, width, height)->
     @$el.css
@@ -269,7 +287,8 @@ jQuery(document).on 'ready page:load', ->
 
     jQuery(window)
       .off 'resize'
-      .on 'resize', -> 
+      .on 'resize', ->
+        igrid.lazy_load_images()
         igrid.relayout()
 
     ise = new ImageSelector jQuery('.grid .images')
@@ -293,6 +312,13 @@ jQuery(document).on 'ready page:load', ->
     popbox_links = new PopBox jQuery('.popbox.template.links'), { box_width: '860px' }
     jQuery('.opbar .bttn.copylink').on 'click', ->
       new LinksPopboxAdapter(popbox_links, ise)
+
+    # 上传面板中的链接表单
+    window.upload_links_form = new LinksForm jQuery('.upload-panel .linksform'), ->
+      urls = []
+      jQuery('.uploading-images .image.done').each ->
+        urls.push jQuery(this).data('url')
+      urls
 
 
 jQuery(document).on 'click', '.preset .field input', ->

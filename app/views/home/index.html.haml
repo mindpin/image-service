@@ -117,9 +117,17 @@
                         %i.fa.fa-close
                     .w1
 
-                .image-urls
-                  %select.form-control
-                    %option 原始尺寸链接
+                .linksform
+                  .selector
+                    .sel
+                      %select.form-control.presets
+                        %option 原图
+                    .sel
+                      %select.form-control.kind
+                        %option{:value => 'url'} 图片网址
+                        %option{:value => 'html'}  HTML
+                        %option{:value => 'md'}  Markdown
+                        %option{:value => 'bbcode'}  BBCode
                   %textarea.urls.form-control{:placeholder => '这里将显示图片链接', :readonly => true}
 
                 %a.close-panel{:href => 'javascript:;'}
@@ -214,11 +222,14 @@
       .linksform
         .selector
           .sel
-            %select.form-control
-              %option 配置一
+            %select.form-control.presets
+              %option 原图
           .sel
-            %select.form-control
-              %option 图片网址
+            %select.form-control.kind
+              %option{:value => 'url'} 图片网址
+              %option{:value => 'html'}  HTML
+              %option{:value => 'md'}  Markdown
+              %option{:value => 'bbcode'}  BBCode
         %textarea.urls.form-control{:placeholder => '这里将显示图片链接', :readonly => true}
 
 

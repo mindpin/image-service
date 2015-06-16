@@ -261,13 +261,23 @@ window.LinksPopboxAdapter = class LinksPopboxAdapter
 
   on_show: ($inner)->
     @$inner = $inner
+    @generate_images()
 
+    lf = new LinksForm @find('.linksform'), =>
+      @urls
+
+    lf.load_presets()
+
+    # @load_presets()
+    # @bind_selector_events()
+
+  generate_images: ->
     len = @iselector.get_selected().length
-    ids = []
+    @urls = []
     for dom in @iselector.get_selected()
-      ids.push jQuery($image).data('id')
-
       $image = jQuery(dom)
+
+      @urls.push $image.data('url')
 
       $simg = jQuery('<div>')
         .addClass('image')
@@ -287,4 +297,62 @@ window.LinksPopboxAdapter = class LinksPopboxAdapter
         alwaysVisible: true
       }
 
-    console.log ids
+window.LinksForm = class LinksForm
+  constructor: (@$form, @urls_func)->
+    @bind_selector_events()
+
+  load_presets: ->
+    jQuery.ajax
+      url: ' /image_sizes'
+      type: 'GET'
+      success: (res)=>
+        @$form.find('select.presets option').each ->
+          $option = jQuery(this)
+          $option.remove() if $option.data('preset')?
+
+        for preset in res
+          @add_select_option preset
+
+        @show_urls()
+
+  add_select_option: (preset)->
+    $select = @$form.find('select.presets')
+    $option = jQuery('<option>')
+      .text(preset.name)
+      .data 'preset', preset
+      .appendTo $select
+
+  show_urls: (preset, kind)->
+    results = for url in @urls_func()
+      u = if not preset?
+            url
+          else
+            QiniuURLFormater.format {
+              url: url
+              style: preset.style
+              width: preset.width
+              height: preset.height
+            }
+
+      switch kind
+        when 'html'
+          "<img src='#{u}' />"
+        when 'md'
+          "![](#{u})"
+        when 'bbcode'
+          "[img]#{u}[/img]"
+        else
+          u
+
+    @$form.find('textarea').val results.join("\n")
+
+  bind_selector_events: ->
+    @$form.on 'change', 'select', =>
+      @update_urls()
+
+  update_urls: ->
+    preset = @$form.find('select.presets option:selected')
+      .data('preset')
+    kind = @$form.find('select.kind').val()
+    console.debug kind
+    @show_urls preset, kind

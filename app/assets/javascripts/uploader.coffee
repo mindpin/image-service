@@ -108,6 +108,8 @@ class FileProgress
       }
     , 1
 
+    window.upload_links_form.load_presets()
+
   _make_dom: ->
     @$dom = jQuery('.uploading-images .template-image')
       .clone().show()
@@ -142,10 +144,7 @@ class FileProgress
   # 上传成功时调用此方法
   success: (info)->
     @$dom.addClass('done').data('url', info.url)
-    arr = []
-    jQuery('.uploading-images .image.done').each ->
-      arr.push jQuery(this).data('url')
-    jQuery('textarea.urls').val arr.join("\n")
+    window.upload_links_form.update_urls()
 
     # 处理页面上的统计信息显示
     jQuery(document).trigger 'img4ye:file-changed', info.stat

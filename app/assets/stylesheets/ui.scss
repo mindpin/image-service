@@ -55,6 +55,36 @@ $gap: 15px;
   @include transition(all ease .3s);
 }
 
+@mixin linksform {
+  .selector {
+    margin-right: -15px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    .sel {
+      box-sizing:border-box;
+      width: 50%;
+      padding-right: 15px;
+      float: left;
+    }
+  }
+  textarea.urls {
+    resize: none;
+    position: absolute;
+    box-sizing:border-box;
+    top:34px + 15px;bottom:0;
+    left:0;right:0;
+    width: 100%;
+
+    font-family: $font-family-monospace;
+    padding: 12px;
+    background-color: #FFF;
+    cursor: default;
+    font-size: 14px;
+
+    word-break: break-all;
+  }
+}
+
 // nono scroller
 
 /** initial setup **/
@@ -731,24 +761,11 @@ body.app .page-dashboard {
               }
             }
           }
-          .image-urls {
+          .linksform {
+            @include linksform;
             position: absolute;
             top: 15px; bottom: 40px;
             right: 0; width: calc(50% - 15px);
-            // background-color: #FFF;
-
-            textarea.urls {
-              position: absolute;
-              top:34px + 15px;left:0;right:0;bottom:0;
-              resize:none;
-              width: 100%;
-              box-sizing:border-box;
-              font-family: $font-family-monospace;
-              padding: 12px;
-              font-size: 16px;
-              background-color: #FFF;
-              cursor: default;
-            }
           }
         }
       }
@@ -1026,43 +1043,22 @@ body.app .page-dashboard {
           float: left;
           .ibox {
             position: absolute;
-            left:0;top:0;right:10px;bottom:10px;
+            left:0;top:0;right:5px;bottom:5px;
             background-size:cover;
             background-position: center center;
             background-repeat: no-repeat;
             box-sizing:border-box;
-            border:solid 3px white;
+            border:solid 2px white;
             box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
           }
         }
       }
     }
     .linksform {
+      @include linksform;
       position: absolute;
       top:0;right:0;height:310px;
-      width:800px - 310px - 8px - 30px;
-      .selector {
-        margin-right: -15px;
-        margin-bottom: 15px;
-        overflow: hidden;
-        .sel {
-          box-sizing:border-box;
-          width: 50%;
-          padding-right: 15px;
-          float: left;
-        }
-      }
-      textarea.urls {
-        resize: none;
-        height: 310px - 34px - 15px;
-        width: 100%;
-        box-sizing:border-box;
-        font-family: $font-family-monospace;
-        padding: 12px;
-        font-size: 16px;
-        background-color: #FFF;
-        cursor: default;
-      }
+      width:800px - 310px - 8px - 15px;
     }
   }
 
