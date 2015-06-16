@@ -65,7 +65,10 @@ class FileEntitiesController < ApplicationController
         url:    file_entity.url,
         ave:    file_entity.ave,
         width:  file_entity.width,
-        height: file_entity.height
+        height: file_entity.height,
+        stat: {
+          image_count: FileEntity.anonymous.images.is_qiniu.count
+        }
       }
     end
   end

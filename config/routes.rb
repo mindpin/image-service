@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # 查看文件详情
   get '/f/:id' => 'file_entities#show'
 
+  # 匿名模式
+  get '/zmkm' => 'home#zmkm'
+  get '/zmkm_aliyun' => 'home#zmkm_aliyun'
+
   match "/file_entities/uptoken", to: "file_entities#uptoken_options", via: :options
   resources :file_entities do
     get    :uptoken,      on: :collection

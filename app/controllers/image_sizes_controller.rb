@@ -1,7 +1,12 @@
 class ImageSizesController < ApplicationController
   def index
-    image_sizes_hash = current_user.image_sizes.map(&:to_hash)
-    render json: image_sizes_hash
+    if current_user
+      image_sizes_hash = current_user.image_sizes.map(&:to_hash)
+      render json: image_sizes_hash
+      return
+    end
+
+    render json: []
   end
 
   def create

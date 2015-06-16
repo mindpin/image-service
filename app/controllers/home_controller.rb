@@ -15,6 +15,20 @@ class HomeController < ApplicationController
     end
   end
 
+  def zmkm
+    per_page = 20
+    if params[:less_than_id]
+      @images = FileEntity.anonymous.images
+        .is_qiniu
+        .where(:id.lt => params[:less_than_id])
+        .page(1).per(per_page)
+    else
+      @images = FileEntity.anonymous.images
+        .is_qiniu
+        .page(1).per(per_page)
+    end
+  end
+
   def aliyun
     return render "/home/login" if !user_signed_in?
 
@@ -29,5 +43,21 @@ class HomeController < ApplicationController
         .is_oss
         .page(1).per(per_page)
     end
+  end
+
+  def zmkm_aliyun
+    per_page = 40
+    if params[:less_than_id]
+      @images = FileEntity.anonymous.images
+        .is_oss
+        .where(:id.lt => params[:less_than_id])
+        .page(1).per(per_page)
+    else
+      @images = FileEntity.anonymous.images
+        .is_oss
+        .page(1).per(per_page)
+    end
+
+    render 'aliyun'
   end
 end

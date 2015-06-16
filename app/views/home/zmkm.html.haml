@@ -1,0 +1,222 @@
+:ruby
+  domain = ENV['QINIU_DOMAIN']
+  basepath = ENV['QINIU_BASE_PATH']
+
+.page-dashboard
+  .header
+    .container
+      .row
+        .col-pad-12
+          %a.logo{:href => '/'} 
+            %span.s1> img
+            %span.s2> 4ye
+            %span.mobile mobile
+          .top-control
+            %a.show-oss-file{:href => '/zmkm_aliyun', :target => '_blank'}
+              %span 查看阿里云匿名旧文件
+  .main
+    .control
+      .container
+        .row
+          .upload-control
+            %a.btn-upload{:href => 'javascript:;', :data => {:domain => domain, :basepath => basepath}}
+              %i.fa.fa-upload
+            .helpinfo
+              .h 点击上传本地图片
+              .h 
+                %span 或者 按下 
+                %span.k CTRL 
+                %span + 
+                %span.k V 
+                %span 粘贴剪贴板里的图片
+              .h 或者 拖拽图片文件到浏览器
+              .hp 点击拍照
+              .hp 或上传相册照片
+          .stat
+            .sts
+              .st.uploaded
+                %span.c.fcount= FileEntity.anonymous.images.is_qiniu.count
+                %span.t{:style => 'display:inline;'} 张匿名图片
+
+
+    .opbar
+      .container
+        .row
+          .col-pad-12
+            .checkstatus.none
+              %a.check{:href => 'javascript:;'}
+                .cb
+                  %i.fa.fa-check
+                %span.txt.t1> 选择所有图片
+                %span.txt.t2> 取消所选
+              %span.point> ·
+              %span 已选
+              %span.n 0
+              %span 张
+            .btns
+              %a.bttn.copylink.disabled{:href => 'javascript:;'}
+                %i.fa.fa-copy
+                %span 复制链接
+              %a.bttn.download.disabled{:href => 'javascript:;'}
+                %i.fa.fa-download
+                %span 下载
+
+    .grid.nano
+      .nano-content
+        .container
+          .row
+            .col-pad-12
+              - klass = @images.blank? ? 'blank' : ''
+              .images{:class => klass, :data => {:'load-more-url' => './'}}
+                .blank
+                  .ac
+                  .s 还没有上传过图片噢 ~
+
+                .loading-icon
+                  %i.fa.fa-refresh.fa-spin
+                .end-text the end
+                - @images.each do |img|
+                  .image{:data => {:ave => img.ave, :width => img.width, :height => img.height, :url => img.url, :id => img.id}}
+
+    .upload-panel
+      .panel
+        .container
+          .row
+            .col-pad-12
+              .pbox
+                .uploading-images.nano
+                  .nano-content
+                    .template-image{:style => 'display:none;'}
+                      .ibox{:style => "background-image:;"}
+                      .percent
+                        .bar{:style => 'width:100%'}
+                        .txt
+                          %span.p 0
+                          %span %
+                        .done
+                          %i.fa.fa-check
+                        .err
+                          %i.fa.fa-warning
+                      .cancel
+                        %i.fa.fa-close
+                    .w1
+
+                .linksform
+                  .selector
+                    .sel
+                      %select.form-control.presets
+                        %option 原图
+                    .sel
+                      %select.form-control.kind
+                        %option{:value => 'url'} 图片网址
+                        %option{:value => 'html'}  HTML
+                        %option{:value => 'md'}  Markdown
+                        %option{:value => 'bbcode'}  BBCode
+                  %textarea.urls.form-control{:placeholder => '这里将显示图片链接', :readonly => true}
+
+                %a.close-panel{:href => 'javascript:;'}
+                  %i.fa.fa-arrow-up
+
+  .popbox.template.delete
+    .ac
+    .tip
+      %span 你确定要删除这
+      %span.n 5
+      %span 张图片吗？
+    .tip
+      %span 删除了就找不回来了！
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat-danger.btn-large.popbox.action.ok{:href => 'javascript:;'}
+        %i.fa.fa-trash
+        %span 确定删除
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
+
+  .popbox.template.download
+    .ac.dabao
+    .ac.success
+    .ac.error
+
+    .icon
+      %i.fa.fa-file-zip-o
+      %span.t zip file
+
+    .state.dabao
+      .tip.dabao
+        %span 正在打包
+        %span.n 5
+        %span 张图片
+      .tip.dabao
+        %span 需要一些时间，请稍等
+        .wait 
+    .state.success
+      .b
+        %a.download-zip.btn.btn-pill.btn-flat-success.btn-large{:href => 'javascript:;', :targer => '_blank'}
+          %i.fa.fa-download
+          %span 打包完毕！点我下载
+    .state.error
+      .tip 打包出错啦！请重试 :(
+
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
+
+  .popbox.template.presets
+    .panel
+      .control
+        .radios
+          .r.r0
+            %input{:name => :mode, :type => :radio, :value => 'width_height'}
+            %span 限定宽高
+          .r.r1
+            %input{:name => :mode, :type => :radio, :value => 'width'}
+            %span 限定宽度，高度自适应
+          .r.r2
+            %input{:name => :mode, :type => :radio, :value => 'height'}
+            %span 限定高度，宽度自适应
+        .inputs
+          .in.w
+            %input.w.form-control{:type => :text, :placeholder => '输入宽度'}
+          .cheng ×
+          .in.h
+            %input.h.form-control{:type => :text, :placeholder => '输入高度'}
+        %a.disabled.add.btn.btn-pill.btn-flat-success.btn-small{:href => 'javascript:;'}
+          %i.fa.fa-plus
+          %span 增加配置
+
+      .records
+        .rbox.nano
+          .preset-template{:style => 'display:none;'}
+            .desc 宽度 600px, 高度自适应
+            %a.delete{:href =>'javascript:;', :title => '删除配置'}
+              %i.fa.fa-trash
+          .list.nano-content
+            .blank 还没有任何配置
+
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
+
+
+  .popbox.template.links
+    .panel
+      .copylink-images.nano
+        .nano-content
+          .w1
+      .linksform
+        .selector
+          .sel
+            %select.form-control.presets
+              %option 原图
+          .sel
+            %select.form-control.kind
+              %option{:value => 'url'} 图片网址
+              %option{:value => 'html'}  HTML
+              %option{:value => 'md'}  Markdown
+              %option{:value => 'bbcode'}  BBCode
+        %textarea.urls.form-control{:placeholder => '这里将显示图片链接', :readonly => true}
+
+
+    .popbox.actions
+      %a.btn.btn-pill.btn-flat.btn-large.popbox.action.close{:href => 'javascript:;'}
+        %span 关闭
