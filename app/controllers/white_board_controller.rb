@@ -15,7 +15,7 @@ class WhiteBoardController < ApplicationController
       :user    => current_user,
       :x       => params[:x],
       :y       => params[:y],
-      :content => params[:content]
+      :text => params[:text]
     )
     render json: image_comment.to_hash
   end
