@@ -1,5 +1,6 @@
 class WhiteBoardController < ApplicationController
   def show
+    return render "/home/login" if !user_signed_in?
     @file_entity = FileEntity.find params[:id]
   end
 
