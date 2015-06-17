@@ -12,7 +12,11 @@ Rails.application.routes.draw do
   get '/f/:id' => 'file_entities#show'
 
   # alpha 标注模式
-  get '/f/:id/wb' => 'white_board#show'
+  get  '/f/:id/wb' => 'white_board#show'
+  get    '/f/:id/image_comments'                   => 'white_board#get_image_comments'
+  post   '/f/:id/image_comments'                   => 'white_board#create_image_comment'
+  delete '/f/:id/image_comments/:image_comment_id' => 'white_board#destroy_image_comment'
+
 
   # 匿名模式
   get '/zmkm' => 'home#zmkm'

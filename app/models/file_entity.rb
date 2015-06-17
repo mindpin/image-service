@@ -8,6 +8,7 @@ class FileEntity
   include FileEntityCreateMethods
   include ImageSize::FileEntityMethods
   include TranscodingRecord::FileEntityMethods
+  include ImageComment::FileEntityMethods
 
   field :original, type: String
   field :token,    type: String
