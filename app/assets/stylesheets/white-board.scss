@@ -116,9 +116,9 @@ $ml: 290px;
           color: $area-danger;
           text-decoration: underline;
           line-height: 20px;
-          // opacity: 0;
-          // pointer-events: none;
-          // @include default-transition;
+          opacity: 0;
+          pointer-events: none;
+          @include default-transition;
         }
 
         textarea {
@@ -216,12 +216,10 @@ $ml: 290px;
           .pop {
             opacity: 1;
             pointer-events: all;
-            // &:hover {
-            //   a.delete {
-            //     opacity: 1;
-            //     pointer-events: all;
-            //   }
-            // }
+            a.delete {
+              opacity: 1;
+              pointer-events: all;
+            }
           }
         }
       }
@@ -259,12 +257,17 @@ $ml: 290px;
   }
 
   .comments {
+    position: absolute;
+    top:53px;left:0;right:0;bottom:0;
+    overflow-y: auto;
+
     .comment {
       border-top:solid 1px white;
       padding:15px;
       border-bottom:solid 1px #ddd;
       &:last-child {
         border-bottom: 0 none;
+        margin-bottom: 100px;
       }
 
       .user {

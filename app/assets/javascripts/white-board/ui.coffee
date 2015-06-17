@@ -161,6 +161,8 @@ class ImageWhiteBoard
     text = comment_data.text
     char = comment_data.user.name[0]
 
+    is_me = comment_data.user.id is @user_data.id
+
     $inputer = jQuery('<div>')
       .addClass('inputer')
       .appendTo @$ibox
@@ -184,11 +186,12 @@ class ImageWhiteBoard
       .addClass 'pop'
       .appendTo $inputer
 
-    $delete = jQuery('<a>')
-      .addClass('delete')
-      .text '删除'
-      .attr 'href', 'javascript:;'
-      .appendTo $pop
+    if is_me
+      $delete = jQuery('<a>')
+        .addClass('delete')
+        .text '删除'
+        .attr 'href', 'javascript:;'
+        .appendTo $pop
 
     $textarea = jQuery('<textarea>')
       .attr 'placeholder', '输入评论…'
