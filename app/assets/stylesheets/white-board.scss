@@ -41,6 +41,8 @@ $ml: 290px;
 .input-resizer {
   position: absolute;
   top:-10000px;left:-10000px;
+  // top:0;right:0;
+  // opacity: 0;
   background-color:white;
   min-height:40px;
   width: 200px;
@@ -50,7 +52,6 @@ $ml: 290px;
   color: #444;
   font-family: $font-family-default;
   pointer-events:none;
-  opacity: 0;
 }
 
 .image-container {
@@ -117,6 +118,8 @@ $ml: 290px;
           line-height: 20px;
           margin:0;
           padding:0;
+          word-break: break-all;
+          overflow:hidden;
         }
 
         .control {
@@ -159,6 +162,47 @@ $ml: 290px;
             font-size: 12px;
             right:0;top:-20px;
             color:#999;
+            span.c {
+              font-weight: bold;
+              margin:0 3px;
+            }
+            span.chao {
+              color: $area-danger;
+            }
+          }
+
+          .b {
+            display: none;
+          }
+          &.show {
+            .b {display: block;}
+          }
+        }
+      }
+
+      &.saved {
+        .pop .control {
+          display: none;
+        }
+        .pop {
+          &:after {
+            content: "saved";
+            position: absolute;
+            right:5px;bottom:0;
+            line-height:20px;
+            font-size: 12px;
+            border-radius:3px;
+            color: #999;
+          }
+          opacity: 0;
+          pointer-events: none;
+          @include default-transition;
+        }
+
+        &.open {
+          .pop {
+            opacity: 1;
+            pointer-events: all;
           }
         }
       }
@@ -193,5 +237,36 @@ $ml: 290px;
     padding: 15px;
     border-bottom:solid 1px #ddd;
     span.p {color:lighten($area-hot, 15%);}
+  }
+
+  .comments {
+    .comment {
+      border-top:solid 1px white;
+      padding:15px;
+      border-bottom:solid 1px #ddd;
+      &:last-child {
+        border-bottom: 0 none;
+      }
+
+      .user {
+        float: left;
+        width:24px;height:24px;line-height:24px;
+        border-radius:100px;
+        background-color: $area-danger;
+        text-align: center;
+        font-size: 14px;
+        color: white;
+      }
+      .name {
+        margin-left: 39px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .text {
+        margin-left: 39px;
+        font-size: 14px;
+      }
+    }
   }
 }
