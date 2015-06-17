@@ -22,7 +22,7 @@ class WhiteBoardController < ApplicationController
 
   def destroy_image_comment
     @file_entity  = FileEntity.find params[:id]
-    image_comment = @file_entity.image_comments.find(:image_comment_id)
+    image_comment = @file_entity.image_comments.find(params[:image_comment_id])
     image_comment.destroy
     render json: {:status => 200}
   end
