@@ -38,15 +38,17 @@ class ImageWhiteBoard
     @$elm.on 'click', '.image-container img', (evt)=>
       offx = evt.offsetX
       offy = evt.offsetY
-      @pop_inputer offx, offy
+      if not @find('.inputer.saved.open').length
+        @pop_inputer offx, offy
 
     @$elm.on 'click', (evt)=>
       return if jQuery(evt.target).closest('.inputer').length
-      @close_inputer()
       @close_opened()
+      @close_inputer()
 
     @$elm.on 'click', '.inputer.saved', (evt)->
       that.close_opened()
+      that.close_inputer()
       jQuery(this).addClass 'open'
 
     @$elm.on 'click', '.inputer a.delete', (evt)->
