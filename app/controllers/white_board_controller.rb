@@ -1,5 +1,6 @@
 class WhiteBoardController < ApplicationController
   def show
+    return render "/home/login" if !user_signed_in?
     @file_entity = FileEntity.find params[:id]
   end
 
@@ -22,7 +23,7 @@ class WhiteBoardController < ApplicationController
 
   def destroy_image_comment
     @file_entity  = FileEntity.find params[:id]
-    image_comment = @file_entity.image_comments.find(:image_comment_id)
+    image_comment = @file_entity.image_comments.find(params[:image_comment_id])
     if image_comment.user == current_user
       image_comment.destroy
     end
