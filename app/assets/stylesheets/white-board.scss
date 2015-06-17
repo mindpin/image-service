@@ -1,0 +1,197 @@
+@import "utils";
+
+// ::-webkit-scrollbar {
+//   width: 9px;
+//   height: 9px;
+//   background: white;
+//   border-left: 1px solid #e8e8e8;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   border-width: 1px;
+//   border-style: solid;
+//   border-color: #fff;
+//   border-radius: 6px;
+//   background: #c9c9c9;
+// }
+
+// ::-webkit-scrollbar-thumb:hover {
+//   background: #b5b5b5;
+// }
+
+body.white-board {
+  color: #555;
+  font-size: 16px;
+  position: absolute;
+  top:0;left:0;right:0;bottom:0;
+  background-color: #ddd;
+  background: url(http://i.teamkn.com/@/i/bro6GxK8.png);
+}
+
+$mt: 0;
+$ml: 290px;
+
+.page-image-white-board {
+  position: absolute;
+  top:0;left:$ml;right:0;bottom:0;
+  overflow:auto;
+}
+
+
+.input-resizer {
+  position: absolute;
+  top:-10000px;left:-10000px;
+  background-color:white;
+  min-height:40px;
+  width: 200px;
+  word-break: break-all;
+  font-size: 14px;
+  line-height: 20px;
+  color: #444;
+  font-family: $font-family-default;
+  pointer-events:none;
+  opacity: 0;
+}
+
+.image-container {
+  margin-top:$mt;
+  margin-left:0;
+  position: relative;
+  padding:10px;
+
+  .ibox {
+    // padding:10px;
+    background-color: #F1F1F1;
+    border:solid 10px white;
+    box-shadow: 3px 3px 6px #888;
+    margin:0 auto;
+    position: relative;
+
+    img {
+      display: block;
+      // border:solid 10px white;
+      // box-shadow: 3px 3px 6px #888;
+    }
+
+    .inputer {
+      position: absolute;
+
+      .user {
+        width: 24px; height: 24px; line-height: 24px;
+        position: absolute;
+        top: -12px; left: - 12px;
+        background-color: $area-hot;
+        color: white;
+        border-radius:100px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 1px 1px 5px rgba(black, 0.5);
+      }
+
+      .pop {
+        $arrw: 6px;
+        position: absolute;
+        min-height: 40px;
+        min-width: 200px;
+        padding:20px;
+        box-shadow: 1px 1px 5px rgba(black, 0.5);
+        top: 0; left: 12px + $arrw * 2 + 5px;
+        background-color: white;
+        &:before {
+          $w: $arrw;
+          content: "";
+          position: absolute;
+          border:solid $w transparent;
+          border-top-color:white;
+          border-right-color:white;
+          top:0;left:-$w * 2;
+        }
+
+        textarea {
+          border:0 none;
+          resize:none;
+          width: 200px;
+          min-height: 40px;
+          font-size: 14px;
+          line-height: 20px;
+          margin:0;
+          padding:0;
+        }
+
+        .control {
+          margin:0 -15px;
+          position: relative;
+          top: 15px;
+          @include clearfix;
+          .b {
+            width:50%;
+            float:left;
+            height:30px;line-height:30px;
+            color:white;
+            text-align: center;
+            // box-shadow: 1px 1px 3px rgba(black, 0.2);
+            text-decoration: none;
+            &:active {
+              position: relative;
+              top: 2px;
+            }
+            &.btn-ok {
+              background-color: $area-success;
+              width:calc(50% - 2px);
+              &:hover {
+                background-color: darken($area-success, 5%);
+              }
+            }
+            &.btn-cancel {
+              background-color: $black-20;
+              width:calc(50% - 3px);
+              float: right;
+              &:hover {
+                background-color: darken($black-20, 5%);
+              }
+            }
+          }
+
+          .limit {
+            position: absolute;
+            height:20px;line-height:20px;
+            font-size: 12px;
+            right:0;top:-20px;
+            color:#999;
+          }
+        }
+      }
+    }
+  }
+}
+
+// .topbar {
+//   position: fixed;
+//   top:0;left:0;right:0;
+//   height:50px;
+//   box-sizing:border-box;
+//   background-color:#f7f7f7;
+//   border-bottom:solid 1px #ccc;
+// }
+
+.sidebar {
+  position: fixed;
+  top:$mt;left:0;width:$ml;
+  bottom:0;
+  box-sizing:border-box;
+  background-color:#f7f7f7;
+  border-right:solid 1px #ccc;
+  &:before {
+    content: "";
+    position: absolute;
+    left:0;right:0;top:0;height:1px;
+    background-color: #f6f6f6;
+  }
+
+  .mouse-pos {
+    padding: 15px;
+    border-bottom:solid 1px #ddd;
+    span.p {color:lighten($area-hot, 15%);}
+  }
+}

@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # 查看文件详情
   get '/f/:id' => 'file_entities#show'
 
+  # alpha 标注模式
+  get '/f/:id/wb' => 'white_board#show'
+
   # 匿名模式
   get '/zmkm' => 'home#zmkm'
   get '/zmkm_aliyun' => 'home#zmkm_aliyun'

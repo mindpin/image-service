@@ -1,46 +1,4 @@
-// 引用 ---------------------
-
-$futura-font-path: "fonts/futura";
-$fa-font-path: "fonts"; // 自行修改字体路径
-@import "css/lily.scss";
-
-$gap: 15px;
-//---------------
-// @font-face {
-//   font-family: 'Sirichana Thai Std Regular';
-//   font-weight: normal;
-//   font-style: normal;
-//   src: url(../../../fonts/sirichana.eot);
-//   src: 
-//     url(../../../fonts/sirichana.eot#iefix) format("embedded-opentype"),
-//     url(../../../fonts/sirichana.woff2) format("woff2"),
-//     url(../../../fonts/sirichana.woff) format("woff"),
-//     url(../../../fonts/sirichana.ttf) format("truetype");
-// }
-
-// @font-face {
-//   font-family: 'Sirichana Thai Std Bold';
-//   font-weight: normal;
-//   font-style: normal;
-//   src: url(../../../fonts/sirichana-bold.eot);
-//   src: 
-//     url(../../../fonts/sirichana-bold.eot#iefix) format("embedded-opentype"),
-//     url(../../../fonts/sirichana-bold.woff2) format("woff2"),
-//     url(../../../fonts/sirichana-bold.woff) format("woff"),
-//     url(../../../fonts/sirichana-bold.ttf) format("truetype");
-// } 
-
-@mixin height($h) {
-  display: block;
-  height: $h;
-  line-height: $h;
-}
-
-@mixin circle($h) {
-  @include height($h);
-  width: $h;
-  border-radius: 100%;
-}
+@import "utils";
 
 @mixin logo {
   font-family: "Futura-Condensed";
@@ -49,10 +7,6 @@ $gap: 15px;
   font-weight: bold;
   span.s1 {color: #374F00;}
   span.s2 {color: #7DB500;}
-}
-
-@mixin default-transition {
-  @include transition(all ease .3s);
 }
 
 @mixin linksform {
@@ -85,71 +39,7 @@ $gap: 15px;
   }
 }
 
-// nono scroller
-
-/** initial setup **/
-.nano {
-  position : relative;
-  width    : 100%;
-  height   : 100%;
-  overflow : hidden;
-}
-.nano > .nano-content {
-  position      : absolute;
-  overflow      : scroll;
-  overflow-x    : hidden;
-  top           : 0;
-  right         : 0;
-  bottom        : 0;
-  left          : 0;
-}
-.nano > .nano-content:focus {
-  outline: thin dotted;
-}
-.nano > .nano-content::-webkit-scrollbar {
-  display: none;
-}
-.has-scrollbar > .nano-content::-webkit-scrollbar {
-  display: block;
-}
-.nano > .nano-pane {
-  background : rgba(0,0,0,.25);
-  position   : absolute;
-  width      : 10px;
-  right      : 0;
-  top        : 0;
-  bottom     : 0;
-  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
-  opacity    : .01;
-  -webkit-transition    : .2s;
-  -moz-transition       : .2s;
-  -o-transition         : .2s;
-  transition            : .2s;
-  // -moz-border-radius    : 5px;
-  // -webkit-border-radius : 5px;
-  // border-radius         : 5px;
-}
-.nano > .nano-pane > .nano-slider {
-  background: #444;
-  background: rgba(0,0,0,.5);
-  position              : relative;
-  margin                : 0 1px;
-  // -moz-border-radius    : 3px;
-  // -webkit-border-radius : 3px;
-  // border-radius         : 3px;
-}
-.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
-  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
-  opacity    : 0.99;
-}
-
-// fix
-.nano {
-  height: auto;
-}
-
 ///////////////
-
 
 .container {
   // @include -above(wide) { 
@@ -158,14 +48,6 @@ $gap: 15px;
   //   min-width: $container-wide;
   //   max-width: $container-xwide; 
   // }
-}
-
-html, body {
-  overflow: hidden;
-}
-
-* {
-  outline: 0 !important;
 }
 
 body.app {

@@ -1,0 +1,32 @@
+:ruby
+  id     = @file_entity.id.to_s
+  url    = @file_entity.url
+  width  = @file_entity.width
+  height = @file_entity.height
+
+  user_json = {
+    id: current_user.id.to_s,
+    name: current_user.name,
+    char: current_user.name[0]
+  }.to_json
+
+  image_json = {
+    id: id,
+    width: width,
+    height: height
+  }.to_json
+
+.page-image-white-board
+  .image-container{data: {user: user_json, image: image_json}}
+    .ibox{style: "width:#{width}px;height:#{height}px;"}
+      %img{src: url, :style => "width:#{width}px;height:#{height}px;"}
+
+  .topbar
+  .sidebar
+    .mouse-pos
+      %span 鼠标位置：
+      %span X:
+      %span.p.x -
+      %span ,
+      %span Y:
+      %span.p.y -
