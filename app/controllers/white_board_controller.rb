@@ -24,7 +24,9 @@ class WhiteBoardController < ApplicationController
   def destroy_image_comment
     @file_entity  = FileEntity.find params[:id]
     image_comment = @file_entity.image_comments.find(params[:image_comment_id])
-    image_comment.destroy
+    if image_comment.user == current_user
+      image_comment.destroy
+    end
     render json: {:status => 200}
   end
 end
