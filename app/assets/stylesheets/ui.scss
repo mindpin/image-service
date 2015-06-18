@@ -1177,7 +1177,20 @@ body.app .page-dashboard {
       margin-right: 30px;
       .info {
         margin-bottom: 10px;
-        i {margin-right: 5px;}
+        i {
+          width:16px;
+          margin-right: 5px;
+        }
+      }
+      .info.alpha {
+        @include -below(phone) {display:none;}
+        span.alpha {
+          color: white;
+          font-size: 12px;
+          background-color: lighten($area-hot, 10%);
+          padding:0 5px;
+          border-radius:5px;
+        }
       }
     }
     .presets {

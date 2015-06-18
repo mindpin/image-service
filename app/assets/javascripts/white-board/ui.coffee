@@ -36,7 +36,9 @@ class MessageAdapter
 
   receive_comment_created: (data)->
     @iwb.append_sidebar data
-    @iwb.append_inputer(data)?.addClass('saved open')
+    $inputer = @iwb.append_inputer(data)
+    @iwb.set_a_inputer_saved $inputer
+    @iwb.set_a_inputer_open $inputer
 
   send_comment_deleted: (data)->
     @client
@@ -73,7 +75,7 @@ class ImageWhiteBoard
       success: (res)=>
         for data in res
           @append_sidebar data
-          @append_inputer(data).addClass('saved')
+          @set_a_inputer_saved @append_inputer(data)
 
 
   find: (str)->
@@ -101,7 +103,7 @@ class ImageWhiteBoard
     @$elm.on 'click', '.inputer.saved', (evt)->
       that.close_opened()
       that.close_inputer()
-      jQuery(this).addClass 'open'
+      that.set_a_inputer_open jQuery(this)
 
     @$elm.on 'click', '.inputer a.delete', (evt)->
       id = jQuery(this).closest('.inputer').data('id')
@@ -144,13 +146,9 @@ class ImageWhiteBoard
   on_input: ()->
     $textarea = @$current_inputer.find 'textarea'
 
-    val = $textarea.val()
-    @$resizer.html val + "\n"
-    $textarea.css
-      'width': @$resizer.width()
-      'height': @$resizer.height()
+    @resize_text_area $textarea
 
-    count = val.length
+    count = $textarea.val().length
     limit = 140 - count
 
     if limit >= 0
@@ -164,6 +162,13 @@ class ImageWhiteBoard
       @$current_inputer.find('.control').removeClass('show')
     else
       @$current_inputer.find('.control').addClass('show')
+
+  resize_text_area: ($textarea)->
+    val = $textarea.val()
+    @$resizer.html val + "\n"
+    $textarea.css
+      'width': @$resizer.width()
+      'height': @$resizer.height()
 
   save: ->
     text = @$current_inputer.find('textarea').val()
@@ -181,10 +186,10 @@ class ImageWhiteBoard
       success: (res)=> 
         @append_sidebar(res)
 
-        @$current_inputer
-          .addClass('saved open')
-          .attr 'data-id', res.id
-          .find('textarea').attr('readonly', true)
+        @$current_inputer.attr 'data-id', res.id
+        @set_a_inputer_saved @$current_inputer
+        @set_a_inputer_open @$current_inputer
+
         @cached_text = ''
         @is_on_input = false
 
@@ -197,6 +202,15 @@ class ImageWhiteBoard
       success: (res)=>
         @remove_comment_by_id id
         @message_adapter.send_comment_deleted {id: id}
+
+  set_a_inputer_saved: ($inputer)->
+    $inputer?.addClass('saved')
+      .find('textarea').attr('readonly', true)
+
+  set_a_inputer_open: ($inputer)->
+    if $inputer?
+      $inputer.addClass('open')
+      @resize_text_area $inputer.find('textarea')
 
   remove_comment_by_id: (id)->
     @find(".inputer[data-id=#{id}]").fadeOut 200, ->
@@ -224,6 +238,8 @@ class ImageWhiteBoard
       .attr 'data-id', id
       .fadeIn(200)
       .appendTo @find('.sidebar .comments')
+
+    @find('.comments').scrollTop @find('.comments')[0].scrollHeight
 
   append_inputer: (comment_data)->
     x = comment_data.x

@@ -19,8 +19,14 @@
           %span #{@file_entity.width} × #{@file_entity.height}
         .info
           %i.fa.fa-file-o
-          %span 原图大小：
+          %span.t1 原图大小：
           %span= @file_entity.filesize.to_human_format_filesize
+        .info.alpha
+          %a{:href => "/f/#{@file_entity.id}/wb"}
+            %i.fa.fa-comments
+            %span 即时讨论板
+          %span.alpha 测试
+
       .presets
         - @file_entity.versions.each do |preset|
           .preset
