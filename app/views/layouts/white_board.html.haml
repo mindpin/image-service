@@ -8,5 +8,7 @@
     = stylesheet_link_tag 'white-board', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'white-board', 'data-turbolinks-track' => true
 
+    %script{:src => 'http://faye.4ye.me:9527/faye/client.js'}
+
   %body.white-board
     = yield

@@ -38,7 +38,8 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if user.blank?
       user = User.create!(
         :name => user_name,
-        :user_token => user_token
+        # :user_token => user_token ???????
+        :user_tokens => [user_token]
       )
     end
 

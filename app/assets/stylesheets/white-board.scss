@@ -76,11 +76,18 @@ $ml: 290px;
 
     .inputer {
       position: absolute;
+      z-index: 2;
+
+      $uw: 30px;
 
       .user {
-        width: 24px; height: 24px; line-height: 24px;
+        $bd: 3px;
+
+        box-sizing:border-box;
+        border:solid $bd white;
+        width: $uw; height: $uw; line-height: $uw - $bd * 2;
         position: absolute;
-        top: -12px; left: - 12px;
+        top: -$uw / 2; left: -$uw / 2;
         background-color: $area-hot;
         color: white;
         border-radius:100px;
@@ -88,6 +95,7 @@ $ml: 290px;
         cursor: pointer;
         font-size: 14px;
         box-shadow: 1px 1px 5px rgba(black, 0.5);
+        @include unselectable;
       }
 
       .pop {
@@ -96,18 +104,21 @@ $ml: 290px;
         min-height: 40px;
         min-width: 200px;
         padding:20px;
-        box-shadow: 1px 1px 5px rgba(black, 0.5);
-        top: 0; left: 12px + $arrw * 2 + 5px;
+        top: 0; left: $uw / 2 + $arrw * 2 + 5px;
         background-color: white;
-        &:before {
-          $w: $arrw;
-          content: "";
-          position: absolute;
-          border:solid $w transparent;
-          border-top-color:white;
-          border-right-color:white;
-          top:0;left:-$w * 2;
-        }
+        box-shadow: 1px 1px 5px rgba(black, 0.5);
+        left: 0px;
+
+        // &:before {
+        //   $w: $arrw;
+        //   content: "";
+        //   position: absolute;
+        //   border:solid $w transparent;
+        //   border-top-color:white;
+        //   border-right-color:white;
+        //   top:0;left:-$w * 2;
+        //   width:0;height:0;
+        // }
 
         a.delete {
           position: absolute;
@@ -219,6 +230,10 @@ $ml: 290px;
             a.delete {
               opacity: 1;
               pointer-events: all;
+              color: rgba($area-danger, 0.6);
+              &:hover{
+                color: $area-danger;
+              }
             }
           }
         }
@@ -274,7 +289,7 @@ $ml: 290px;
         float: left;
         width:24px;height:24px;line-height:24px;
         border-radius:100px;
-        background-color: $area-danger;
+        background-color: $area-hot;
         text-align: center;
         font-size: 14px;
         color: white;
