@@ -21,6 +21,8 @@
           %i.fa.fa-file-o
           %span.t1 原图大小：
           %span= @file_entity.filesize.to_human_format_filesize
+        .info.qrcode
+          %img{:src => "#{@file_entity.url}?qrcode|imageMogr2/crop/!248x248a24a24"}
         .info.alpha
           %a{:href => "/f/#{@file_entity.id}/wb"}
             %i.fa.fa-comments
