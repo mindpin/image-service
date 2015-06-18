@@ -78,6 +78,7 @@ class FileEntity
     end
   end
 
+  # 此方法暂时没有地方用到了
   def path
     if self.is_oss?
       File.join("/",ENV['ALIYUN_BASE_DIR'],
@@ -90,9 +91,5 @@ class FileEntity
     end
   end
 
-  # 迁移数据用 方法，建议建议完删除
-  def __old_qiniu_path
-    File.join("@", ENV["QINIU_BASE_PATH"], filename)
-  end
 
 end

@@ -36,7 +36,9 @@ namespace "from_0.2_to_0.3" do
     images.each_with_index do |image, index|
       p "#{index+1}/#{count}"
 
-      image.qiniu_key = image.__old_qiniu_path
+      new_key = File.join("@", ENV["QINIU_BASE_PATH"], image.filename)
+
+      image.qiniu_key = new_key
       image.save!
     end
   end
