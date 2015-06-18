@@ -16,7 +16,7 @@ window.str_to_color = (str)->
 class MessageAdapter
   # iwb means image white board
   constructor: (@iwb)->
-    @CHANNEL = '/img4ye-wb'
+    @CHANNEL = "/img4ye-wb-#{@iwb.image_data.id}"
     @client = new Faye.Client('http://faye.4ye.me:9527/faye')
 
     @client.subscribe @CHANNEL, (msg)=>
