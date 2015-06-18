@@ -19,11 +19,11 @@ class FileEntitiesController < ApplicationController
 
   def create
     # params 结构
-    # { "bucket"=>"fushang318", 
-    #   "key"=>"/i/yscPYbwk.jpeg", 
-    #   "fsize"=>"3514", 
-    #   "endUser"=>"5551b62b646562104b000000", 
-    #   "image_rgb"=>"0xee4f60", 
+    # { "bucket"=>"fushang318",
+    #   "key"=>"i/yscPYbwk.jpeg", 
+    #   "fsize"=>"3514",
+    #   "endUser"=>"5551b62b646562104b000000",
+    #   "image_rgb"=>"0xee4f60",
     #   "origin_file_name"=>"icon200x200.jpeg",
     #   "mimeType" => "image/png",
     #   "image_width"=>"200",

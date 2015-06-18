@@ -8,14 +8,15 @@ class Mkzip
     # 先查询缓存
     task_id = MkzipCache.new(@file_entity_ids).zip_cache
     return task_id if !task_id.blank?
-    
-    result = Mkzip.pfop(bucket: ENV['QINIU_BUCKET'], key: @images.first.path, fops: build_fops)
+
+    result = Mkzip.pfop(bucket: ENV['QINIU_BUCKET'], key: @images.first.qiniu_key, fops: build_fops)
     if result[0] == 200
       task_id = result[1]['persistentId']
       MkzipCache.new(@file_entity_ids).set_zip_cache(task_id)
       return task_id
+    else
+      raise '打包错误'
     end
-    result
   end
 
   def build_fops

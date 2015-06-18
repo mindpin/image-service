@@ -10,7 +10,7 @@ class AudioAndVideoTranscodeWorker
     saveas_fops = "#{tr.fops}|saveas/#{code}"
     _, result = Qiniu::Fop::Persistance.pfop(
       bucket: ENV['QINIU_BUCKET'],
-      key: tr.file_entity.key, 
+      key: tr.file_entity.qiniu_key, 
       fops: saveas_fops
     )
     tr.quniu_persistance_id = result["persistentId"]

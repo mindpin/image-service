@@ -28,4 +28,16 @@ namespace "from_0.2_to_0.3" do
 
   end
 
+
+  desc "把 token 迁移到 qiniu_key"
+  task token_to_key: :environment do
+    images = FileEntity.images.is_qiniu
+    count = images.count
+    images.each_with_index do |image, index|
+      p "#{index+1}/#{count}"
+
+      image.qiniu_key = image.__old_qiniu_path
+      image.save!
+    end
+  end
 end

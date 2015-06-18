@@ -8,7 +8,7 @@ module FileEntityCreateMethods
       ext = uri.path.split(".").last || "dat"
       token = randstr
       filename = "#{token}.#{ext}"
-      key = File.join("/", ENV["QINIU_BASE_PATH"], filename)
+      key = File.join(ENV["QINIU_BASE_PATH"], filename)
 
       new_url = 'http://iovip.qbox.me/fetch/' +
         Qiniu::Utils.urlsafe_base64_encode(url) +
@@ -104,7 +104,7 @@ module FileEntityCreateMethods
     end
 
     # { "bucket"=>"fushang318",
-    #   "key"=>"/i/yscPYbwk.jpeg",
+    #   "key"=>"i/yscPYbwk.jpeg",
     #   "fsize"=>"3514",
     #   "endUser"=>"5551b62b646562104b000000",
     #   "image_rgb"=>"0xee4f60",
@@ -125,7 +125,11 @@ module FileEntityCreateMethods
     #   "avinfo_audio_duration"   => ""
     # }
     def from_qiniu_callback_body(callback_body)
-      token      = callback_body[:key].match(/\/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
+      token      = callback_body[:key].match(/#{ENV['QINIU_BASE_PATH']}\/(.*)\..*/)[1]
+      if token.blank?
+        Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
+        raise "上传路径错误"
+      end
       mime_type  = callback_body[:mimeType]
       meta = __get_meta_from_callback_body(mime_type, callback_body)
       kind = mime_type.split("/").first.to_sym
@@ -143,7 +147,7 @@ module FileEntityCreateMethods
       FileEntity.create!(
         user_id:  callback_body[:endUser] || nil,
         original: callback_body[:origin_file_name],
-        token: token,
+        qiniu_key: callback_body[:key],
         mime: mime_type,
         meta: meta,
         kind: kind

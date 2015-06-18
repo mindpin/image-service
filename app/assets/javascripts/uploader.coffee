@@ -6,7 +6,7 @@ class Uploader
 
     # 上传进度显示对象
     @file_progresses = {}
-    
+
     @_init()
     # 注册图片粘贴事件
     new PasteImage (file)=>
@@ -40,7 +40,7 @@ class Uploader
         Key: (up, file)=>
           ext = file.name.split(".").pop()
           ext = ext.toLowerCase()
-          "/#{@basepath}/#{jQuery.randstr()}.#{ext}"
+          "#{@basepath}/#{jQuery.randstr()}.#{ext}"
 
         # 该方法第二个被触发
         BeforeUpload: (up, file)=>
@@ -49,7 +49,7 @@ class Uploader
             @file_progresses[file.id] = new FileProgress(file, up)
 
         # 该方法第三个被触发，上传结束前持续被触发
-        UploadProgress: (up, file)=> 
+        UploadProgress: (up, file)=>
           console.debug 'upload progress'
           chunk_size = plupload.parseSize up.getOption('chunk_size')
           @file_progresses[file.id].update()

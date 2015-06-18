@@ -12,6 +12,7 @@ class FileEntity
 
   field :original, type: String
   field :token,    type: String
+  field :qiniu_key,type: String
   field :mime,     type: String
   field :meta,     type: Hash
   field :is_oss,   type: Boolean
@@ -24,8 +25,17 @@ class FileEntity
   scope :avs,    -> {where(:kind.in => [:audio, :video])}
   scope :is_oss, -> {where(:is_oss => true)}
   scope :is_qiniu, -> {where(:is_oss => nil)}
-  validates :original, :token, :mime, :meta, presence: true
+  validates :original, :mime, :meta, presence: true
   enumerize :kind, in: KINDS
+
+  validate :check_token_and_qiniu_key
+  def check_token_and_qiniu_key
+    if is_oss && token.blank?
+      errors.add(:token, "token 不能为空")
+    elsif !is_oss && qiniu_key.blank?
+      errors.add(:qiniu_key, "qiniu_key 不能为空")
+    end
+  end
 
   def filesize
     self.meta["filesize"].to_i
@@ -43,13 +53,11 @@ class FileEntity
     self.meta["height"]
   end
 
-  def key
-    File.join("/", ENV["QINIU_BASE_PATH"], filename)
-  end
-
   # key 去掉 ext
   def key_prefix
-    File.join("/", ENV["QINIU_BASE_PATH"], token)
+    arr = qiniu_key.split(".")
+    arr.pop
+    arr.join(".")
   end
 
   def filename
@@ -66,7 +74,7 @@ class FileEntity
                 ENV['ALIYUN_BASE_DIR'],
                 "#{filename}")
     else
-      self.class._get_qiniu_url(filename)
+      File.join(ENV['QINIU_DOMAIN'], self.qiniu_key)
     end
   end
 
@@ -75,16 +83,16 @@ class FileEntity
       File.join("/",ENV['ALIYUN_BASE_DIR'],
                 "#{filename}")
     else
-      File.join("/",ENV['QINIU_BASE_PATH'],
-                "#{filename}")
+      if self.qiniu_key[0] == "@"
+        return self.qiniu_key.gsub("@","")
+      end
+      return self.qiniu_key
     end
   end
 
-  def self._get_qiniu_url(filename)
-    File.join(ENV['QINIU_DOMAIN'],
-              "@",
-              ENV['QINIU_BASE_PATH'],
-              "#{filename}")
+  # 迁移数据用 方法，建议建议完删除
+  def __old_qiniu_path
+    File.join("@", ENV["QINIU_BASE_PATH"], filename)
   end
 
 end

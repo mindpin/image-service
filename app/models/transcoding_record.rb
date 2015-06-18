@@ -13,9 +13,7 @@ class TranscodingRecord
   belongs_to :file_entity
 
   def url
-    File.join(ENV['QINIU_DOMAIN'],
-              "@",
-              qiniu_key)
+    File.join(ENV['QINIU_DOMAIN'], qiniu_key)
   end
 
   module FileEntityMethods
@@ -25,7 +23,7 @@ class TranscodingRecord
     end
 
     def put_audio_and_video_transcode_to_quene
-      case self.mime.split("/").first 
+      case self.mime.split("/").first
       when 'audio'
         put_audio_transcode_to_quene
       when 'video'
@@ -52,7 +50,7 @@ class TranscodingRecord
     end
 
     def put_video_transcode_to_quene
-      # 完全按照 http://www.youku.com/help/view/fid/8#q20 
+      # 完全按照 http://www.youku.com/help/view/fid/8#q20
       # 的逻辑会很复杂，需要借助一些数据后才能调整
       # 先用简化的逻辑处理
       bit_rate = self.meta["avinfo"]["total_bit_rate"]
