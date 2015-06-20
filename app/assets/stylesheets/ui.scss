@@ -58,43 +58,236 @@ body.app {
   top:0;left:0;right:0;bottom:0;
 }
 
-body.app .page-auth {
-  width: 320px; margin:0 auto;
+// 用户落地页
+body.app.landing {
+  background-color: #444;
+  background-image: url(http://i.teamkn.com/i/FlLkYPuR.png);
 
-  .logo {
-    @include logo;
-    @include height(200px);
-    font-size: 120px;
-    padding-bottom: 60px;
-    text-align: center;
+  .wallpaper {
+    position: absolute;
+    $pd:0px;
+    top:$pd;left:$pd;right:$pd;bottom:$pd;
+    pointer-events: none;
+    // background-image: url(http://i.teamkn.com/@/i/PoJcRRdp.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    @include -below(pad) {
+      top:0;left:0;right:0;bottom:0;
+      border:0 none;
+    }
+
+    img {
+      min-width: 100%;
+      min-height: 100%;
+      position: absolute;
+      top:0;left:0;right:0;bottom:0;
+      margin: auto;
+    }
   }
+}
 
-  .desc {
-    font-size: 18px;
-    line-height: 30px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
+body.app .page-landing {
+  position: absolute;
+  top:0;left:0;right:0;bottom:0;
+  font-size: 16px;
+  color: white;
+  overflow-y: auto;
 
-  a.login {
-    @include height(60px);
-    background-color: #fc5728;
-    color: white;
-    display: block;
-    text-align: center;
-    font-size: 18px;
+  a {
+    color: lighten(#2A70E8, 30%);
     text-decoration: none;
-    border-radius: 100px;
-    position: relative;
-    margin-bottom: 30px;
-    &:hover {
-      background-color: #ee3703;
+  }
+
+  .auth-float {
+    position: absolute;
+    // width: 600px;
+    top:0;left:0;right:0;
+    margin-top: 15px;
+    background-color: rgba(black, 0.3);
+    padding: 50px 50px 70px;
+    // border-radius: 6px;
+    @include -below(pad) {
+      margin-top: 0;
+      padding: 10px 30px 30px;
+      position: static;
+    }
+
+    .show {
+      font-size: 18px;
+      .logo {
+        @include logo;
+        font-size: 80px;
+        margin-bottom: 50px;
+        height: 120px;line-height: 120px;
+        span.s1 { color: white; }
+        span.s2 { color: white; }
+        text-shadow: 1px 1px 10px rgba(black, 0.5);
+        @include -below(pad) {
+          text-align: center;
+          font-size: 60px;
+          height:90px;line-height:90px;
+          margin-bottom: 20px;
+        }
+      }
+      .desc {
+        line-height: 24px;
+        margin-bottom: 30px;
+        text-shadow: 0 1px 1px rgba(black, 0.5);
+        @include -below(pad) {
+          text-align: center;
+          .d1 {display:none;}
+        }
+      }
+      .uses {
+        line-height: 24px;
+        margin-bottom: 12px;
+        text-shadow: 0 1px 1px rgba(black, 0.5);
+        .c {
+          font-family: Futura-Condensed;
+          font-size: 24px;
+        }
+        @include -below(pad) {
+          display: none;
+        }
+      }
+    }
+
+    .auth-form {
+      width: 240px;
+      margin-top: 15px;
+      float: right;
+      position: relative;
+
+      @include -below(pad) {
+        float: none;
+        width: auto;
+      }
+
+      .sign-up-form, .sign-in-form {
+        position: relative;
+        margin-bottom: 30px;
+        // display: none;
+      }
+
+      .t {
+        line-height:24px;
+        margin-bottom: 15px;
+        text-shadow: 0 1px 1px rgba(black, 0.5);
+      }
+      a.to {
+        line-height: 24px;
+        position: absolute;
+        top:0;right:0;
+        color:white;
+        background-color: rgba(white, 0.2);
+        border-radius: 3px;
+        padding: 0 10px;
+        font-size: 14px;
+        &:hover {background-color: rgba(white, 0.3);}
+        &:active {top:2px;}
+      }
+      input {
+        background-color: #e7f1f8;
+        border:0 none;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        &:focus {
+          box-shadow: inset 0 1px 1px rgba(black, 0.075), 0 0 8px rgba(white, 0.9);
+          background-color: white;
+        }
+      }
+      a.sign-up {
+        display: block;
+        height:34px;line-height:34px;
+        text-align: center;
+        color: white;
+        background-color: #80C3F7;
+        text-shadow: 0 1px 1px rgba(black, 0.2);
+        border-radius: 3px;
+        box-shadow: inset 0 1px 0 rgba(white, 0.3), 0 1px 1px rgba(#333,.05);
+        &:active {
+          position: relative;
+          top:2px;
+        }
+      }
+
+      .third {
+        a.trd.weibo {
+          box-sizing:border-box;
+          display: block;
+          height:34px;line-height:34px;
+          width:120px;
+          text-align: center;
+          padding-left: 34px;
+          color: white;
+          background-color: darken(#80C3F7, 10%);
+          text-shadow: 0 1px 1px rgba(black, 0.2);
+          border-radius: 3px;
+          box-shadow: inset 0 1px 0 rgba(white, 0.3), 0 1px 1px rgba(#333,.05);
+          position: relative;
+
+          &:active {
+            top:2px;
+          }
+
+          i {
+            position: absolute;
+            width:28px;height:28px;line-height: 28px;
+            top:3px;left:3px;
+            text-align: center;
+            // border-radius:3px;
+            font-size: 20px;
+            border-right:solid 1px rgba(white, 0.3);
+          }
+        }
+      }
     }
   }
 
+  .img-changer {
+    height:50px;
+    position: absolute;
+    left:0;right:0;bottom:50px + 15px;
+    .btns {
+      position: absolute;
+      top:0;left:0;right:0;bottom:0;
+      margin:auto;
+      width:100px;
+    }
+
+    a.prev, a.next {
+      float: left;
+      display: block;
+      width:30px;height:30px;line-height:30px;
+      text-align: center;
+      border-radius:100px;
+      background-color: rgba(white, 0.2);
+      color:white;
+      border:solid 2px white;
+      &:hover {
+        background-color: rgba(white, 0.4);
+      }
+      &:active {
+        position: relative;
+        top:2px;
+      }
+    }
+    a.prev {margin-left:8px;margin-right:16px;}
+    a.next {margin-right: 8px;}
+  }
+
   .team {
-    font-size: 16px;
+    position: absolute;
+    left:0;right:0;bottom:15px;
+    height:50px;line-height:50px;
     text-align: center;
+    font-size: 14px;
+    background-color: rgba(black, 0.4);
+
+    @include -below(pad) {
+      position: static;
+    }
   }
 }
 

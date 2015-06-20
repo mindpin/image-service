@@ -1,6 +1,9 @@
 class HomeController < ApplicationController
   def index
-    return render "/home/login" if !user_signed_in?
+    if not user_signed_in?
+      @body_class = 'landing'
+      return render "/home/login" if !user_signed_in?
+    end
 
     per_page = 20
     if params[:less_than_id]

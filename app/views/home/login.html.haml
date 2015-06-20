@@ -1,13 +1,55 @@
-.page-auth
-  .header
-    .logo 
-      %span.s1> img
-      %span.s2> 4ye
-    .desc
-      .d0 简单易用的图片保存服务
-      .d1 支持手机，PC 访问
-  .form
-    %a.login{:href => "/auth/weibo"}
-      %i.fa.fa-weibo
-      %span 通过新浪微博登录
+.wallpaper
+.page-landing
+  .auth-float
+    .container
+      .row
+        .col-desk-3.col-desk-offset-3
+          .show
+            .logo 
+              %span.s1> img
+              %span.s2> 4ye
+            .desc
+              .d0 简单易用的图片保存服务
+              .d1 支持 PC，手机浏览器访问
+            .uses
+              %span 已累计保存
+              %span.c #{FileEntity.images.count}
+              %span 张图片
+
+        .col-desk-3
+          .auth-form
+            .sign-up-form{:style => 'display:none;'}
+              .t 注册新用户：
+              %a.to.to-sign-in{:href => 'javascript:;'}
+                %i.fa.fa-chevron-right
+                %span 我要登录
+
+              %input.form-control{:type => :input, :name => :email, :placeholder => '注册邮箱'}
+              %input.form-control{:type => :password, :name => :password, :placeholder => '登录密码'}
+              %a.sign-up{:href => 'javascript:;'}
+                %span 我要注册
+
+            .sign-in-form{:style => 'display:none;'}
+              .t 登录：
+              %a.to.to-sign-up{:href => 'javascript:;'}
+                %i.fa.fa-chevron-right
+                %span 我要注册
+
+              %input.form-control{:type => :input, :name => :email, :placeholder => '邮箱'}
+              %input.form-control{:type => :password, :name => :password, :placeholder => '密码'}
+              %a.sign-up{:href => 'javascript:;'}
+                %span 登录
+
+            .third
+              .t 第三方登录：
+              %a.trd.weibo{:href => "/auth/weibo"}
+                %i.fa.fa-weibo
+                %span 新浪微博
+
+  .img-changer
+    .btns
+      %a.prev{:href => 'javascript:;'}
+        %i.fa.fa-arrow-left
+      %a.next{:href => 'javascript:;'}
+        %i.fa.fa-arrow-right
   .team MINDPIN TEAM, 2015

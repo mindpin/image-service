@@ -28,3 +28,5 @@
 //= require popbox
 //= require popbox-adapters
 //= require ui
+
+//= require auth
