@@ -24,8 +24,10 @@
                 %i.fa.fa-chevron-right
                 %span 我要登录
 
-              %input.form-control{:type => :input, :name => :email, :placeholder => '注册邮箱'}
-              %input.form-control{:type => :password, :name => :password, :placeholder => '登录密码'}
+              %input.username.form-control{:type => :input, :name => :username, :placeholder => '用户名'}
+              %input.email.form-control{:type => :input, :name => :email, :placeholder => '注册邮箱'}
+              %input.pw.form-control{:type => :password, :name => :password, :placeholder => '登录密码'}
+              .info{:style => 'display:none;'}
               %a.sign-up{:href => 'javascript:;'}
                 %span 我要注册
 
@@ -35,14 +37,17 @@
                 %i.fa.fa-chevron-right
                 %span 我要注册
 
-              %input.form-control{:type => :input, :name => :email, :placeholder => '邮箱'}
-              %input.form-control{:type => :password, :name => :password, :placeholder => '密码'}
-              %a.sign-up{:href => 'javascript:;'}
+              %input.email.form-control{:type => :input, :name => :email, :placeholder => '邮箱'}
+              %input.pw.form-control{:type => :password, :name => :password, :placeholder => '密码'}
+              .info{:style => 'display:none;'}
+                %span 邮箱或密码不正确
+              %a.sign-in{:href => 'javascript:;'}
                 %span 登录
+
 
             .third
               .t 第三方登录：
-              %a.trd.weibo{:href => "/auth/weibo"}
+              %a.trd.weibo{:href => "/auth/weibo", :'data-no-turbolink' => true}
                 %i.fa.fa-weibo
                 %span 新浪微博
 

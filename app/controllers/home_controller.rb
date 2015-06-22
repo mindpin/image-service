@@ -1,65 +1,47 @@
 class HomeController < ApplicationController
-  def index
+  before_filter :render_landing, :except => [:zmkm, :zmkm_aliyun]
+
+  def render_landing
     if not user_signed_in?
       @body_class = 'landing'
-      return render "/home/login" if !user_signed_in?
+      render 'home/landing'
     end
+  end
 
+  def index
     per_page = 20
-    if params[:less_than_id]
-      @images = current_user.file_entities.images
-        .is_qiniu
-        .where(:id.lt => params[:less_than_id])
-        .page(1).per(per_page)
-    else
-      @images = current_user.file_entities.images
-        .is_qiniu
-        .page(1).per(per_page)
-    end
+    condition = params[:less_than_id] ? {:id.lt => params[:less_than_id]} : {}
+    @images = current_user.file_entities.images
+      .is_qiniu
+      .where(condition)
+      .limit(per_page)
+  end
+
+  def aliyun
+    per_page = 40
+    condition = params[:less_than_id] ? {:id.lt => params[:less_than_id]} : {}
+    @images = current_user.file_entities.images
+      .is_oss
+      .where(condition)
+      .limit(per_page)
   end
 
   def zmkm
     per_page = 20
-    if params[:less_than_id]
-      @images = FileEntity.anonymous.images
-        .is_qiniu
-        .where(:id.lt => params[:less_than_id])
-        .page(1).per(per_page)
-    else
-      @images = FileEntity.anonymous.images
-        .is_qiniu
-        .page(1).per(per_page)
-    end
-  end
-
-  def aliyun
-    return render "/home/login" if !user_signed_in?
-
-    per_page = 40
-    if params[:less_than_id]
-      @images = current_user.file_entities.images
-        .is_oss
-        .where(:id.lt => params[:less_than_id])
-        .page(1).per(per_page)
-    else
-      @images = current_user.file_entities.images
-        .is_oss
-        .page(1).per(per_page)
-    end
+    condition = params[:less_than_id] ? {:id.lt => params[:less_than_id]} : {}
+    @images = FileEntity.anonymous.images
+      .is_qiniu
+      .where(condition)
+      .limit(per_page)
   end
 
   def zmkm_aliyun
     per_page = 40
-    if params[:less_than_id]
-      @images = FileEntity.anonymous.images
-        .is_oss
-        .where(:id.lt => params[:less_than_id])
-        .page(1).per(per_page)
-    else
-      @images = FileEntity.anonymous.images
-        .is_oss
-        .page(1).per(per_page)
-    end
+    condition = params[:less_than_id] ? {:id.lt => params[:less_than_id]} : {}
+    @images = FileEntity.anonymous.images
+      .is_oss
+      .where(condition)
+      .limit(per_page)
 
     render 'aliyun'
   end

@@ -95,7 +95,7 @@ body.app .page-landing {
   overflow-y: auto;
 
   a {
-    color: lighten(#2A70E8, 30%);
+    color: lighten(#80C3F7, 10%);
     text-decoration: none;
   }
 
@@ -168,6 +168,32 @@ body.app .page-landing {
         position: relative;
         margin-bottom: 30px;
         // display: none;
+
+        .info {
+          background-color: rgba(black, 0.1);
+          padding: 10px;
+          border-radius: 3px;
+          margin-bottom: 15px;
+          box-shadow: 0 1px 1px rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.15);
+          font-size: 14px;
+          span:before {
+            content: "\f06a";
+            font-family: FontAwesome;
+            opacity: 0.5;
+            margin-right: 10px;
+          }
+          span {
+            display: block;
+            margin-bottom: 5px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+            .info-to-sign-in {
+              margin-left: 5px;
+              border-bottom: dashed 1px;
+            }
+          }
+        }
       }
 
       .t {
@@ -197,12 +223,12 @@ body.app .page-landing {
           background-color: white;
         }
       }
-      a.sign-up {
+      a.sign-up, a.sign-in{
         display: block;
         height:34px;line-height:34px;
         text-align: center;
         color: white;
-        background-color: #80C3F7;
+        background-color: darken(#80C3F7, 10%);
         text-shadow: 0 1px 1px rgba(black, 0.2);
         border-radius: 3px;
         box-shadow: inset 0 1px 0 rgba(white, 0.3), 0 1px 1px rgba(#333,.05);
@@ -221,7 +247,7 @@ body.app .page-landing {
           text-align: center;
           padding-left: 34px;
           color: white;
-          background-color: darken(#80C3F7, 10%);
+          background-color: #80C3F7;
           text-shadow: 0 1px 1px rgba(black, 0.2);
           border-radius: 3px;
           box-shadow: inset 0 1px 0 rgba(white, 0.3), 0 1px 1px rgba(#333,.05);

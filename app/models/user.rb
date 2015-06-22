@@ -57,11 +57,60 @@ class User
   has_many :image_sizes
   field :name, type: String
 
-  def password_required?
-    false
-  end
+  validates :name, presence: true
+  validates :name, length: {in: 2..20}, :if => Proc.new {|user|
+    user.name.present?
+  }
+
+  # 2015 年 6 月 21 日
+  # 修改验证逻辑
+  # 用户可以直接注册，填写用户名，邮箱，密码
+  # 也可以使用 omniauth 登录
+  # 前一种账号有邮箱，密码，使用默认头像
+  # 后一种账号没有邮箱，系统分配了默认密码，使用第三方头像
+  # 检查是否有邮箱就能区分两类账号
 
   def email_required?
-    false
+    return false if user_tokens.count > 0
+    return true
+  end
+
+  def self.from_weibo_omniauth(auth_hash)
+    uid        = auth_hash.uid
+    provider   = auth_hash.provider
+    token      = auth_hash.credentials.token
+    expires_at = auth_hash.credentials.expires_at
+    expires    = auth_hash.credentials.expires
+    avatar_url = auth_hash.extra.raw_info.avatar_large
+    user_name  = auth_hash.info.nickname
+
+    # 若不存在对应的 user_token 则创建
+    # 若存在则更新
+    user_token = UserToken.where(
+      :uid      => uid,
+      :provider => provider
+    ).first_or_initialize
+
+    user_token.update_attributes(
+      :token      => token,
+      :expires_at => expires_at,
+      :expires    => expires
+    )
+
+    # 若不存在对应的 user 则创建
+    # 若存在则更新
+    user = user_token.user || 
+      User.create!(
+        :name => user_name,
+        :user_tokens => [user_token],
+        :password => Devise.friendly_token.first(8)
+      )
+
+    user.update_attributes(
+      :name => user_name,
+      :avatar_url => avatar_url
+    )
+
+    return user
   end
 end

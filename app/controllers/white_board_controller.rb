@@ -1,6 +1,5 @@
 class WhiteBoardController < ApplicationController
   def show
-    return redirect_to "/" if !user_signed_in?
     @file_entity = FileEntity.find params[:id]
   end
 

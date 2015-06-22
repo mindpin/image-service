@@ -4,11 +4,13 @@
   width  = @file_entity.width
   height = @file_entity.height
 
-  user_json = {
-    id: current_user.id.to_s,
-    name: current_user.name,
-    char: current_user.name[0]
-  }.to_json
+  if user_signed_in?
+    user_json = {
+      id: current_user.id.to_s,
+      name: current_user.name,
+      char: current_user.name[0]
+    }.to_json
+  end
 
   image_json = {
     id: id,

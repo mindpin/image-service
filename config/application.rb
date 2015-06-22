@@ -27,7 +27,8 @@ module ImageService
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    config.i18n.default_locale = :zh
+
     config.generators do |g|
       g.test_framework :rspec,
         fixtures: true,
@@ -40,5 +41,10 @@ module ImageService
     end
 
     config.autoload_paths += %W(#{config.root}/lib)
+
+    # 允许 ajax 注册登录
+    config.to_prepare do
+      DeviseController.respond_to :html, :json
+    end
   end
 end

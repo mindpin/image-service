@@ -1,0 +1,24 @@
+zh:
+  hello: "Hello world"
+
+  mongoid:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: '没有填写邮箱'
+              invalid: '邮箱格式不正确'
+              taken: '邮箱已经注册过了'
+            password:
+              blank: '没有填写密码'
+              too_short: '密码太短了（最少八位）'
+            name:
+              blank: '没有填写用户名'
+              too_short: '用户名太短了（最少两个字）'
+              too_long: '用户名太长了（最多二十个字）'
+
+  devise:
+    failure:
+      user:
+        unauthenticated: '邮箱或密码不正确'
