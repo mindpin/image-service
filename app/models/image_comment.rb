@@ -13,18 +13,24 @@ class ImageComment
   validates :text, :x, :y, :user, :file_entity, presence: true
 
   def to_hash
-    {
+    hash = {
       :id             => id.to_s,
       :file_entity_id => file_entity.id.to_s,
       :x              => x,
       :y              => y,
-      :text           => text,
-      :user           => {
-                           :id         => user.id.to_s,
-                           :name       => user.name,
-                           :avatar_url => user.avatar_url
-      }
+      :text           => text
     }
+
+    # 用户可能有被删除的
+    if user.present?
+      hash[:user] = {
+        :id         => user.id.to_s,
+        :name       => user.name,
+        :avatar_url => user.avatar_url
+      }
+    end
+
+    hash
   end
 
   module FileEntityMethods

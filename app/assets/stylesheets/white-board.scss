@@ -276,6 +276,40 @@ $ml: 290px;
     top:53px;left:0;right:0;bottom:0;
     overflow-y: auto;
 
+    .not-signed-in {
+      padding: 15px;
+      border-top:solid 1px white;
+      border-bottom:solid 1px #ddd;
+    }
+
+    .current-user {
+      padding: 15px;
+      border-top:solid 1px white;
+      border-bottom:solid 1px #ddd;
+      .avatar, .avatar img {
+        width: 30px;height:30px;
+        border-radius:100px;
+        float: left;
+      }
+      .name {
+        height: 30px;line-height: 30px;
+        margin-left: 40px;
+      }
+    }
+
+    .faye-offline {
+      .s {
+        background-color: lighten($area-danger, 20%);
+        color: white;
+        margin: 4px 5px 5px;
+        padding: 10px;
+        border-radius: 3px;
+      }
+      display: none;
+      border-top:solid 1px white;
+      border-bottom:solid 1px #ddd;
+    }
+
     .comment {
       border-top:solid 1px white;
       padding:15px;

@@ -66,7 +66,10 @@ class ImageWhiteBoard
 
     @load()
 
-    @message_adapter = new MessageAdapter @
+    if Faye?
+      @message_adapter = new MessageAdapter @
+    else
+      @find('.faye-offline').fadeIn()
 
   load: ->
     jQuery.ajax
@@ -116,6 +119,7 @@ class ImageWhiteBoard
   # 弹出输入泡泡
   pop_inputer: (x, y)->
     return if @is_on_input
+    return if not @user_data?
 
     setTimeout =>
       @is_on_input = true
@@ -220,8 +224,13 @@ class ImageWhiteBoard
 
   append_sidebar: (comment_data)->
     id = comment_data.id
-    user_name = comment_data.user.name
     text = comment_data.text
+    if comment_data.user?
+      user_name = comment_data.user.name
+      bgc = str_to_color user_name
+    else
+      user_name = '匿名用户'
+      bgc = '#aaa'
 
     return if @find(".comment[data-id=#{id}]").length
 
@@ -231,7 +240,7 @@ class ImageWhiteBoard
       .find('.user')
         .text(user_name[0])
         .css
-          'background-color': str_to_color user_name
+          'background-color': bgc
       .end()
       .find('.name').text(user_name).end()
       .find('.text').text(text).end()
@@ -246,12 +255,21 @@ class ImageWhiteBoard
     y = comment_data.y
     id = comment_data.id
     text = comment_data.text
-    name = comment_data.user.name
+
+    if comment_data.user?
+      name = comment_data.user.name
+      uid = comment_data.user.id
+      bgc = str_to_color name
+    else
+      name = '匿名用户'
+      uid = -1
+      bgc = '#999'
+      
     char = name[0]
 
     return if @find(".inputer[data-id=#{id}]").length
 
-    is_me = comment_data.user.id is @user_data.id
+    is_me = uid is @user_data?.id
     console.log is_me
 
     $inputer = jQuery('<div>')
@@ -277,7 +295,7 @@ class ImageWhiteBoard
       .appendTo $inputer
       .text char
       .css
-        'background-color': str_to_color name
+        'background-color': bgc
 
     if is_me
       $delete = jQuery('<a>')

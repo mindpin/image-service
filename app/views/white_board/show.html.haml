@@ -33,6 +33,24 @@
       %span Y:
       %span.p.y -
     .comments
+      .faye-offline
+        .s
+          %i.fa.fa-exclamation-circle
+          %span 服务发生连接故障，多人实时协作暂不可用
+
+      - if not user_signed_in?
+        .not-signed-in
+          .t 
+            %span> 你还没有登录，
+            %a{:href => "/"} 去首页登录
+      - else
+        .current-user
+          .avatar
+            %img{:src => current_user.avatar_url}
+          .name
+            %span>= current_user.name
+            %span ，你好
+
       .comment-template{:style => 'display:none;'}
         .user 洋
         .name 洋气书生:
