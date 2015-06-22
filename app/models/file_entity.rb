@@ -46,11 +46,11 @@ class FileEntity
   end
 
   def width
-    self.meta["width"]
+    self.meta["width"].to_i
   end
 
   def height
-    self.meta["height"]
+    self.meta["height"].to_i
   end
 
   # key 去掉 ext

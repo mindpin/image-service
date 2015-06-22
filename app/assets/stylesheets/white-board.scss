@@ -28,12 +28,12 @@ body.white-board {
   background: url(http://i.teamkn.com/@/i/bro6GxK8.png);
 }
 
-$mt: 0;
+$mt: 50px;
 $ml: 290px;
 
 .page-image-white-board {
   position: absolute;
-  top:0;left:$ml;right:0;bottom:0;
+  top:$mt;left:$ml;right:0;bottom:0;
   overflow:auto;
 }
 
@@ -55,7 +55,7 @@ $ml: 290px;
 }
 
 .image-container {
-  margin-top:$mt;
+  margin-top:0;
   margin-left:0;
   position: relative;
   padding:10px;
@@ -242,18 +242,60 @@ $ml: 290px;
   }
 }
 
-// .topbar {
-//   position: fixed;
-//   top:0;left:0;right:0;
-//   height:50px;
-//   box-sizing:border-box;
-//   background-color:#f7f7f7;
-//   border-bottom:solid 1px #ccc;
-// }
+.topbar {
+  position: fixed;
+  top:0;left:290px;right:0;
+  height:$mt;
+  box-sizing:border-box;
+  background-color:#f7f7f7;
+  border-bottom:solid 1px #ccc;
+
+  .not-signed-in {
+    float: left;
+    padding: 0 15px;
+    @include height($mt - 1px);
+    border-left:solid 1px white;
+    a.to-signin {
+      border-bottom: dashed 1px;
+      text-decoration: none;
+    }
+  }
+
+  .current-user {
+    float: left;
+    padding: 0 15px;
+    @include height($mt - 1px);
+    border-left:solid 1px white;
+
+    .avatar, .avatar img {
+      width: 30px;height:30px;
+      border-radius:100px;
+      float: left;
+    }
+    .avatar {
+      margin-top: ($mt - 1px - 30px) / 2;
+    }
+    .name {
+      margin-left: 45px;
+    }
+  }
+
+  .faye-offline {
+    float: left;
+    .s {
+      background-color: lighten($area-danger, 20%);
+      color: white;
+      margin: 5px;
+      padding: 0 15px;
+      border-radius: 3px;
+      @include height($mt - 10px - 1px);
+    }
+  }
+}
 
 .sidebar {
   position: fixed;
-  top:$mt;left:0;width:$ml;
+  top:0;left:0;width:$ml;
   bottom:0;
   box-sizing:border-box;
   background-color:#f7f7f7;
@@ -266,49 +308,17 @@ $ml: 290px;
   }
 
   .mouse-pos {
-    padding: 15px;
+    height: $mt - 1px;
+    line-height: $mt - 1px;
+    padding: 0 15px;
     border-bottom:solid 1px #ddd;
     span.p {color:lighten($area-hot, 15%);}
   }
 
   .comments {
     position: absolute;
-    top:53px;left:0;right:0;bottom:0;
+    top:$mt;left:0;right:0;bottom:0;
     overflow-y: auto;
-
-    .not-signed-in {
-      padding: 15px;
-      border-top:solid 1px white;
-      border-bottom:solid 1px #ddd;
-    }
-
-    .current-user {
-      padding: 15px;
-      border-top:solid 1px white;
-      border-bottom:solid 1px #ddd;
-      .avatar, .avatar img {
-        width: 30px;height:30px;
-        border-radius:100px;
-        float: left;
-      }
-      .name {
-        height: 30px;line-height: 30px;
-        margin-left: 40px;
-      }
-    }
-
-    .faye-offline {
-      .s {
-        background-color: lighten($area-danger, 20%);
-        color: white;
-        margin: 4px 5px 5px;
-        padding: 10px;
-        border-radius: 3px;
-      }
-      display: none;
-      border-top:solid 1px white;
-      border-bottom:solid 1px #ddd;
-    }
 
     .comment {
       border-top:solid 1px white;

@@ -88,13 +88,13 @@ class ImageWhiteBoard
     that = this
 
     @$elm.on 'mousemove', '.image-container img', (evt)=>
-      offx = evt.offsetX || evt.originalEvent.layerX
-      offy = evt.offsetY || evt.originalEvent.layerY
+      offx = ~~(evt.offsetX || evt.originalEvent.layerX)
+      offy = ~~(evt.offsetY || evt.originalEvent.layerY)
       @show_mouse_pos offx, offy
 
     @$elm.on 'click', '.image-container img', (evt)=>
-      offx = evt.offsetX || evt.originalEvent.layerX
-      offy = evt.offsetY || evt.originalEvent.layerY
+      offx = ~~(evt.offsetX || evt.originalEvent.layerX)
+      offy = ~~(evt.offsetY || evt.originalEvent.layerY)
       if not @find('.inputer.saved.open').length
         @pop_inputer offx, offy
 
