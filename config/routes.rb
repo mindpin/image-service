@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/rubymyadmin', as: 'rails_admin'
   devise_for :users,
     :path => '',
-    :controllers => { 
+    :controllers => {
       :omniauth_callbacks => 'users/omniauth_callbacks',
       :registrations => 'users/registrations',
       :sessions => 'users/sessions'

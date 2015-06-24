@@ -38,6 +38,8 @@ class User
   ######
   field :avatar_url,    type: String
   field :name,          type: String
+  # rails_admin 管理页面需要验证该字段
+  field :admin,         type: Boolean
   ######################### issues/3626 ###########################
   # https://github.com/mongoid/mongoid/issues/3626#issuecomment-64700154
   def self.serialize_from_session(key, salt)

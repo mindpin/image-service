@@ -88,3 +88,4 @@ group :development do
 end
 
 gem "non-stupid-digest-assets"
+gem "rails_admin"
