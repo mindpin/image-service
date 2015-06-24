@@ -1,8 +1,8 @@
 # 填写 oss ALIYUN_ACCESS_ID
-ALIYUN_ACCESS_ID : xxx 
+ALIYUN_ACCESS_ID : xxx
 
 # BUCKET 下的某个子目录名，可以随意写
-ALIYUN_BASE_DIR : aaa 
+ALIYUN_BASE_DIR : aaa
 
 # zzz-dev 代表 BUCKET name 和上面的 ALIYUN_BUCKET 需要一致
 # oss-cn-qingdao 代表 BUCKET 属于 cn-qingdao
@@ -11,6 +11,10 @@ IMAGE_ENDPOINT : http://zzz-dev.oss-cn-qingdao.aliyuncs.com
 # http://open.weibo.com/ 申请应用后，把 key secret 填写在这里
 WEIBO_KEY: xxx
 WEIBO_SECRET: xxx
+
+# http://connect.qq.com 申请应用后，把 key secret 填写在这里
+QQ_CONNECT_KEY: XXX
+QQ_CONNECT_SECRET: XXX
 
 # http://www.qiniu.com/ 注册登陆后，访问 "账号设置" -> "秘钥"，把 key secret 填写在这里
 QINIU_APP_ACCESS_KEY: XXX

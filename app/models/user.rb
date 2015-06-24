@@ -76,13 +76,23 @@ class User
   end
 
   def self.from_weibo_omniauth(auth_hash)
-    uid        = auth_hash.uid
-    provider   = auth_hash.provider
-    token      = auth_hash.credentials.token
-    expires_at = auth_hash.credentials.expires_at
-    expires    = auth_hash.credentials.expires
-    avatar_url = auth_hash.extra.raw_info.avatar_large
-    user_name  = auth_hash.info.nickname
+    omniauth_info = self._get_info_form_weibo_omniauth(auth_hash)
+    self.from_omniauth_info(omniauth_info)
+  end
+
+  def self.from_qq_connect_omniauth(auth_hash)
+    omniauth_info = self._get_info_form_qq_connect_omniauth(auth_hash)
+    self.from_omniauth_info(omniauth_info)
+  end
+
+  def self.from_omniauth_info(omniauth_info)
+    uid        = omniauth_info[:uid]
+    provider   = omniauth_info[:provider]
+    token      = omniauth_info[:token]
+    expires_at = omniauth_info[:expires_at]
+    expires    = omniauth_info[:expires]
+    avatar_url = omniauth_info[:avatar_url]
+    user_name  = omniauth_info[:user_name]
 
     # 若不存在对应的 user_token 则创建
     # 若存在则更新
@@ -99,7 +109,7 @@ class User
 
     # 若不存在对应的 user 则创建
     # 若存在则更新
-    user = user_token.user || 
+    user = user_token.user ||
       User.create!(
         :name => user_name,
         :user_tokens => [user_token],
@@ -112,5 +122,29 @@ class User
     )
 
     return user
+  end
+
+  def self._get_info_form_qq_connect_omniauth(auth_hash)
+    {
+      uid:        auth_hash.uid,
+      provider:   auth_hash.provider,
+      token:      auth_hash.credentials.token,
+      expires_at: auth_hash.credentials.expires_at,
+      expires:    auth_hash.credentials.expires,
+      avatar_url: auth_hash.extra.raw_info.figureurl_qq_2,
+      user_name:  auth_hash.info.nickname
+    }
+  end
+
+  def self._get_info_form_weibo_omniauth(auth_hash)
+    {
+      uid:        auth_hash.uid,
+      provider:   auth_hash.provider,
+      token:      auth_hash.credentials.token,
+      expires_at: auth_hash.credentials.expires_at,
+      expires:    auth_hash.credentials.expires,
+      avatar_url: auth_hash.extra.raw_info.avatar_large,
+      user_name:  auth_hash.info.nickname
+    }
   end
 end

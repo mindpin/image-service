@@ -54,6 +54,7 @@ gem 'figaro', '>= 1.0.0'
 
 gem 'devise'
 gem "omniauth-weibo-oauth2"
+gem "omniauth-qq"
 gem "haml"
 gem 'kaminari'
 
