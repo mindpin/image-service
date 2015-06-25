@@ -4,7 +4,6 @@
 #   browse_button:   'jquery selector str | ele | jquery ele',
 
 #   drag_area:       'jquery selector str | ele | jquery ele',
-#   file_list_area:  'jquery selector str | ele | jquery ele',
 #   file_progress_callback: FileProgress,
 
 #   auto_start: false,
@@ -26,8 +25,7 @@ class Img4yeUploader
     @drag_area      = jQuery(@options["drag_area"]).get(0)
     @dragdrop = (typeof(@drag_area) != "undefined")
 
-    @file_list_area = jQuery(@options["file_list_area"]).get(0)
-    @file_progress_callback = @options["file_progress_callback"] || DefualtImg4yeFileProgress
+    @file_progress_callback = @options["file_progress_callback"] || FileProgress
     @file_progresses = {}
 
     @auto_start = @options["auto_start"]
@@ -73,34 +71,53 @@ class Img4yeUploader
       x_vars:
         origin_file_name: (up, file)->
           file.name
-      init: 
-        FilesAdded: (up, files)->
-          plupload.each files, (file)->
-            # 同时选择多个文件时才会触发
-        BeforeUpload: (up, file)->
-          that.file_progresses[file.id] = new that.file_progress_callback(that.file_list_area, file)
-          that.file_progresses[file.id].start_upload()
-        UploadProgress: (up, file)-> 
-          chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-          that.file_progresses[file.id].refresh_progress()
-          # progress.text "当前进度 #{file.percent}%，速度 #{up.total.bytesPerSec}，#{chunk_size}"
-        FileUploaded: (up, file, info)->
-          info = jQuery.parseJSON(info);
-          fp = that.file_progresses[file.id]
-          fp.upload_end("success")
-          fp.upload_success(info)
-        Error: (up, err, errTip)->
-          fp = that.file_progresses[err.file.id]
-          fp.upload_end("error")
-          fp.upload_error()
-        UploadComplete: ()->
-          #队列文件处理完毕后,处理相关的事情
-        Key: (up, file)->
-          # // domain 为七牛空间（bucket)对应的域名，选择某个空间后，可通过"空间设置->基本设置->域名设置"查看获取
-          # // uploader 为一个plupload对象，继承了所有plupload的方法，参考http://plupload.com/docs
+      init:
+        ###
+          文档参考：
+          http://developer.qiniu.com/docs/v6/sdk/javascript-sdk.html
+        ###
+
+        # 指定七牛文件 key 的个性化生成规则
+        # 该方法首先被触发
+        Key: (up, file)=>
           ext = file.name.split(".").pop()
           ext = ext.toLowerCase()
-          "/#{that.qiniu_basepath}/#{jQuery.randstr()}.#{ext}"
+          "#{that.qiniu_basepath}/#{jQuery.randstr()}.#{ext}"
+
+        # 该方法第二个被触发
+        BeforeUpload: (up, file)=>
+          console.debug 'before upload'
+          if not @file_progresses[file.id]?
+            @file_progresses[file.id] = new that.file_progress_callback(file, up)
+
+        # 该方法第三个被触发，上传结束前持续被触发
+        UploadProgress: (up, file)=>
+          console.debug 'upload progress'
+          chunk_size = plupload.parseSize up.getOption('chunk_size')
+          @file_progresses[file.id].update()
+          # 当前进度 #{file.percent}%，
+          # 速度 #{up.total.bytesPerSec}，
+
+        # 该方法在上传成功结束时触发
+        FileUploaded: (up, file, info_json)=>
+          console.debug 'file uploaded'
+          info = jQuery.parseJSON(info_json);
+          @file_progresses[file.id].success(info)
+
+        # 该方法在上传出错时触发
+        Error: (up, err, errTip)=>
+          @file_progresses[err.file.id].error()
+
+        # 同时选择多个文件时才会触发
+        FilesAdded: (up, files)=>
+          console.debug 'many files'
+          plupload.each files, (file)=>
+            if not @file_progresses[file.id]?
+              @file_progresses[file.id] = new that.file_progress_callback(file, up)
+
+        # 该方法在整个队列处理完毕后触发
+        UploadComplete: ->
+          that.file_progress_callback.alldone()
 
   _process_auto_start: ()->
     if !@auto_start
@@ -151,7 +168,7 @@ class Img4yeUploader
   _deal_chrome_paste: (arr)->
     console.log 'chrome paste'
     for i in arr
-      if i.type.match(/^image\/\w+$/) 
+      if i.type.match(/^image\/\w+$/)
         file = i.getAsFile()
         file.name = "paste-#{(new Date).valueOf()}.png"
         @qiniu.addFile(file) if file
@@ -165,24 +182,27 @@ class Img4yeUploader
       @qiniu.addFile(blob)
       return
 
-class DefualtImg4yeFileProgress
-  constructor: (@$files_ele, @file)->
+###
+  用于显示上传进度的类
+  里面规定了上传进度如何被显示的一些方法
+###
+class FileProgress
+  constructor: (qiniu_uploading_file, @uploader)->
+    @file = qiniu_uploading_file
 
-  refresh_progress: ->
-    console.log("refresh_progress #{@file.percent}%")
+  # 上传进度进度更新时调用此方法
+  update: ->
+    console.log(@file.percent)
 
-  upload_success: (info)->
-    console.log("uploade_success")
+  # 上传成功时调用此方法
+  success: (info)->
     console.log(info)
 
-  upload_end: (status)->
-    console.log("upload_end")
-    console.log("status #{status}")
+  # 上传出错时调用此方法
+  error: ->
+    console.log("error")
 
-  upload_error: ->
-    console.log("upload_error")
-
-  start_upload: ->
-    console.log("start_upload")
+  @alldone: ->
+    console.log("alldone")
 
 window.Img4yeUploader = Img4yeUploader
