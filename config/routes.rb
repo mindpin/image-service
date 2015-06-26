@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/rubymyadmin', as: 'rails_admin'
+  mount Chart::Engine => '/chart'
   devise_for :users,
     :path => '',
     :controllers => {

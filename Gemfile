@@ -89,3 +89,5 @@ end
 
 gem "non-stupid-digest-assets"
 gem "rails_admin"
+gem 'chart',
+    :path => 'vendor/chart'

@@ -7,6 +7,11 @@ GIT
       open4
       rake
 
+PATH
+  remote: vendor/chart
+  specs:
+    chart (0.0.1)
+
 GEM
   remote: http://ruby.taobao.org/
   specs:
@@ -371,6 +376,7 @@ DEPENDENCIES
   byebug
   carrierwave (= 0.8.0)
   carrierwave-mongoid
+  chart!
   coffee-rails (~> 4.1.0)
   database_cleaner (~> 1.4.0)
   devise
