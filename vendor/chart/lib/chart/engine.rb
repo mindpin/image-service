@@ -11,10 +11,5 @@ module Chart
       end
     end
 
-    initializer 'require lib' do
-      require 'chart/user_methods'
-      require 'chart/file_entity_methods'
-    end
-
   end
 end

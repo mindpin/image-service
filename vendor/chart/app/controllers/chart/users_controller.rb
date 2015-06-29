@@ -3,17 +3,13 @@ module Chart
     def sign_stat
     end
 
+    def sign_list
+      @users = Chart::UserStat.list_of_sign_day(params[:time])
+    end
+
     def sign_stat_data
-      # {
-      #   :time => "2015-05",
-      #   :data => {
-      #     "01" => {
-      #       # 01 号 注册 10 人
-      #       :count => 10
-      #     }
-      #   }
-      # }
-      render :json => User.sign_stat(params[:time])
+      res = Chart::UserStat.sign_stat(params[:time])
+      render :json => res
     end
   end
 end

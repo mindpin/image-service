@@ -1,0 +1,28 @@
+.page-stat{
+  padding: 100px;
+  .graph{
+    width: 630px;
+    height: 300px;
+    padding-bottom: 20px;
+
+    rect.bar {
+      &:hover {
+        fill: #ffcc3f;
+      }
+    }
+  }
+}
+
+.page-user-list{
+  .user{
+    background: #f1f1f1;
+    padding: 15px;
+    margin: 15px;
+  }
+}
+
+.bar-tip{
+  padding: 15px;
+  background: #000;
+  color: #fff;
+}

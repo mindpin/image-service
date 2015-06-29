@@ -1,5 +1,7 @@
 require "chart/version"
 require "chart/time_util"
+require "chart/user_stat"
+require "chart/file_entity_stat"
 
 module Chart
   class << self

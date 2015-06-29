@@ -1,0 +1,7 @@
+.page-user-list
+  - @users.each do |user|
+    .user
+      .name= user.name
+      .email= user.email
+      .avatar
+        %img{src: user.avatar_url}
