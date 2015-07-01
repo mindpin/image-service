@@ -133,16 +133,11 @@ module FileEntityCreateMethods
       mime_type  = callback_body[:mimeType]
       meta = __get_meta_from_callback_body(mime_type, callback_body)
       kind = mime_type.split("/").first.to_sym
-      if kind != :image
+      
+      if !FileEntity::KINDS.include?(kind)
         Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
-        raise '不允许上传 图片 以外类型的资源'
+        raise '不允许上传 图片 音频 视频 以外类型的资源'
       end
-
-      # TODO 暂时只允许图片上传，以后再增加音频视频的上传
-      # if !FileEntity::KINDS.include?(kind)
-      #   Qiniu.delete(ENV['QINIU_BUCKET'], callback_body[:key])
-      #   raise '不允许上传 图片 音频 视频 以外类型的资源'
-      # end
 
       FileEntity.create!(
         user_id:  callback_body[:endUser] || nil,

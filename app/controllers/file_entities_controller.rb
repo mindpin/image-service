@@ -43,6 +43,15 @@ class FileEntitiesController < ApplicationController
     user = User.where(:id => params[:endUser]).first
 
     file_entity = FileEntity.from_qiniu_callback_body(params)
+
+    if !file_entity.kind.image?
+      return render json: {
+        id:     file_entity.id.to_s,
+        kind:   file_entity.kind,
+        url:    file_entity.url
+      }
+    end
+
     if user.present?
       user.reload
       render json: {
