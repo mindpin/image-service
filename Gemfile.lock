@@ -13,7 +13,7 @@ PATH
     chart (0.0.1)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://ruby.taobao.org/
   specs:
     actionmailer (4.2.0)
       actionpack (= 4.2.0)
